@@ -3,7 +3,7 @@ from ..helpers import MocaException
 import pandas
 from pybedtools import BedTool
 import numpy as np
-
+import shutil
 
 __NARROWPEAK_COLUMNS__ = ['chrom', 'chromStart', 'chromEnd',
                          'name', 'score', 'strand',
@@ -23,6 +23,7 @@ __BED_COLUMN_MAPPING__ = {9: __NARROWPEAK_COLUMNS__,
 
 class Bedfile(object):
     """Class to crate a bed file object
+
     Parameters
     ----------
     filepath: string
@@ -40,7 +41,7 @@ class Bedfile(object):
             raise MocaException('Bed file {} not found'.format(self.filepath))
         self._read()
         self.bed_format = self.guess_bedformat()
-        self.genome_table = genome_table
+        self.genome_table = os.path.abspath(genome_table)
         assert self.bed_format is not None
         self.determine_peaks()
         self._sort_bed()
@@ -58,6 +59,7 @@ class Bedfile(object):
 
     def guess_bedformat(self):
         """Method to guess bed format
+
         Returns
         -------
         bed_format: string
@@ -82,17 +84,20 @@ class Bedfile(object):
         """
         return self.sort_by(columns=['score'], ascending=False)
 
-    def write_as_scorefile(self):
+    def write_to_scorefile(self):
         """Write bed file as score file
 
         """
-        self.scorefile = os.path.splitext(self.filepath)[0] + '.scorefile'
+        filename, file_extension = os.path.splitext(self.filepath)
+        filename += '.sorted'
+        self.scorefile = filename
         self.bed_df.to_csv(self.scorefile, header=False,
                 sep='\t',
-                index=False, columns=['chromStart', 'chromEnd', 'peak_position'])
+                index=False,
+                columns=['chrom', 'chromStartZeroBased', 'chromEndOneBased', 'name', 'score'])
 
 
-    def slop_bed(self, flank_length=5):
+    def slop_bed(self, flank_length=200):
         """Add flanking sequences to bed file
 
         Parameters
@@ -105,22 +110,15 @@ class Bedfile(object):
         slop_bed: dataframe
             Slopped bed data object
         """
-        self.bed.slop(g=self.genome_table,
-                      b=flank_length
-                      )
+        if self.bed is None:
+            # Load bed fole into bedtools
+            self.bed = BedTool(self.scorefile)
+        self.bed.slop(g=self.genome_table, b=flank_length)
 
     def determine_peaks(self):
         """Converts bed file to a three column file
 
         Columns: chromosome\t peak_position\t score
-
-        filename, file_extension = os.path.splitext(self.filepath)
-        filename += '.sorted'
-        self.bed_df.to_csv(filename+file_extension,
-                           sep='\t',
-                           columns=['chrom', 'peak_positions', 'score'],
-                           index=False,
-                           header=False)
         """
         bed_format = self.bed_format
         if bed_format=='narrowPeak':
@@ -132,38 +130,40 @@ class Bedfile(object):
             self.bed_df['peak_position'] = np.floor(self.bed_df[['chromStart', 'chromEnd']].mean(axis=1))
             # Peak not called, so chromStart is the peak itself
             self.bed_df.ix[self.bed_df.peak==-1, 'peak_position'] = self.bed_df.ix[self.bed_df.peak==-1, 'chromStart']
-            """
-            filter_df1 = df[df.peak.astype(int)==-1]
-            filter_df2 = df[df.peak.astype(int)!=-1]
-            ##For peaksdd
-            filter_df1['peak_positions'] = filter_df1[['chromStart' , 'chromEnd']].mean(axis=1)
-            filter_df2['peak_positions'] = filter_df2['chromStart'].astype(int)+filter_df2['peak'].astype(int)
-            df = pandas.concat([filter_df1, filter_df2])
-            """
-        else:
-            raise MocaException('Broad region support not implemented')
-            #TODO
-            """
-            df['peak_positions'] = (df['chromStart']+df['chromEnd'])VV
-            df['peak_positions'] = [int(x/2) for x in df['peak_positions'].astype(int)]
-            """
 
-    def extract_fasta(self, fasta_file):
+            ## Append explicit chromStart and chromEnd position based on peak_position
+            self.bed_df['chromStartZeroBased'] = self.bed_df['peak_position'].astype(int)-1
+            self.bed_df['chromEndOneBased'] = self.bed_df['peak_position'].astype(int)
+        else:
+            #TODO
+            raise MocaException('Broad region support not implemented')
+
+    def extract_fasta(self, fasta_file, outfile=None):
         """Extract fasta of bed regions
+
         Parameters
         ----------
-        fasta_file: string
-            Absolute path to location of fasta file
+        fasta_in: string
+            Absolute path to location of reference fasta file
+
+        fasta_out: string
+            Path to write extracted fasta sequence
+
         Returns
         -------
         fasta: string
             Fasta sequence combined
         """
+        if self.bed is None:
+            # Load bed fole into bedtools
+            self.bed = Bedtool(self.scorefile)
         self.extracted_fasta = self.bed.sequence(fi=fasta_file)
+        self.temp_fasta = self.extracted_fasta.seqfn
         return self.extracted_fasta
 
     def sort_by(self, columns=None, ascending=False):
         """Method to sort columns of bedfiles
+
         Parameters
         ----------
         columns: list
