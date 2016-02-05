@@ -51,8 +51,8 @@ setup(
         'moca.helpers',
         'moca.bedoperations',
         'moca.pipeline',
-        'moca.visualiser',
-        'moca.webserver'
+        #'moca.visualiser',
+        #'moca.webserver'
     ],
     package_dir={'moca':
                  'moca'},
