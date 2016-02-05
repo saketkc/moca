@@ -15,12 +15,13 @@ MoCA
 
 Tool for motif conservation analysis
 
-* Free software: ISC license
+* Free software: BSD license
 * Documentation: https://moca.readthedocs.org.
 
 Features
 --------
 
+* Bedfile operator
 * TODO
 
 Credits
