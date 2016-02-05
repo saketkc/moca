@@ -3,6 +3,10 @@ language: python
 env:
   - "2.6"
   - "2.7"
+cache:
+    directories:
+        - $HOME/miniconda
+
 install:
   - sudo apt-get update
   # We do this conditionally because it saves us some downloading if the
@@ -25,7 +29,7 @@ install:
   - python setup.py install
 
 
-script: nose2
+script: nose2 && flake8
 
 deploy:
   provider: pypi
