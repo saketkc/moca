@@ -1,6 +1,3 @@
-# Config file for automatic testing at travis-ci.org
-# This file will be regenerated if you run travis_pypi_setup.py
-
 language: python
 
 env:
@@ -8,8 +5,10 @@ env:
   - TOXENV=py26
   - TOXENV=pypy
 
-# command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install: pip install -U tox && pip install -r requirements.txt
+#TODO change to conda setup
+install: 
+    - sudo apt-get install libblas-dev liblapack-dev libatlas-base-dev gfortran
+    - pip install -U tox && pip install -r requirements.txt
 
 # command to run tests, e.g. python setup.py test
 script: tox
