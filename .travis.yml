@@ -19,11 +19,8 @@ install:
   - conda update -q conda
   # Useful for debugging any issues with conda
   - conda info -a
-  - conda install --file conda-requirements.txt
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION
+  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION --file conda-requirements.txt -c bioconda
   - source activate test-environment
-  - conda install --file conda-requirements.txt
-  - conda install bx-python -c bioconda
   - pip install nose2
   - python setup.py install
 
