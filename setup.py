@@ -57,7 +57,7 @@ setup(
     package_dir={'moca':
                  'moca'},
     include_package_data=True,
-    install_requires=requirements,
+    #install_requires=requirements,
     license="MIT",
     zip_safe=False,
     keywords='moca',
