@@ -14,9 +14,9 @@ MoCA
 
 
 Tool for motif conservation analysis
+Python rewrite of [MoCA0.1.0](https://github.com/saketkc/moca_web)
 
 * Free software: BSD license
-* Documentation: https://moca.readthedocs.org.
 
 Features
 --------
