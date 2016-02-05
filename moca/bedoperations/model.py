@@ -83,7 +83,7 @@ class Bedfile(object):
     def _sort_bed(self):
         """Sort bed by default in descending order of scores
         """
-        return self.sort_by(columns=['score'], ascending=False)
+        return self.sort_by(columns=['score', 'chrom', 'peakStartZeroBased'], ascending=[False, True, False])
 
     def write_to_scorefile(self):
         """Write bed file as score file
@@ -114,12 +114,11 @@ class Bedfile(object):
         if self.bed is None:
             # Load bed fole into bedtools
             self.bed = BedTool(self.scorefile)
-        self.bed.slop(g=self.genome_table, b=flank_length)
+        self.bed = self.bed.slop(g=self.genome_table, b=flank_length)
 
     def determine_peaks(self):
-        """Converts bed file to a three column file
+        """Add extra columns representing peaks
 
-        Columns: chromosome\t peak_position\t score
         """
         bed_format = self.bed_format
         if bed_format == 'narrowPeak':
@@ -161,9 +160,9 @@ class Bedfile(object):
         fasta: string
             Fasta sequence combined
         """
-        if self.bed is None:
+        #if self.bed is None:
             # Load bed fole into bedtools
-            self.bed = BedTool(self.scorefile)
+            #self.bed = BedTool(self.scorefile)
         self.extracted_fasta = self.bed.sequence(fi=fasta_in)
         self.temp_fasta = self.extracted_fasta.seqfn
         shutil.copy(self.temp_fasta, fasta_out)
@@ -185,4 +184,7 @@ class Bedfile(object):
             dataframe with sorted columns
         """
         assert type(columns) is list
-        return self.bed_df.sort_values(by=columns, ascending=ascending)
+        return self.bed_df.sort_values(by=columns, ascending=ascending, inplace=True)
+
+    def __str__(self):
+        return repr(self.bed_df)
