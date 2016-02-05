@@ -13,12 +13,15 @@ __BROADPEAK_COLUMNS__ = ['chrom', 'chromStart', 'chromEnd',
                          'name', 'score', 'strand',
                          'signalValue', 'p-value', 'q-value', 'peak']
 
+__MACSPEAK_COLUMNS__ = __BROADPEAK_COLUMNS__[:5]
+
 __BED_TYPES__ = {10: 'narrowPeak',
                  9: 'broadPeak',
-                 3: 'questPeak'}
+                 5: 'macsPeak'}
 
 __BED_COLUMN_MAPPING__ = {9: __NARROWPEAK_COLUMNS__,
-                          10: __BROADPEAK_COLUMNS__}
+                          10: __BROADPEAK_COLUMNS__,
+                          5: __MACSPEAK_COLUMNS__}
 
 
 class Bedfile(object):
@@ -51,11 +54,9 @@ class Bedfile(object):
         """ Read bedfile as a pandas dataframe
         """
         try:
-            self.bed_df = pandas.read_table(self.filepath,
-                                        header=None)
+            self.bed_df = pandas.read_table(self.filepath, header=None)
         except Exception as e:
-            raise MocaException('Error reading bed file {}'.format(self.filepath),
-                                'Traceback: {}'.format(e))
+            raise MocaException('Error reading bed file {}\n Traceback: {}'.format(self.filepath, e))
 
     def guess_bedformat(self):
         """Method to guess bed format
@@ -76,7 +77,7 @@ class Bedfile(object):
             bed_format = __BED_TYPES__[count]
             self.bed_df.columns = __BED_COLUMN_MAPPING__[count]
         except KeyError:
-            raise MocaException('Bed file had {} columns. Supported column lengths are {}')
+            raise MocaException('Bed file had {} columns. Supported column lengths are 5,9 or 10'.format(count))
         return bed_format
 
     def _sort_bed(self):
@@ -94,7 +95,7 @@ class Bedfile(object):
         self.bed_df.to_csv(self.scorefile, header=False,
                 sep='\t',
                 index=False,
-                columns=['chrom', 'chromStartZeroBased', 'chromEndOneBased', 'name', 'score'])
+                columns=['chrom', 'peakStartZeroBased', 'peakEndOneBased', 'name', 'score'])
 
 
     def slop_bed(self, flank_length=200):
@@ -121,7 +122,7 @@ class Bedfile(object):
         Columns: chromosome\t peak_position\t score
         """
         bed_format = self.bed_format
-        if bed_format=='narrowPeak':
+        if bed_format == 'narrowPeak':
             """See https://genome.ucsc.edu/FAQ/FAQformat.html#format12
             peak: Point-source called for this peak; 0-based offset from chromStart. Use -1 if no point-source called.
             chromStart - The starting position of the feature in the chromosome or scaffold. The first base in a chromosome is numbered 0.
@@ -132,13 +133,19 @@ class Bedfile(object):
             self.bed_df.ix[self.bed_df.peak==-1, 'peak_position'] = self.bed_df.ix[self.bed_df.peak==-1, 'chromStart']
 
             ## Append explicit chromStart and chromEnd position based on peak_position
-            self.bed_df['chromStartZeroBased'] = self.bed_df['peak_position'].astype(int)-1
-            self.bed_df['chromEndOneBased'] = self.bed_df['peak_position'].astype(int)
-        else:
+            self.bed_df['peakStartZeroBased'] = self.bed_df['peak_position'].astype(int)-1
+            self.bed_df['peakEndOneBased'] = self.bed_df['peak_position'].astype(int)
+        elif bed_format == 'broadPeak':
             #TODO
             raise MocaException('Broad region support not implemented')
+        elif bed_format == 'macsPeak':
+            self.bed_df['peak_position'] = np.floor(self.bed_df[['chromStart', 'chromEnd']].mean(axis=1))
+            self.bed_df['peakStartZeroBased'] = self.bed_df['peak_position'].astype(int)-1
+            self.bed_df['peakEndOneBased'] = self.bed_df['peak_position'].astype(int)
+        else:
+            raise MocaException('Format should be one of {}'.format(__BED_TYPES__.values()))
 
-    def extract_fasta(self, fasta_file, outfile=None):
+    def extract_fasta(self, fasta_in, fasta_out=None):
         """Extract fasta of bed regions
 
         Parameters
@@ -156,9 +163,10 @@ class Bedfile(object):
         """
         if self.bed is None:
             # Load bed fole into bedtools
-            self.bed = Bedtool(self.scorefile)
-        self.extracted_fasta = self.bed.sequence(fi=fasta_file)
+            self.bed = BedTool(self.scorefile)
+        self.extracted_fasta = self.bed.sequence(fi=fasta_in)
         self.temp_fasta = self.extracted_fasta.seqfn
+        shutil.copy(self.temp_fasta, fasta_out)
         return self.extracted_fasta
 
     def sort_by(self, columns=None, ascending=False):

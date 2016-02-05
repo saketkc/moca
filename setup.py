@@ -75,6 +75,6 @@ setup(
         'Operating System :: Unix',
         'Operating System :: MacOS'
     ],
-    test_suite='tests',
+    test_suite='nose2.collector.collector',
     tests_require=test_requirements
 )
