@@ -20,7 +20,7 @@ before_install:
  - conda install python=$TRAVIS_PYTHON_VERSION
  - conda create -q -n moca-test python=$TRAVIS_PYTHON_VERSION --file conda-requirements.txt
  - source activate moca-test
- - travis_retry pip install nose2 codecov nose2[coverage-plugin] coveralls
+ - travis_retry pip install codecov nose2[coverage-plugin] coveralls
 
 install:
   - python setup.py install --single-version-externally-managed --record=/tmp/record.txt
