@@ -1,0 +1,7 @@
+[run]
+branch = True
+source = moca/*
+include = moca/*
+omit = */setup.py
+[report]
+include = moca/*
