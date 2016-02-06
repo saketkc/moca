@@ -60,7 +60,7 @@ coverage:
 	coverage html
 	$(BROWSER) htmlcov/index.html
 
-docs:
+html:
 	rm -f docs/moca.rst
 	rm -f docs/modules.rst
 	sphinx-apidoc -o docs/ moca
