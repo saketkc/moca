@@ -26,8 +26,13 @@ install:
   - python setup.py install --single-version-externally-managed --record=/tmp/record.txt
 
 after_success:
+  - conda remove --name moca-test --all
   - codecov
   - coveralls
+
+after_failure:
+  - conda remove --name moca-test --all
+
 
 script: nose2 -v --with-coverage
 
