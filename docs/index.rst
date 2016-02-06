@@ -5,7 +5,7 @@
 
 Welcome to MoCA's documentation!
 ======================================
-
+.. include:: ../../README.rst
 Contents:
 
 .. toctree::
