@@ -1,6 +1,6 @@
 import subprocess
 from ..helpers import MocaException
-
+from ..helpers import ConfigurationParser
 
 class Pipeline(object):
     """Generic class to run pipelines
@@ -12,18 +12,10 @@ class Pipeline(object):
 
     """
     def __init__(self, config_file):
-        self.conf = None
         self.commands_run = list()
         if not os.path.isfile(config_file):
             raise MocaException('Config file {} not found'.format(config_file))
-        try:
-            import configparser
-            self.conf = configparser.ConfigParser()
-        except ImportError:
-            import ConfigParser
-            self.conf = ConfigParser.ConfigParser()
-        self.conf.readfp(open(config_file, 'r'))
-        self.config_sections =  self.conf._section
+        self.conf = ConfigurationParser(config_file)
 
     def run_meme(object):
         pass
