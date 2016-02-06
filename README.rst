@@ -12,6 +12,9 @@ MoCA
         :target: https://readthedocs.org/projects/moca/?badge=latest
         :alt: Documentation Status
 
+.. image:: https://codecov.io/github/saketkc/moca/coverage.svg?branch=master
+        :target: https://codecov.io/github/saketkc/moca?branch=master
+
 
 Tool for motif conservation analysis
 Python rewrite of [MoCA0.1.0](https://github.com/saketkc/moca_web)
