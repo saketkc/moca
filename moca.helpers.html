@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>moca.helpers package &mdash; MoCA 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="MoCA 0.1.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">MoCA 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="moca-helpers-package">
+<h1>moca.helpers package<a class="headerlink" href="#moca-helpers-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-moca.helpers.configuration_parser">
+<span id="moca-helpers-configuration-parser-module"></span><h2>moca.helpers.configuration_parser module<a class="headerlink" href="#module-moca.helpers.configuration_parser" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="moca.helpers.configuration_parser.ConfigurationParser">
+<em class="property">class </em><tt class="descclassname">moca.helpers.configuration_parser.</tt><tt class="descname">ConfigurationParser</tt><big>(</big><em>config_file</em><big>)</big><a class="reference internal" href="_modules/moca/helpers/configuration_parser.html#ConfigurationParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.helpers.configuration_parser.ConfigurationParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Parse config file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config_file</strong> (<em>str</em>) &#8211; absolute path to configuration file</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="moca.helpers.configuration_parser.ConfigurationParser.get_all_genomes">
+<tt class="descname">get_all_genomes</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/moca/helpers/configuration_parser.html#ConfigurationParser.get_all_genomes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.helpers.configuration_parser.ConfigurationParser.get_all_genomes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all genome names as specified in config file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>genome_names</strong> &#8211; List of all genome names</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="moca.helpers.configuration_parser.ConfigurationParser.get_all_sections">
+<tt class="descname">get_all_sections</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/moca/helpers/configuration_parser.html#ConfigurationParser.get_all_sections"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.helpers.configuration_parser.ConfigurationParser.get_all_sections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all sections in config file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>sections</strong> &#8211; List of all sections</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="moca.helpers.configuration_parser.ConfigurationParser.get_binary_path">
+<tt class="descname">get_binary_path</tt><big>(</big><em>binary_name</em><big>)</big><a class="reference internal" href="_modules/moca/helpers/configuration_parser.html#ConfigurationParser.get_binary_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.helpers.configuration_parser.ConfigurationParser.get_binary_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns absolute path to installed binaries</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>binary_name</strong> (<em>string</em>) &#8211; Program name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>binary_path</strong> &#8211; Absolute path to installed binary</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="moca.helpers.configuration_parser.ConfigurationParser.get_genome_data">
+<tt class="descname">get_genome_data</tt><big>(</big><em>genome_name</em><big>)</big><a class="reference internal" href="_modules/moca/helpers/configuration_parser.html#ConfigurationParser.get_genome_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.helpers.configuration_parser.ConfigurationParser.get_genome_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all files associated with a genome in the  config file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>genome_name</strong> (<em>str</em>) &#8211; Genome name as specified in &#8216;genome:&lt;genome_name&gt;&#8217; format</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>genome_dict</strong> &#8211; Dictionary specifying the files associated with a genome
+Format: {&#8216;genome_name&#8217;: {&#8216;&lt;wig_prefix&gt;&#8217;: wig_prefix_path, &#8216;genome_table&#8217;: genome_table_path}}</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="moca.helpers.configuration_parser.is_executable">
+<tt class="descclassname">moca.helpers.configuration_parser.</tt><tt class="descname">is_executable</tt><big>(</big><em>fpath</em><big>)</big><a class="reference internal" href="_modules/moca/helpers/configuration_parser.html#is_executable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.helpers.configuration_parser.is_executable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if binary is executable</p>
+<p>Source: <a class="reference external" href="http://stackoverflow.com/a/377028/756986">http://stackoverflow.com/a/377028/756986</a></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-moca.helpers.exceptions">
+<span id="moca-helpers-exceptions-module"></span><h2>moca.helpers.exceptions module<a class="headerlink" href="#module-moca.helpers.exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="moca.helpers.exceptions.MocaException">
+<em class="property">exception </em><tt class="descclassname">moca.helpers.exceptions.</tt><tt class="descname">MocaException</tt><big>(</big><em>msg</em><big>)</big><a class="reference internal" href="_modules/moca/helpers/exceptions.html#MocaException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.helpers.exceptions.MocaException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+<p>Base class for MoCA Exceptions</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-moca.helpers.job_executor">
+<span id="moca-helpers-job-executor-module"></span><h2>moca.helpers.job_executor module<a class="headerlink" href="#module-moca.helpers.job_executor" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="moca.helpers.job_executor.run_job">
+<tt class="descclassname">moca.helpers.job_executor.</tt><tt class="descname">run_job</tt><big>(</big><em>self</em>, <em>cmd</em><big>)</big><a class="reference internal" href="_modules/moca/helpers/job_executor.html#run_job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.helpers.job_executor.run_job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute command line jobs passed as string argument</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmd</strong> (<em>string</em>) &#8211; Absolute command line statement as would be run on command line</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><strong>stdout</strong> (<em>string</em>) &#8211; standard output as written by cmd program</li>
+<li><strong>stderr</strong> (<em>string</em>) &#8211; standard output as written by cmd program</li>
+<li><strong>returncode</strong> (<em>int</em>) &#8211; return code as returned by subprocess(not very informative in general)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-moca.helpers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-moca.helpers" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">moca.helpers package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-moca.helpers.configuration_parser">moca.helpers.configuration_parser module</a></li>
+<li><a class="reference internal" href="#module-moca.helpers.exceptions">moca.helpers.exceptions module</a></li>
+<li><a class="reference internal" href="#module-moca.helpers.job_executor">moca.helpers.job_executor module</a></li>
+<li><a class="reference internal" href="#module-moca.helpers">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/moca.helpers.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">MoCA 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2016, Saket Choudhary.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

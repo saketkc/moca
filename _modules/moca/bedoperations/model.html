@@ -1,0 +1,282 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>moca.bedoperations.model &mdash; MoCA 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="MoCA 0.1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">MoCA 0.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for moca.bedoperations.model</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">MocaException</span>
+<span class="kn">import</span> <span class="nn">pandas</span>
+<span class="kn">from</span> <span class="nn">pybedtools</span> <span class="kn">import</span> <span class="n">BedTool</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+<span class="n">__NARROWPEAK_COLUMNS__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">,</span> <span class="s1">&#39;chromStart&#39;</span><span class="p">,</span> <span class="s1">&#39;chromEnd&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="s1">&#39;strand&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;signalValue&#39;</span><span class="p">,</span> <span class="s1">&#39;p-value&#39;</span><span class="p">,</span> <span class="s1">&#39;q-value&#39;</span><span class="p">]</span>
+
+<span class="n">__BROADPEAK_COLUMNS__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">,</span> <span class="s1">&#39;chromStart&#39;</span><span class="p">,</span> <span class="s1">&#39;chromEnd&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="s1">&#39;strand&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;signalValue&#39;</span><span class="p">,</span> <span class="s1">&#39;p-value&#39;</span><span class="p">,</span> <span class="s1">&#39;q-value&#39;</span><span class="p">,</span> <span class="s1">&#39;peak&#39;</span><span class="p">]</span>
+
+<span class="n">__MACSPEAK_COLUMNS__</span> <span class="o">=</span> <span class="n">__BROADPEAK_COLUMNS__</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
+
+<span class="n">__BED_TYPES__</span> <span class="o">=</span> <span class="p">{</span><span class="mi">10</span><span class="p">:</span> <span class="s1">&#39;narrowPeak&#39;</span><span class="p">,</span>
+                 <span class="mi">9</span><span class="p">:</span> <span class="s1">&#39;broadPeak&#39;</span><span class="p">,</span>
+                 <span class="mi">5</span><span class="p">:</span> <span class="s1">&#39;macsPeak&#39;</span><span class="p">}</span>
+
+<span class="n">__BED_COLUMN_MAPPING__</span> <span class="o">=</span> <span class="p">{</span><span class="mi">9</span><span class="p">:</span> <span class="n">__NARROWPEAK_COLUMNS__</span><span class="p">,</span>
+                          <span class="mi">10</span><span class="p">:</span> <span class="n">__BROADPEAK_COLUMNS__</span><span class="p">,</span>
+                          <span class="mi">5</span><span class="p">:</span> <span class="n">__MACSPEAK_COLUMNS__</span><span class="p">}</span>
+
+
+<div class="viewcode-block" id="Bedfile"><a class="viewcode-back" href="../../../moca.bedoperations.html#moca.bedoperations.model.Bedfile">[docs]</a><span class="k">class</span> <span class="nc">Bedfile</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class to crate a bed file object</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filepath: string</span>
+<span class="sd">        Absolute path to bedfile</span>
+
+<span class="sd">    genome_table: string</span>
+<span class="sd">        Absolute path to geonme chromosome size file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">genome_table</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bed_format</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extracted_fasta</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bed</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">MocaException</span><span class="p">(</span><span class="s1">&#39;Bed file {} not found&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_read</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bed_format</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">guess_bedformat</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">genome_table</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">genome_table</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed_format</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">determine_peaks</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sort_bed</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_to_scorefile</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Read bedfile as a pandas dataframe</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">MocaException</span><span class="p">(</span><span class="s1">&#39;Error reading bed file {}</span><span class="se">\n</span><span class="s1"> Traceback: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">,</span> <span class="n">e</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Bedfile.guess_bedformat"><a class="viewcode-back" href="../../../moca.bedoperations.html#moca.bedoperations.model.Bedfile.guess_bedformat">[docs]</a>    <span class="k">def</span> <span class="nf">guess_bedformat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Method to guess bed format</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bed_format: string</span>
+<span class="sd">            BED format</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; bed_df = Bedfile(&#39;file.bed&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; print(bed_df.guess_bed_format())</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bed_columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bed_columns</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">bed_format</span> <span class="o">=</span> <span class="n">__BED_TYPES__</span><span class="p">[</span><span class="n">count</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">__BED_COLUMN_MAPPING__</span><span class="p">[</span><span class="n">count</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">MocaException</span><span class="p">(</span><span class="s1">&#39;Bed file had {} columns. Supported column lengths are 5,9 or 10&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">count</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">bed_format</span>
+</div>
+    <span class="k">def</span> <span class="nf">_sort_bed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sort bed by default in descending order of scores</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sort_by</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="s1">&#39;chrom&#39;</span><span class="p">,</span> <span class="s1">&#39;peakStartZeroBased&#39;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="bp">False</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">])</span>
+
+<div class="viewcode-block" id="Bedfile.write_to_scorefile"><a class="viewcode-back" href="../../../moca.bedoperations.html#moca.bedoperations.model.Bedfile.write_to_scorefile">[docs]</a>    <span class="k">def</span> <span class="nf">write_to_scorefile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write bed file as score file</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">filename</span><span class="p">,</span> <span class="n">file_extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">+=</span> <span class="s1">&#39;.sorted&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scorefile</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scorefile</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span>
+                <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">,</span> <span class="s1">&#39;peakStartZeroBased&#39;</span><span class="p">,</span> <span class="s1">&#39;peakEndOneBased&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;score&#39;</span><span class="p">])</span>
+
+</div>
+<div class="viewcode-block" id="Bedfile.slop_bed"><a class="viewcode-back" href="../../../moca.bedoperations.html#moca.bedoperations.model.Bedfile.slop_bed">[docs]</a>    <span class="k">def</span> <span class="nf">slop_bed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flank_length</span><span class="o">=</span><span class="mi">200</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add flanking sequences to bed file</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        flank_length: int</span>
+<span class="sd">            the bed region is expanded in both direction by flank_length number of bases</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        slop_bed: dataframe</span>
+<span class="sd">            Slopped bed data object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c1"># Load bed fole into bedtools</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bed</span> <span class="o">=</span> <span class="n">BedTool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scorefile</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed</span><span class="o">.</span><span class="n">slop</span><span class="p">(</span><span class="n">g</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">genome_table</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">flank_length</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Bedfile.determine_peaks"><a class="viewcode-back" href="../../../moca.bedoperations.html#moca.bedoperations.model.Bedfile.determine_peaks">[docs]</a>    <span class="k">def</span> <span class="nf">determine_peaks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add extra columns representing peaks</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bed_format</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed_format</span>
+        <span class="k">if</span> <span class="n">bed_format</span> <span class="o">==</span> <span class="s1">&#39;narrowPeak&#39;</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;See https://genome.ucsc.edu/FAQ/FAQformat.html#format12</span>
+<span class="sd">            peak: Point-source called for this peak; 0-based offset from chromStart. Use -1 if no point-source called.</span>
+<span class="sd">            chromStart - The starting position of the feature in the chromosome or scaffold. The first base in a chromosome is numbered 0.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="c1"># By default peak position is the  floor of mean of chromStart and chromEnd</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">[</span><span class="s1">&#39;peak_position&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">[[</span><span class="s1">&#39;chromStart&#39;</span><span class="p">,</span> <span class="s1">&#39;chromEnd&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+            <span class="c1"># Peak not called, so chromStart is the peak itself</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="o">.</span><span class="n">peak</span><span class="o">==-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;peak_position&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="o">.</span><span class="n">peak</span><span class="o">==-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;chromStart&#39;</span><span class="p">]</span>
+
+            <span class="c1">## Append explicit chromStart and chromEnd position based on peak_position</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">[</span><span class="s1">&#39;peakStartZeroBased&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">[</span><span class="s1">&#39;peak_position&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">[</span><span class="s1">&#39;peakEndOneBased&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">[</span><span class="s1">&#39;peak_position&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">bed_format</span> <span class="o">==</span> <span class="s1">&#39;broadPeak&#39;</span><span class="p">:</span>
+            <span class="c1">#TODO</span>
+            <span class="k">raise</span> <span class="n">MocaException</span><span class="p">(</span><span class="s1">&#39;Broad region support not implemented&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">bed_format</span> <span class="o">==</span> <span class="s1">&#39;macsPeak&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">[</span><span class="s1">&#39;peak_position&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">[[</span><span class="s1">&#39;chromStart&#39;</span><span class="p">,</span> <span class="s1">&#39;chromEnd&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">[</span><span class="s1">&#39;peakStartZeroBased&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">[</span><span class="s1">&#39;peak_position&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">[</span><span class="s1">&#39;peakEndOneBased&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">[</span><span class="s1">&#39;peak_position&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">MocaException</span><span class="p">(</span><span class="s1">&#39;Format should be one of {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">__BED_TYPES__</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+</div>
+<div class="viewcode-block" id="Bedfile.extract_fasta"><a class="viewcode-back" href="../../../moca.bedoperations.html#moca.bedoperations.model.Bedfile.extract_fasta">[docs]</a>    <span class="k">def</span> <span class="nf">extract_fasta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fasta_in</span><span class="p">,</span> <span class="n">fasta_out</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Extract fasta of bed regions</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fasta_in: string</span>
+<span class="sd">            Absolute path to location of reference fasta file</span>
+
+<span class="sd">        fasta_out: string</span>
+<span class="sd">            Path to write extracted fasta sequence</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fasta: string</span>
+<span class="sd">            Fasta sequence combined</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#if self.bed is None:</span>
+            <span class="c1"># Load bed fole into bedtools</span>
+            <span class="c1">#self.bed = BedTool(self.scorefile)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extracted_fasta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed</span><span class="o">.</span><span class="n">sequence</span><span class="p">(</span><span class="n">fi</span><span class="o">=</span><span class="n">fasta_in</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temp_fasta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extracted_fasta</span><span class="o">.</span><span class="n">seqfn</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp_fasta</span><span class="p">,</span> <span class="n">fasta_out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extracted_fasta</span>
+</div>
+<div class="viewcode-block" id="Bedfile.sort_by"><a class="viewcode-back" href="../../../moca.bedoperations.html#moca.bedoperations.model.Bedfile.sort_by">[docs]</a>    <span class="k">def</span> <span class="nf">sort_by</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Method to sort columns of bedfiles</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        columns: list</span>
+<span class="sd">            list of column names to sort by</span>
+<span class="sd">        ascending: bool</span>
+<span class="sd">            Sort order(Default: true)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sorted_bed_df: dataframe</span>
+<span class="sd">            dataframe with sorted columns</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="n">ascending</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">MoCA 0.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2016, Saket Choudhary.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

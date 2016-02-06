@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>moca.bedoperations package &mdash; MoCA 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="MoCA 0.1.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">MoCA 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="moca-bedoperations-package">
+<h1>moca.bedoperations package<a class="headerlink" href="#moca-bedoperations-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-moca.bedoperations.model">
+<span id="moca-bedoperations-model-module"></span><h2>moca.bedoperations.model module<a class="headerlink" href="#module-moca.bedoperations.model" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="moca.bedoperations.model.Bedfile">
+<em class="property">class </em><tt class="descclassname">moca.bedoperations.model.</tt><tt class="descname">Bedfile</tt><big>(</big><em>filepath</em>, <em>genome_table</em><big>)</big><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Class to crate a bed file object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filepath</strong> (<em>string</em>) &#8211; Absolute path to bedfile</li>
+<li><strong>genome_table</strong> (<em>string</em>) &#8211; Absolute path to geonme chromosome size file</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="moca.bedoperations.model.Bedfile.determine_peaks">
+<tt class="descname">determine_peaks</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.determine_peaks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.determine_peaks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add extra columns representing peaks</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moca.bedoperations.model.Bedfile.extract_fasta">
+<tt class="descname">extract_fasta</tt><big>(</big><em>fasta_in</em>, <em>fasta_out=None</em><big>)</big><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.extract_fasta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.extract_fasta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract fasta of bed regions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fasta_in</strong> (<em>string</em>) &#8211; Absolute path to location of reference fasta file</li>
+<li><strong>fasta_out</strong> (<em>string</em>) &#8211; Path to write extracted fasta sequence</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>fasta</strong> &#8211; Fasta sequence combined</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">string</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="moca.bedoperations.model.Bedfile.guess_bedformat">
+<tt class="descname">guess_bedformat</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.guess_bedformat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.guess_bedformat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to guess bed format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><strong>bed_format</strong> (<em>string</em>) &#8211; BED format</li>
+<li><em>Example</em> &#8211; &gt;&gt;&gt; bed_df = Bedfile(&#8216;file.bed&#8217;)
+&gt;&gt;&gt; print(bed_df.guess_bed_format())</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="moca.bedoperations.model.Bedfile.slop_bed">
+<tt class="descname">slop_bed</tt><big>(</big><em>flank_length=200</em><big>)</big><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.slop_bed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.slop_bed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add flanking sequences to bed file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>flank_length</strong> (<em>int</em>) &#8211; the bed region is expanded in both direction by flank_length number of bases</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>slop_bed</strong> &#8211; Slopped bed data object</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dataframe</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="moca.bedoperations.model.Bedfile.sort_by">
+<tt class="descname">sort_by</tt><big>(</big><em>columns=None</em>, <em>ascending=False</em><big>)</big><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.sort_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.sort_by" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to sort columns of bedfiles</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>columns</strong> (<em>list</em>) &#8211; list of column names to sort by</li>
+<li><strong>ascending</strong> (<em>bool</em>) &#8211; Sort order(Default: true)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>sorted_bed_df</strong> &#8211; dataframe with sorted columns</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dataframe</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="moca.bedoperations.model.Bedfile.write_to_scorefile">
+<tt class="descname">write_to_scorefile</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.write_to_scorefile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.write_to_scorefile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write bed file as score file</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-moca.bedoperations">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-moca.bedoperations" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">moca.bedoperations package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-moca.bedoperations.model">moca.bedoperations.model module</a></li>
+<li><a class="reference internal" href="#module-moca.bedoperations">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/moca.bedoperations.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">MoCA 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2016, Saket Choudhary.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
