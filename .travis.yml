@@ -29,7 +29,7 @@ after_success:
   - codecov
   - coveralls
 
-script: nose2 -v --with-coverage --cover-package=moca
+script: nose2 -v --with-coverage
 
 deploy:
   provider: pypi
