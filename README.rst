@@ -8,9 +8,6 @@ MoCA
 .. image:: https://img.shields.io/travis/saketkc/moca.svg
         :target: https://travis-ci.org/saketkc/moca
 
-.. image:: https://readthedocs.org/projects/moca/badge/?version=latest
-        :target: https://readthedocs.org/projects/moca/?badge=latest
-        :alt: Documentation Status
 
 .. image:: https://codecov.io/github/saketkc/moca/coverage.svg?branch=master
         :target: https://codecov.io/github/saketkc/moca?branch=master
@@ -20,9 +17,14 @@ MoCA
 
 
 Tool for motif conservation analysis
-Python rewrite of [MoCA0.1.0](https://github.com/saketkc/moca_web)
+Python rewrite of `MoCA0.1.0`
 
 * Free software: BSD license
+
+Documentation
+-------------
+
+http://saketkc.github.io/moca/
 
 Features
 --------
@@ -35,5 +37,6 @@ Credits
 
 This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
 
+.. _`MoCA0.1.0`: https://github.com/saketkc/moca_web
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
