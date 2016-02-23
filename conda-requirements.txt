@@ -11,6 +11,7 @@ https://repo.continuum.io/pkgs/free/linux-64/cairo-1.12.18-6.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/click-4.1-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/clyent-1.2.0-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/coverage-4.0-py27_0.tar.bz2
+https://conda.anaconda.org/bioconda/linux-64/curl-7.45.0-1.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/cycler-0.9.0-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/decorator-4.0.6-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/docutils-0.12-py27_0.tar.bz2
@@ -42,6 +43,7 @@ https://repo.continuum.io/pkgs/free/linux-64/pixman-0.32.6-0.tar.bz2
 https://conda.anaconda.org/Chroxvi/linux-64/pockets-0.3-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/py2cairo-1.10.0-py27_2.tar.bz2
 https://conda.anaconda.org/bioconda/linux-64/pybedtools-0.7.6-py27_1.tar.bz2
+https://conda.anaconda.org/bioconda/linux-64/pybigwig-0.2.5-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/pyflakes-1.0.0-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/pygments-2.1-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/pyparsing-2.0.3-py27_0.tar.bz2
@@ -55,7 +57,7 @@ https://repo.continuum.io/pkgs/free/linux-64/qt-4.8.7-1.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/readline-6.2-2.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/requests-2.9.0-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/scipy-0.17.0-np110py27_1.tar.bz2
-https://repo.continuum.io/pkgs/free/linux-64/setuptools-19.6.2-py27_0.tar.bz2
+https://repo.continuum.io/pkgs/free/linux-64/setuptools-20.1.1-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/simplegeneric-0.8.1-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/sip-4.16.9-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/six-1.10.0-py27_0.tar.bz2
