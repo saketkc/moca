@@ -11,6 +11,7 @@ Subpackages
     moca.helpers
     moca.pipeline
     moca.visualiser
+    moca.wigoperations
 
 Submodules
 ----------
