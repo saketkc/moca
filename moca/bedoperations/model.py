@@ -119,6 +119,12 @@ class Bedfile(object):
     def determine_peaks(self):
         """Add extra columns representing peaks
 
+        Parameters
+        ----------
+
+        Returns
+        --------
+
         """
         bed_format = self.bed_format
         if bed_format == 'narrowPeak':
@@ -165,7 +171,7 @@ class Bedfile(object):
             #self.bed = BedTool(self.scorefile)
         self.extracted_fasta = self.bed.sequence(fi=fasta_in)
         self.temp_fasta = self.extracted_fasta.seqfn
-        shutil.copy(self.temp_fasta, fasta_out)
+        shutil.copy(self.temp_fasta, os.path.abspath(fasta_out))
         return self.extracted_fasta
 
     def sort_by(self, columns=None, ascending=False):
