@@ -1,11 +1,11 @@
 """Utility function to run jobs
 """
 
-import subprocess
-import os
 import contextlib
+import os
+import re
+import subprocess
 import time
-
 
 def safe_makedir(dname):
     """Make a directory if it doesn't exist, handling concurrent race conditions.
@@ -63,6 +63,8 @@ def run_job(cmd, cwd):
         return code as returned by subprocess(not very informative in general)
     """
 
+    # Replace multiple spaces with single space
+    cmd = re.sub('\s+', ' ', cmd).strip()
     cmd_split = cmd.split(' ')
     with chdir(cwd):
         proc = subprocess.Popen(cmd_split, stdout=subprocess.PIPE, stderr=subprocess.PIPE)

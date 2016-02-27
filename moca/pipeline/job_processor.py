@@ -4,8 +4,7 @@ import os
 from ..helpers import MocaException
 from ..helpers import ConfigurationParser
 from ..helpers import run_job
-
-xstr = lambda s: s or ""
+from ..helpers import xstr
 
 class Pipeline(object):
     """Generic class to run pipelines
@@ -24,6 +23,9 @@ class Pipeline(object):
         self.meme_default_params = '-dna -revcomp -maxsize 1000000 -nmotifs 3'
         self.meme_strargs = None
         self.meme_location = 'meme'
+        self.fimo_default_params = ''
+        self.fimo_strargs = None
+        self.fimo_location = 'fimo'
         self.commands_run = []
 
     def run_meme(self, fasta_in, out_dir=None, strargs=None):
@@ -58,10 +60,50 @@ class Pipeline(object):
         if not out_dir:
             out_dir = os.path.join(os.path.dirname(fasta_in), 'meme_out')
         out_dir = os.path.abspath(out_dir)
-        cmd = "{} {} -oc {} {}".format(self.meme_location, self.meme_strargs, out_dir, os.path.abspath(fasta_in))
+        cmd = '{} {} -oc {} {}'.format(self.meme_location, self.meme_strargs,
+                                       out_dir, os.path.abspath(fasta_in))
         stdout, stderr, exitcode = run_job(cmd=cmd,
                                            cwd=os.path.dirname(out_dir))
 
-        output = {'out_dir': out_dir, 'stdout': stdout, 'stderr': stderr, 'exitcode': exitcode, 'cmd': cmd}
+        output = {'out_dir': out_dir, 'stdout': stdout,
+                  'stderr': stderr, 'exitcode': exitcode,
+                  'cmd': cmd}
+        self.commands_run.append({'cmd': cmd, 'metadata': output})
+        return output
+
+    def run_fimo(self, motif_file, sequence_file, out_dir, strargs):
+        """Run fimo to find out locations where motif occurs
+
+        Arguments
+        ---------
+        motif_file: str
+            Path to meme.txt
+        sequence_file: str
+            Path to sequence file
+        out_dir: str
+            Location to output fimo results
+        strargs: str
+            string arguments as would be passed to fimo commandline
+        """
+        #TODO This code is same as in the above fmethod. Make this a separate method?
+        self.fimo_strargs = strargs
+        if not out_dir:
+            out_dir = os.path.join(os.path.dirname(motif_file), 'fimo_out')
+        self.fimo_strargs = xstr(self.fimo_strargs) + ' -oc {}'.format(os.path.abspath(out_dir))
+        fimo_binary = self.conf.get_binary_path('meme')
+        if not fimo_binary:
+            # Use meme from envirnonment
+            fimo_binary = 'fimo'
+        else:
+            #  Use absolute path meme
+            fimo_binary += '/fimo'
+        self.fimo_location = fimo_binary
+        cmd = '{}{} {} {}'.format(self.fimo_location, self.fimo_strargs, os.path.abspath(motif_file),
+                                   os.path.abspath(sequence_file))
+        stdout, stderr, exitcode = run_job(cmd=cmd,
+                                           cwd=os.path.dirname(out_dir))
+        output = {'out_dir': out_dir, 'stdout': stdout,
+                  'stderr': stderr, 'exitcode': exitcode,
+                  'cmd': cmd}
         self.commands_run.append({'cmd': cmd, 'metadata': output})
         return output
