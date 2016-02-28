@@ -98,6 +98,8 @@ class ConfigurationParser(object):
                 raise MocaException('{} is not executable.'.format(binary_path))
         else:
             if not is_executable(os.path.join(binary_path,'meme')):
-                raise MocaException('{}/meme is not executable'.format(binary_path))
+                pass
+                #TODO This should also raise warning
+                #raise MocaException('{}/meme is not executable'.format(binary_path))
         return binary_path
 

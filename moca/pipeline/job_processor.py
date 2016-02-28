@@ -17,8 +17,10 @@ class Pipeline(object):
     def __init__(self, config_file=None):
         self.commands_run = list()
         #TODO This can be removed if config_file is optional
-        if not os.path.isfile(config_file):
-            raise MocaException('Config file {} not found'.format(config_file))
+        if not os.path.isfile(xstr(config_file)):
+            #TODO This should raise a warning and no xception
+            print 'Config file {} not found'.format(config_file)
+            #raise MocaException('Config file {} not found'.format(config_file))
         self.conf = ConfigurationParser(config_file)
         self.meme_default_params = '-dna -revcomp -maxsize 1000000 -nmotifs 3'
         self.meme_strargs = None
@@ -49,8 +51,8 @@ class Pipeline(object):
         self.meme_strargs = strargs
         if not self.meme_strargs:
             self.meme_strargs = self.meme_default_params
-        meme_binary = self.conf.get_binary_path('meme')
-        if not meme_binary:
+        meme_binary = self.conf.get_binary_path('meme').strip()
+        if not meme_binary or meme_binary == '':
             # Use meme from envirnonment
             meme_binary = 'meme'
         else:
@@ -91,7 +93,7 @@ class Pipeline(object):
             out_dir = os.path.join(os.path.dirname(motif_file), 'fimo_out')
         self.fimo_strargs = xstr(self.fimo_strargs) + ' -oc {}'.format(os.path.abspath(out_dir))
         fimo_binary = self.conf.get_binary_path('meme')
-        if not fimo_binary:
+        if not fimo_binary or fimo_binary == '':
             # Use meme from envirnonment
             fimo_binary = 'fimo'
         else:
