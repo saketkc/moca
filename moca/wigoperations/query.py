@@ -1,3 +1,5 @@
+"""Perform query on bigwig files
+"""
 import pyBigWig
 from ..helpers import MocaException
 
@@ -22,7 +24,7 @@ class WigReader(object):
         Arguments
         ---------
         intervals: list of tuples
-            A list of tuples with the following format: (chr, chrStart, chrEnd)
+            A list of tuples with the following format: (chr, chrStart, chrEnd, strand)
 
         Returns
         -------
@@ -30,9 +32,12 @@ class WigReader(object):
             A list of lists containing scores for each tuple
         """
         scores = []
-        for chrom, chromStart, chromEnd in intervals:
+        for chrom, chromStart, chromEnd, strand in intervals:
             score = self.wig.values(chrom, chromStart, chromEnd)
-            scores.append(score)
+            if strand == '+':
+                scores.append(score)
+            else:
+                scores.append(score.reverse())
         return scores
 
     def _get_chromosomes(self):
@@ -46,5 +51,3 @@ class WigReader(object):
 
         """
         return self.wig.chroms()
-
-

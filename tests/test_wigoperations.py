@@ -22,7 +22,7 @@ class TestWigoperations(unittest.TestCase):
 
     def test_query(self):
         loaded_wig = WigReader(self.wig_location)
-        scores = loaded_wig.query([("1", 0, 3),("1",150,151)])
-        assert scores == [[0.10000000149011612, 0.20000000298023224, 0.30000001192092896], [1.5]]
+        scores = loaded_wig.query([("1", 0, 3, '-'),("1",150,151,'+')])
+        assert scores == [[0.10000000149011612, 0.20000000298023224, 0.30000001192092896].reverse(), [1.5]]
 
 
