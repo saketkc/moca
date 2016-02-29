@@ -85,4 +85,3 @@ https://repo.continuum.io/pkgs/free/linux-64/traitlets-4.1.0-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/wheel-0.29.0-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/yaml-0.1.6-0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/zlib-1.2.8-0.tar.bz2
-https://conda.anaconda.org/saketkc/linux-64/meme-4.11.1-py27pl5.18.2_0.tar.bz2
