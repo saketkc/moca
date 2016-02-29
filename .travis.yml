@@ -32,7 +32,7 @@ before_install:
  - conda install gcc perl
  - conda create -q -n moca-test python=$TRAVIS_PYTHON_VERSION
  - source activate moca-test
- - export MEME_ETC_DIR="~/anaconda2/etc"
+ - export MEME_ETC_DIR="$MINICONDA/pkgs/meme-4.11.1-py27pl5.18.2_0"
  - conda install meme -c saketkc
  - conda install  --file conda-requirements.txt
    # - conda install -c saketkc meme
