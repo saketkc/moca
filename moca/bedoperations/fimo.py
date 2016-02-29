@@ -1,5 +1,8 @@
 """Convert fimo.txt to a bed file"""
+
+import os
 import pandas as pd
+
 def fimo_to_sites(fimo_file):
     """Convert fimo.txt to bed file
     fimi.txt columns:
@@ -26,7 +29,7 @@ def fimo_to_sites(fimo_file):
                             Proc. Natl Acad. Sci. USA (2003) 100:9430-9445
     sequence:        The sequence matched to the motif.
     """
-    fimo_df = pd.read_table(fimo_file)
+    fimo_df = pd.read_table(os.path.abspath(fimo_file))
     #Split chr-start:end to three columns
     split_chr = lambda columnstr: pd.Series(s for s in columnstr.replace('-', ':').split(':'))
     fimo_df[['chrom', 'chromStart', 'chromEnd']] = fimo_df['sequence name'].apply(split_chr)
