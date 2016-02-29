@@ -27,13 +27,14 @@ class TestPipeline(unittest.TestCase):
             shutil.rmtree('tests/data/out/meme_analysis')
         output = self.pipeline.run_meme(fasta_in=self.fasta, out_dir='tests/data/out/meme_analysis')
         #TODO Check if meme.txt is same and created
+        print output
         assert output['exitcode'] == 0
         if os.path.exists('tests/data/out/meme_analysis'):
             shutil.rmtree('tests/data/out/meme_analysis')
 
     def test_fimo(self):
         """Test fimo runner"""
-        fimo_output = self.pipeline.run_fimo(motif_file='tests/data/meme_analysis/meme.txt',
+        fimo_output = self.pipeline.run_fimo(motif_file='tests/data/meme_analysis/meme.txt', motif_num=1,
                                              sequence_file=self.fasta, out_dir=None, strargs=None)
         assert fimo_output['exitcode'] == 0
 
