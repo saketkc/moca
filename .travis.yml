@@ -19,9 +19,11 @@ before_install:
  - conda info -a
  - conda install python=$TRAVIS_PYTHON_VERSION
  - conda remove --name moca-test --all
- - conda create -q -n moca-test python=$TRAVIS_PYTHON_VERSION --file conda-requirements.txt
-   # - conda install -c saketkc meme
+ - conda create -q -n moca-test python=$TRAVIS_PYTHON_VERSION
  - source activate moca-test
+ - conda install meme -c saketkc
+ - conda install  --file conda-requirements.txt
+   # - conda install -c saketkc meme
  - travis_retry pip install codecov nose2[coverage-plugin] coveralls
 
 install:
