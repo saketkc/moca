@@ -9,6 +9,7 @@ cache:
     - $HOME/miniconda
 
 before_install:
+ - sudo apt-get install libc-dev
  - export MINICONDA=$HOME/miniconda 
  - export PATH="$MINICONDA/bin:$PATH"
  - hash -r
