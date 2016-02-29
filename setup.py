@@ -46,6 +46,7 @@ setup(
     author="Saket Choudhary",
     author_email='saketkc@gmail.com',
     url='https://github.com/saketkc/moca',
+    #scripts=['bin/mocacli'],
     packages=[
         'moca',
         'moca.helpers',
@@ -76,5 +77,12 @@ setup(
         'Operating System :: MacOS'
     ],
     test_suite='nose2.collector.collector',
-    tests_require=test_requirements
+    tests_require=test_requirements,
+    entry_points = '''
+            [console_scripts]
+            yourscript=yourscript:cli
+    ''',
+    #{
+     #   'console_scripts': ['mocacli=mocacli:cli'],
+     #   }
 )

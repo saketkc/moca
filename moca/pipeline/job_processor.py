@@ -73,13 +73,15 @@ class Pipeline(object):
         self.commands_run.append({'cmd': cmd, 'metadata': output})
         return output
 
-    def run_fimo(self, motif_file, sequence_file, out_dir, strargs):
+    def run_fimo(self, motif_file, motif_num, sequence_file, out_dir, strargs):
         """Run fimo to find out locations where motif occurs
 
         Arguments
         ---------
         motif_file: str
             Path to meme.txt
+        motif_num: int
+            Motif number to investigate
         sequence_file: str
             Path to sequence file
         out_dir: str
@@ -91,7 +93,7 @@ class Pipeline(object):
         self.fimo_strargs = strargs
         if not out_dir:
             out_dir = os.path.join(os.path.dirname(motif_file), 'fimo_out')
-        self.fimo_strargs = xstr(self.fimo_strargs) + ' -oc {}'.format(os.path.abspath(out_dir))
+        self.fimo_strargs = xstr(self.fimo_strargs) + ' --motif {} -oc {}'.format(motif_num, os.path.abspath(out_dir))
         fimo_binary = self.conf.get_binary_path('meme')
         if not fimo_binary or fimo_binary == '':
             # Use meme from envirnonment
