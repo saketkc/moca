@@ -19,6 +19,8 @@ before_install:
  - conda info -a
  - conda install python=$TRAVIS_PYTHON_VERSION
  - conda remove --name moca-test --all
+ - conda config --add channels bioconda
+ - conda config --add channels r
  - conda create -q -n moca-test python=$TRAVIS_PYTHON_VERSION
  - source activate moca-test
  - conda install meme -c saketkc
