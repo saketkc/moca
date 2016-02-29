@@ -33,13 +33,12 @@ class TestPipeline(unittest.TestCase):
 
     def test_fimo(self):
         """Test fimo runner"""
-        self.pipeline.run_meme(fasta_in=self.fasta, out_dir='tests/data/out/meme_analysis')
-        fimo_output = self.pipeline.run_fimo(motif_file='tests/data/out/meme_analysis/meme.txt',
+        fimo_output = self.pipeline.run_fimo(motif_file='tests/data/meme_analysis/meme.txt',
                                              sequence_file=self.fasta, out_dir=None, strargs=None)
         assert fimo_output['exitcode'] == 0
 
     def test_fimo_to_sites(self):
-        fimo_file = 'tests/data/out/meme_analysis/fimo_out/fimo.txt'
+        fimo_file = 'tests/data/fimo_analysis/fimo.txt'
         record_dict = SeqIO.to_dict(SeqIO.parse(open(self.fasta), "fasta"))
         fimo_df = fimo_to_sites(fimo_file)
         for i, row in fimo_df.iterrows():

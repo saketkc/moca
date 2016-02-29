@@ -1,0 +1,19 @@
+##gff-version 3
+chr1:29387-29428	fimo	nucleotide_motif	12	35	90.5	+	.	Name=1;ID=1-1-chr1:29387-29428;pvalue=8.81e-10;qvalue= 1.87e-07;sequence=AGTCCGCCCGCGCCTCCGGGTCCT;
+chr1:237735-237776	fimo	nucleotide_motif	17	40	89.4	-	.	Name=1;ID=1-1-chr1:237735-237776;pvalue=1.13e-09;qvalue= 1.87e-07;sequence=TGACCTCTGCTGCCACCTGGTGCT;
+chr1:740100-740141	fimo	nucleotide_motif	11	34	71.1	+	.	Name=1;ID=1-1-chr1:740100-740141;pvalue=7.79e-08;qvalue= 4.28e-06;sequence=AAATAGCTACTGCTAAACAGACCT;
+chr1:757386-757427	fimo	nucleotide_motif	13	36	 77	+	.	Name=1;ID=1-1-chr1:757386-757427;pvalue=1.98e-08;qvalue= 1.31e-06;sequence=AGATCCACCCTGTCTACTCTACCT;
+chr1:712819-712860	fimo	nucleotide_motif	2	25	77.8	+	.	Name=1;ID=1-1-chr1:712819-712860;pvalue=1.65e-08;qvalue= 1.31e-06;sequence=agctcactgcagccttgagctcct;
+chr1:234323-234364	fimo	nucleotide_motif	14	37	86.8	+	.	Name=1;ID=1-1-chr1:234323-234364;pvalue=2.07e-09;qvalue= 2.27e-07;sequence=AGGAAGCTGTTGCCTCACCTTCCT;
+chr1:714075-714116	fimo	nucleotide_motif	4	16	65.3	+	.	Name=2;ID=2-1-chr1:714075-714116;pvalue=2.96e-07;qvalue= 6.58e-05;sequence=AAGGCGCACCCTT;
+chr1:10165-10206	fimo	nucleotide_motif	16	28	62.1	+	.	Name=2;ID=2-1-chr1:10165-10206;pvalue=6.2e-07;qvalue= 6.58e-05;sequence=aaccctaacccta;
+chr1:10165-10206	fimo	nucleotide_motif	22	34	62.1	+	.	Name=2;ID=2-2-chr1:10165-10206;pvalue=6.2e-07;qvalue= 6.58e-05;sequence=aaccctaacccta;
+chr1:10165-10206	fimo	nucleotide_motif	28	40	62.1	+	.	Name=2;ID=2-3-chr1:10165-10206;pvalue=6.2e-07;qvalue= 6.58e-05;sequence=aaccctaacccta;
+chr1:10165-10206	fimo	nucleotide_motif	10	22	40.4	+	.	Name=2;ID=2-4-chr1:10165-10206;pvalue=9.15e-05;qvalue= 0.00808;sequence=taacctaacccta;
+chr1:521554-521595	fimo	nucleotide_motif	7	19	68.9	+	.	Name=2;ID=2-1-chr1:521554-521595;pvalue=1.28e-07;qvalue= 6.58e-05;sequence=AAGGCAAACCCGA;
+chr1:10165-10206	fimo	nucleotide_motif	4	11	 43	+	.	Name=3;ID=3-1-chr1:10165-10206;pvalue=5.04e-05;qvalue= 0.00568;sequence=taacccta;
+chr1:10165-10206	fimo	nucleotide_motif	15	22	 43	+	.	Name=3;ID=3-2-chr1:10165-10206;pvalue=5.04e-05;qvalue= 0.00568;sequence=taacccta;
+chr1:10165-10206	fimo	nucleotide_motif	21	28	 43	+	.	Name=3;ID=3-3-chr1:10165-10206;pvalue=5.04e-05;qvalue= 0.00568;sequence=taacccta;
+chr1:10165-10206	fimo	nucleotide_motif	27	34	 43	+	.	Name=3;ID=3-4-chr1:10165-10206;pvalue=5.04e-05;qvalue= 0.00568;sequence=taacccta;
+chr1:10165-10206	fimo	nucleotide_motif	33	40	 43	+	.	Name=3;ID=3-5-chr1:10165-10206;pvalue=5.04e-05;qvalue= 0.00568;sequence=taacccta;
+chr1:715241-715282	fimo	nucleotide_motif	15	22	 43	+	.	Name=3;ID=3-1-chr1:715241-715282;pvalue=5.04e-05;qvalue= 0.00568;sequence=taatccca;
