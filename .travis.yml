@@ -9,8 +9,14 @@ cache:
     - $HOME/miniconda
 
 before_install:
- - sudo apt-get update -y
- - sudo apt-get install -qq -y build-essential python-dev
+ - sudo apt-get update -qq
+ - sudo apt-get install -qq 
+ - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+ - sudo apt-get update
+ - sudo apt-get install g++-4.8 gcc-4.8 build-essential
+ - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
+ - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 90
+ - sudo apt-get install libstdc++-4.8-dev
  - export MINICONDA=$HOME/miniconda 
  - export PATH="$MINICONDA/bin:$PATH"
  - hash -r
