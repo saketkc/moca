@@ -9,7 +9,8 @@ cache:
     - $HOME/miniconda
 
 before_install:
- - sudo apt-get install libc-dev
+ - sudo apt-get update -y
+ - sudo apt-get install -qq -y build-essential python-dev
  - export MINICONDA=$HOME/miniconda 
  - export PATH="$MINICONDA/bin:$PATH"
  - hash -r
