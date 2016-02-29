@@ -21,6 +21,7 @@ before_install:
  - conda remove --name moca-test --all
  - conda config --add channels bioconda
  - conda config --add channels r
+ - conda install gcc perl
  - conda create -q -n moca-test python=$TRAVIS_PYTHON_VERSION
  - source activate moca-test
  - conda install meme -c saketkc
