@@ -16,7 +16,7 @@ before_install:
  - sudo apt-get install g++-4.8 gcc-4.8 build-essential
  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 90
- - sudo apt-get install libstdc++-4.8-dev
+ - sudo apt-get install libstdc++-4.8-dev ghostscript
  - export MINICONDA=$HOME/miniconda 
  - export PATH="$MINICONDA/bin:$PATH"
  - hash -r
@@ -34,7 +34,8 @@ before_install:
  - source activate moca-test
  - export MEME_ETC_DIR="$MINICONDA/envs/moca-test/etc"
  - conda install meme -c saketkc
- - conda install  --file conda-requirements.txt
+ - conda install  --file conda-requirements.txti
+ - conda install ghostscript
    # - conda install -c saketkc meme
  - find $MINICONDA -iname "template.eps"
  - travis_retry pip install codecov nose2[coverage-plugin] coveralls
