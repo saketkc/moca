@@ -12,6 +12,7 @@ from Bio import SeqIO
 from moca.pipeline import Pipeline
 from moca.bedoperations import fimo_to_sites
 import filecmp
+from moca.helpers import read_memefile
 
 class TestPipeline(unittest.TestCase):
     """Test pipeline """
@@ -32,8 +33,10 @@ class TestPipeline(unittest.TestCase):
         #TODO This check is too stringent, specially if logos are being produced.
         #MEME installation leads to hard coded paths
         #assert output['exitcode'] == 0
-        assert filecmp.cmp('tests/data/out/meme_analysis/meme.txt',
-                           'tests/data/meme_analysis/meme.txt')
+        #assert filecmp.cmp('tests/data/out/meme_analysis/meme.txt',
+        #                   'tests/data/meme_analysis/meme.txt')
+
+        assert read_memefile['num_occurences'] == 3
         if os.path.exists('tests/data/out/meme_analysis'):
             shutil.rmtree('tests/data/out/meme_analysis')
 

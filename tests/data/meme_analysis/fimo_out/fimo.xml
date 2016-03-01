@@ -4,7 +4,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation=  xmlns:fimo="http://noble.gs.washington.edu/schema/fimo"
 >
-<command-line>fimo -oc /media/data1/Development_Version_Controlled/OpenSource/saketkc/moca/tests/data/meme_analysis/fimo_out /media/data1/Development_Version_Controlled/OpenSource/saketkc/moca/tests/data/meme_analysis/meme.txt /media/data1/Development_Version_Controlled/OpenSource/saketkc/moca/tests/data/macsPeak.out.fasta</command-line>
+<command-line>fimo --motif 1 -oc /media/data1/Development_Version_Controlled/OpenSource/saketkc/moca/tests/data/meme_analysis/fimo_out /media/data1/Development_Version_Controlled/OpenSource/saketkc/moca/tests/data/meme_analysis/meme.txt /media/data1/Development_Version_Controlled/OpenSource/saketkc/moca/tests/data/macsPeak.out.fasta</command-line>
 <settings>
 <setting name="output directory">/media/data1/Development_Version_Controlled/OpenSource/saketkc/moca/tests/data/meme_analysis/fimo_out</setting>
 <setting name="MEME file name">/media/data1/Development_Version_Controlled/OpenSource/saketkc/moca/tests/data/meme_analysis/meme.txt</setting>
@@ -19,8 +19,9 @@
 <setting name="max stored scores">100000</setting>
 <setting name="pseudocount">0.1</setting>
 <setting name="verbosity">2</setting>
+<setting name="selected motif">1</setting>
 </settings>
-<sequence-data num-sequences="10" num-residues="410" />
+<sequence-data num-sequences="0" num-residues="0" />
 <alphabet name="DNA" like="dna">
 <letter id="A" symbol="A" complement="T" name="Adenine" colour="CC0000"/>
 <letter id="C" symbol="C" complement="G" name="Cytosine" colour="0000CC"/>
