@@ -34,10 +34,7 @@ before_install:
  - source activate moca-test
  - export MEME_ETC_DIR="$MINICONDA/envs/moca-test/etc"
  - conda install meme -c saketkc
- - conda install  --file conda-requirements.txti
- - conda install ghostscript
-   # - conda install -c saketkc meme
- - find $MINICONDA -iname "template.eps"
+ - conda install  --file conda-requirements.txt
  - travis_retry pip install codecov nose2[coverage-plugin] coveralls
 
 install:
