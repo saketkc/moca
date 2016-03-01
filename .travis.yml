@@ -36,7 +36,8 @@ before_install:
  - conda install meme -c saketkc
  - conda install  --file conda-requirements.txt
    # - conda install -c saketkc meme
- - find $MINICODA -iname "template.eps"
+ - find $MINICONDA -iname "template.eps"
+ - find / -iname "template.eps"
  - travis_retry pip install codecov nose2[coverage-plugin] coveralls
 
 install:
