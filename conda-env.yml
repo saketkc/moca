@@ -37,7 +37,6 @@ dependencies:
 - mkl=11.3.1=0
 - mpc=1.0.1=0
 - mpfr=3.1.2=0
-- nose2=0.5.0=py27_0
 - numpy=1.10.4=py27_0
 - openblas=0.2.14=3
 - openssl=1.0.2g=0
@@ -52,7 +51,6 @@ dependencies:
 - pickleshare=0.5=py27_0
 - pip=8.0.3=py27_0
 - pixman=0.32.6=0
-- pockets=0.3=py27_0
 - py2cairo=1.10.0=py27_2
 - pybedtools=0.7.6=py27_1
 - pybigwig=0.2.5=py27_0
@@ -76,7 +74,6 @@ dependencies:
 - snowballstemmer=1.2.1=py27_0
 - sphinx=1.2.3=py27_0
 - sphinx_rtd_theme=0.1.9=py27_0
-- sphinxcontrib-napoleon=0.4.4=py27_0
 - sqlite=3.9.2=0
 - statsmodels=0.6.1=np110py27_0
 - tk=8.5.18=0
@@ -88,6 +85,8 @@ dependencies:
   - cov-core==1.15.0
   - ipython-genutils==0.1.0
   - moca==0.1.0
+  - pockets==0.3
   - sphinx-bootstrap-theme==0.4.8
   - sphinx-rtd-theme==0.1.9
+  - sphinxcontrib-napoleon==0.5.0
 
