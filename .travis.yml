@@ -29,17 +29,13 @@ before_install:
  - conda remove --name moca-test --all
  - conda config --add channels bioconda
  - conda config --add channels r
- - conda config --add channels saketkc
- - conda config --add channels richardotis
  - conda install gcc perl
-   #- conda create -q -n moca-test python=$TRAVIS_PYTHON_VERSION
- - conda env create -f conda-env.yml -q -n moca-test
+ - conda env create -f conda-env.yml -q -n moca-test python=$TRAVIS_PYTHON_VERSION
 
  - source activate moca-test
  - export MEME_ETC_DIR="$MINICONDA/envs/moca-test/etc"
  - conda install meme -c saketkc
- - conda install  --file conda-requirements.txt
- - travis_retry pip install codecov nose2[coverage-plugin] coveralls
+   #- travis_retry pip install codecov nose2[coverage-plugin] coveralls
 
 install:
   - python setup.py install --single-version-externally-managed --record=/tmp/record.txt
