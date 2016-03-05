@@ -31,7 +31,9 @@ before_install:
  - conda config --add channels r
  - conda config --add channels saketkc
  - conda install gcc perl
- - conda create -q -n moca-test python=$TRAVIS_PYTHON_VERSION
+   #- conda create -q -n moca-test python=$TRAVIS_PYTHON_VERSION
+ - conda env create -f -q -n moca-test environment.yml
+
  - source activate moca-test
  - export MEME_ETC_DIR="$MINICONDA/envs/moca-test/etc"
  - conda install meme -c saketkc
