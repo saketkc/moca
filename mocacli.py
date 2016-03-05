@@ -10,10 +10,10 @@ from moca.helpers.job_executor import safe_makedir
 
 @click.command()
 @click.option('--bedfile', help='Bed file input')
-@click.option('--configuration', help='Configuration file')
-@click.option('--genome-table', '-gt', help='Chromosome size file')
-@click.option('--genome-fasta', '-gf', help='Genome fasta')
-@click.option('--flank-length', default=100, help='Flanking sequence length')
+@click.option('--configuration', help='Configuration file', required=True)
+@click.option('--genome-table', '-gt', help='Chromosome size file', required=True)
+@click.option('--genome-fasta', '-gf', help='Genome fasta', required=True)
+@click.option('--flank-length', default=100, help='Flanking sequence length', required=True)
 
 
 def mocacli(bedfile, genome_table, genome_fasta, flank_length, configuration):
@@ -32,7 +32,9 @@ def mocacli(bedfile, genome_table, genome_fasta, flank_length, configuration):
     meme_out_dir = os.path.join(moca_out_dir, 'meme_analysis' )
     #def run_meme(self, fasta_in, out_dir=None, strargs=None):
     meme_run_out = moca_pipeline.run_meme(fasta_in=query_fasta, out_dir=meme_out_dir)
+    print meme_run_out
     meme_file = os.path.join(meme_out_dir, 'meme.txt')
+    print (meme_file)
 
     meme_summary = read_memefile(meme_file)
     for motif in range(1, meme_summary['num_occurences']+1):

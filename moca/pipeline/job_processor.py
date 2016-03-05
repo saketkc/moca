@@ -22,7 +22,7 @@ class Pipeline(object):
             print 'Config file {} not found'.format(config_file)
             #raise MocaException('Config file {} not found'.format(config_file))
         self.conf = ConfigurationParser(config_file)
-        self.meme_default_params = '-dna -revcomp -maxsize 1000000 -nmotifs 3'
+        self.meme_default_params = '-maxw 20 -dna -revcomp -maxsize 1000000 -nmotifs 3'
         self.meme_strargs = None
         self.meme_location = 'meme'
         self.fimo_default_params = ''
