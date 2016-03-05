@@ -40,7 +40,7 @@ dependencies:
 - nose2=0.5.0=py27_0
 - numpy=1.10.4=py27_0
 - openblas=0.2.14=3
-- openssl=1.0.2f=0
+- openssl=1.0.2g=0
 - pandas=0.17.1=np110py27_0
 - path.py=8.1.2=py27_1
 - patsy=0.4.0=np110py27_0
