@@ -49,7 +49,7 @@ before_install:
 install:
   - python setup.py install --single-version-externally-managed --record=/tmp/record.txt
 
-script: nose2 -v --with-coverage
+script: nosetests -v --with-coverage
 
 after_success:
   - codecov
