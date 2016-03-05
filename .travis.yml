@@ -41,10 +41,10 @@ install:
   - python setup.py install --single-version-externally-managed --record=/tmp/record.txt
 
 after_success:
-  - source deactivate moca-test
-  - conda remove --name moca-test --all
   - codecov
   - coveralls
+  - source deactivate moca-test
+  - conda remove --name moca-test --all
 
 after_failure:
   - source deactivate moca-test
