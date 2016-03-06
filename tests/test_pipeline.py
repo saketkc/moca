@@ -61,7 +61,8 @@ class TestPipeline(unittest.TestCase):
                                              strargs=None)
         assert fimo_output['exitcode'] == 0
 
-    def test_fimo_to_sites(self):
+    def test_fimotosites(self):
+        """Test fimo_to_sites"""
         fimo_file = 'tests/data/expected_out/fimo_analysis/fimo.txt'
         record_dict = SeqIO.to_dict(SeqIO.parse(open(self.meme_fasta), 'fasta'))
         fimo_df = fimo_to_sites(fimo_file)

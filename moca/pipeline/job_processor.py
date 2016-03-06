@@ -73,7 +73,7 @@ class Pipeline(object):
         self.commands_run.append({'cmd': cmd, 'metadata': output})
         return output
 
-    def run_fimo(self, motif_file, motif_num, sequence_file, out_dir, strargs):
+    def run_fimo(self, motif_file, motif_num, sequence_file, out_dir=None, strargs=None):
         """Run fimo to find out locations where motif occurs
 
         Arguments
@@ -102,8 +102,9 @@ class Pipeline(object):
             #  Use absolute path meme
             fimo_binary += '/fimo'
         self.fimo_location = fimo_binary
-        cmd = '{}{} {} {}'.format(self.fimo_location, self.fimo_strargs, os.path.abspath(motif_file),
-                                   os.path.abspath(sequence_file))
+        cmd = '{}{} {} {}'.format(self.fimo_location, self.fimo_strargs,
+                                  os.path.abspath(motif_file),
+                                  os.path.abspath(sequence_file))
         stdout, stderr, exitcode = run_job(cmd=cmd,
                                            cwd=os.path.dirname(out_dir))
         output = {'out_dir': out_dir, 'stdout': stdout,

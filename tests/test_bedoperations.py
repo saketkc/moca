@@ -5,10 +5,10 @@ bedoperations_test
 Tests for `moca.bedoperations` module.
 """
 
-from moca.bedoperations import Bedfile
 import unittest
-from moca.helpers import MocaException
 import filecmp
+from moca.bedoperations import Bedfile
+from moca.helpers import MocaException
 
 class TestBedoperations(unittest.TestCase):
 
@@ -19,18 +19,22 @@ class TestBedoperations(unittest.TestCase):
         self.genome_table = 'tests/data/hg19.chrom.sizes'
 
     def test_narrowPeak(self):
+        """Test load narrowPeak"""
         loaded_bed = Bedfile(self.narrowpeak, self.genome_table)
         assert loaded_bed.bed_format == 'narrowPeak'
 
     def test_broadPeak(self):
+        """Test load broadPeak"""
         with self.assertRaises(MocaException):
-            loaded_bed = Bedfile(self.broadpeak, self.genome_table)
+            Bedfile(self.broadpeak, self.genome_table)
 
     def test_macsPeak(self):
+        """Test load macsPeak"""
         loaded_bed = Bedfile(self.macspeak, self.genome_table)
         assert loaded_bed.bed_format == 'macsPeak'
 
     def test_generatefasta(self):
+        """Test generate fasta"""
         loaded_bed = Bedfile(self.macspeak, self.genome_table)
         loaded_bed.determine_peaks()
         loaded_bed.slop_bed(flank_length=20)
