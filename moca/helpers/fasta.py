@@ -10,7 +10,25 @@ from Bio.SeqRecord import SeqRecord
 from random import seed
 from random import randint
 
+def make_uppercase(mixed_fasta, upper_fasta):
+    """Convert fasta to have all upper case letters
+
+    This function is essentially a hack to convert
+    repeat masked sequences which are often repeated by MEME
+    to normal alphabets. The problem arises
+    becauses Biopython handles only upper case letters(IUPACUnambiguousDNA) in the
+    core motif model. In cases where MEME reports motifs from
+    soft-masked regions, the meme file can't be read by Biopython
+    unless it is generated from a fasta containing only upper case
+    letters. MEME's recommendation is to NOT use repeat masked
+    sequence. It is a bit surprising in the first place thatMEME reports regions
+    from repeatmasked sites.
+    """
+    records = (rec.upper() for rec in SeqIO.parse(os.path.abspath(mixed_fasta), 'fasta'))
+    SeqIO.write(records, os.path.abspath(upper_fasta), 'fasta')
+
 def generate_random_fasta(genome, genome_table, random_fasta):
+    """Generate fasta pooling seqe"""
     gt = None
     seed(1)
     with open(genome_table) as f:
