@@ -10,7 +10,7 @@ from Bio.SeqRecord import SeqRecord
 from random import seed
 from random import randint
 
-def make_uppercase(mixed_fasta, upper_fasta):
+def make_uppercase_fasta(mixed_fasta, upper_fasta):
     """Convert fasta to have all upper case letters
 
     This function is essentially a hack to convert
@@ -21,8 +21,16 @@ def make_uppercase(mixed_fasta, upper_fasta):
     soft-masked regions, the meme file can't be read by Biopython
     unless it is generated from a fasta containing only upper case
     letters. MEME's recommendation is to NOT use repeat masked
-    sequence. It is a bit surprising in the first place thatMEME reports regions
-    from repeatmasked sites.
+    sequence.
+
+    See: https://groups.google.com/forum/#!topic/meme-suite/0XEgRn0Lmcc
+
+    Arguments
+    ---------
+    mixed_fasta: str
+        Location of fasta with mixed(both uppercase and lowercase alphabets)
+    upper_fasta: str
+        Location to store the uppercase fasta
     """
     records = (rec.upper() for rec in SeqIO.parse(os.path.abspath(mixed_fasta), 'fasta'))
     SeqIO.write(records, os.path.abspath(upper_fasta), 'fasta')

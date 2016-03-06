@@ -14,4 +14,5 @@ def read_memefile(meme_file):
 
     sorted_occurences = sorted(enumerate(num_occurrences), key=lambda x: x[1])
     summary['motif_occurrences'] = {'motif{}'.format(index+1):value for index,value in sorted_occurences}
+    summary['motif_records'] = records
     return summary

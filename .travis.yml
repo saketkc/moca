@@ -18,6 +18,7 @@ addons:
 cache:
   directories:
     - $HOME/miniconda
+    - $HOME/moca/tests
 
 before_install:
  - export MINICONDA=$HOME/miniconda
@@ -42,6 +43,8 @@ before_install:
 
 install:
   - python setup.py install --single-version-externally-managed --record=/tmp/record.txt
+  - wget -c -O tests/data http://hgdownload.cse.ucsc.edu/goldenpath/hg19/bigZips/chromFa.tar.gz
+  - tar -zxvf tests/data/chromFa.tar.gz && mv tests/data/chromFa.tar.gz tests/data/hg19.fa
 
 script: nosetests -v --with-coverage
 

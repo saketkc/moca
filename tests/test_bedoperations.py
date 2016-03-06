@@ -8,6 +8,7 @@ Tests for `moca.bedoperations` module.
 from moca.bedoperations import Bedfile
 import unittest
 from moca.helpers import MocaException
+import filecmp
 
 class TestBedoperations(unittest.TestCase):
 
@@ -33,7 +34,5 @@ class TestBedoperations(unittest.TestCase):
         loaded_bed = Bedfile(self.macspeak, self.genome_table)
         loaded_bed.determine_peaks()
         loaded_bed.slop_bed(flank_length=20)
-        #fasta_out = loaded_bed.extract_fasta(fasta_in='/media/data1/GENOMES/genomes/hg19/fasta/hg19.fa', fasta_out='tests/data/out/macsPeak.fasta')
-        #with open('tests/data/out/macsPeak.fasta', 'w') as f:
-        #    f.write(fasta_out)
+        fasta_out = loaded_bed.extract_fasta(fasta_in='tests/data/hg19.fa', fasta_out='tests/data/generated_out/macsPeak.fasta')
 

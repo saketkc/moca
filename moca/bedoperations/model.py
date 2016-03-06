@@ -1,9 +1,9 @@
 import os
 from ..helpers import MocaException
+from ..helpers import make_uppercase_fasta
 import pandas
 from pybedtools import BedTool
 import numpy as np
-import shutil
 
 __NARROWPEAK_COLUMNS__ = ['chrom', 'chromStart', 'chromEnd',
                          'name', 'score', 'strand',
@@ -171,7 +171,8 @@ class Bedfile(object):
             #self.bed = BedTool(self.scorefile)
         self.extracted_fasta = self.bed.sequence(fi=fasta_in)
         self.temp_fasta = self.extracted_fasta.seqfn
-        shutil.copy(self.temp_fasta, os.path.abspath(fasta_out))
+        make_uppercase_fasta(self.temp_fasta, os.path.abspath(fasta_out))
+        os.remove(self.temp_fasta)
         return self.extracted_fasta
 
     def sort_by(self, columns=None, ascending=False):

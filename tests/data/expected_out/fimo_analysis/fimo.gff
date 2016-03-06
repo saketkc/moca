@@ -1,0 +1,6 @@
+##gff-version 3
+chr1:29387-29428	fimo	nucleotide_motif	18	35	72.4	+	.	Name=1;ID=1-1-chr1:29387-29428;pvalue=5.78e-08;qvalue= 5.27e-06;sequence=CCCGCGCCTCCGGGTCCT;
+chr1:237735-237776	fimo	nucleotide_motif	17	34	78.4	-	.	Name=1;ID=1-1-chr1:237735-237776;pvalue=1.42e-08;qvalue= 3.5e-06;sequence=CTGCTGCCACCTGGTGCT;
+chr1:757386-757427	fimo	nucleotide_motif	22	39	67.2	+	.	Name=1;ID=1-1-chr1:757386-757427;pvalue=1.89e-07;qvalue= 1.38e-05;sequence=CTGTCTACTCTACCTGCT;
+chr1:712819-712860	fimo	nucleotide_motif	8	25	75.4	+	.	Name=1;ID=1-1-chr1:712819-712860;pvalue=2.88e-08;qvalue= 3.5e-06;sequence=CTGCAGCCTTGAGCTCCT;
+chr1:234323-234364	fimo	nucleotide_motif	20	37	76.1	+	.	Name=1;ID=1-1-chr1:234323-234364;pvalue=2.45e-08;qvalue= 3.5e-06;sequence=CTGTTGCCTCACCTTCCT;
