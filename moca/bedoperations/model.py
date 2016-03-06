@@ -169,7 +169,7 @@ class Bedfile(object):
         #if self.bed is None:
             # Load bed fole into bedtools
             #self.bed = BedTool(self.scorefile)
-        self.extracted_fasta = self.bed.sequence(fi=fasta_in)
+        self.extracted_fasta = self.bed.sequence(fi=os.path.abspath(fasta_in))
         self.temp_fasta = self.extracted_fasta.seqfn
         make_uppercase_fasta(self.temp_fasta, os.path.abspath(fasta_out))
         os.remove(self.temp_fasta)

@@ -16,9 +16,10 @@ addons:
             - libstdc++-4.8-dev
             - ghostscript
 cache:
+    apt: true
   directories:
     - $HOME/miniconda
-    - $HOME/moca/tests
+    - $HOME/moca/tests/data
 
 before_install:
  - export MINICONDA=$HOME/miniconda
