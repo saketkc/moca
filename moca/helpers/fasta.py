@@ -110,8 +110,8 @@ def generate_random_fasta(genome,
         start = randint(0, limit-len_seq-1)
         end = start+len_seq-1
         data = record.seq[start:end]
-        seq = SeqRecord(data, '{}_{}_-{}'.format(chr_id, start, end), '', '')
-        seqs.append(seq)
+        seq = SeqRecord(data, '{}:{}-{}'.format(chr_id, start, end), '', '')
+        seqs.append(seq.upper())
 
     output_handle = open(out_fasta, 'w')
     logging.info('###########GeneratingRandomFA Start########################')

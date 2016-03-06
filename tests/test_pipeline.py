@@ -11,7 +11,6 @@ import unittest
 from Bio import SeqIO
 from moca.pipeline import Pipeline
 from moca.bedoperations import fimo_to_sites
-import filecmp
 from moca.helpers import read_memefile
 
 class TestPipeline(unittest.TestCase):
@@ -40,10 +39,10 @@ class TestPipeline(unittest.TestCase):
         #TODO Check if meme.txt is same and created
         #TODO This check is too stringent, specially if logos are being produced.
         #MEME installation leads to hard coded paths
-        #assert output['exitcode'] == 0
-
+        assert output['exitcode'] == 0
         meme_record = read_memefile('tests/data/generated_out/meme_analysis/meme.txt')
         assert meme_record['total_motifs'] == 3
+
         motif_record1 = meme_record['motif_records'][0]
         motif_record2 = meme_record['motif_records'][1]
         motif_record3 = meme_record['motif_records'][2]
@@ -65,8 +64,8 @@ class TestPipeline(unittest.TestCase):
         """Test fimo_to_sites"""
         fimo_file = 'tests/data/expected_out/fimo_analysis/fimo.txt'
         record_dict = SeqIO.to_dict(SeqIO.parse(open(self.meme_fasta), 'fasta'))
-        fimo_df = fimo_to_sites(fimo_file)
-        for i, row in fimo_df.iterrows():
+        fimo_df = fimo_to_sites(os.path.abspath(fimo_file))
+        for _, row in fimo_df.iterrows():
             record_id = row['sequence name']
             fimo_sequence = row['matched sequence']
             start = row['start']-1 # 0-based start

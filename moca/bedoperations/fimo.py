@@ -34,9 +34,8 @@ def fimo_to_sites(fimo_file):
     split_chr = lambda columnstr: pd.Series(s for s in columnstr.replace('-', ':').split(':'))
     fimo_df[['chrom', 'chromStart', 'chromEnd']] = fimo_df['sequence name'].apply(split_chr)
     fimo_df[['chromStart', 'chromEnd']] = fimo_df[['chromStart', 'chromEnd']].astype(int)
-    fimo_df.motifStartZeroBased = fimo_df.chromStart+fimo_df.start-1
-    fimo_df.motifEndOneBased = fimo_df.chromEnd+fimo_df.stop
-    # Seq((str(fasta[3].seq)[16:40])).reverse_complement()
+    fimo_df['motifStartZeroBased'] = fimo_df.chromStart+fimo_df.start-1
+    fimo_df['motifEndOneBased'] = fimo_df.chromEnd+fimo_df.stop
     return fimo_df
 
 

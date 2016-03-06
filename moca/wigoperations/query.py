@@ -33,11 +33,10 @@ class WigReader(object):
         """
         scores = []
         for chrom, chromStart, chromEnd, strand in intervals:
-            score = self.wig.values(chrom, chromStart, chromEnd)
-            if strand == '+':
-                scores.append(score)
-            else:
-                scores.append(score.reverse())
+            score = self.wig.values(chrom, int(chromStart), int(chromEnd))
+            if strand == '-':
+                score.reverse()
+            scores.append(score)
         return scores
 
     def _get_chromosomes(self):

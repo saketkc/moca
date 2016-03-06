@@ -3,6 +3,8 @@
 
 import os
 import click
+import pyprind
+import sys
 from moca import bedoperations, wigoperations, pipeline
 from moca.bedoperations import fimo_to_sites
 from moca.helpers import filename_extension
@@ -42,7 +44,9 @@ def mocacli(bedfile, genome_table, genome_fasta,
     fasta_metadata = get_fasta_metadata(query_fasta)
     phylop_wig = wigoperations.WigReader(phylop)
     gerp_wig = wigoperations.WigReader(gerp)
-    for motif in range(1, 2):# meme_summary['total_motifs']+1):
+    bar = pyprind.ProgBar(meme_summary['total_motifs']+1, monitor=True, width=180, stream=sys.stdout)
+
+    for motif in range(1, meme_summary['total_motifs']+1):
         fimo_rand_dir = os.path.join(moca_out_dir, 'motif_{}_fimo_analysis_random'.format(motif))
         fimo_main_dir = os.path.join(moca_out_dir, 'motif_{}_fimo_analysis_main'.format(motif))
         safe_makedir(fimo_rand_dir)
@@ -65,20 +69,38 @@ def mocacli(bedfile, genome_table, genome_fasta,
                                            sequence_file=query_fasta,
                                            out_dir=fimo_main_dir)
 
-        fimo_main_sites = fimo_to_sites(os.path.join(fimo_main_dir, 'fimo.txt'))
-        fimo_rand_sites = fimo_to_sites(os.path.join(fimo_rand_dir, 'fimo.txt'))
+        ##TODO Shoulnd;t this whole thing be a functon????
 
-        main_subset = fimo_main_sites[['motifStartZeroBased', 'motifEndOneBased', 'strand']]
-        main_intervals = [tuple(x) for x in main_subset.values]
+        fimo_main_file = os.path.join(fimo_main_dir, 'fimo.txt')
+        fimo_rand_file = os.path.join(fimo_rand_dir, 'fimo.txt')
+        fimo_main_sites = fimo_to_sites(fimo_main_file)
+        fimo_rand_sites = fimo_to_sites(fimo_rand_file)
 
-        rand_subset = fimo_rand_sites[['motifStartZeroBased', 'motifEndOneBased', 'strand']]
-        rand_intervals = [tuple(x) for x in rand_subset.values]
+        main_subset = fimo_main_sites[['chrom', 'motifStartZeroBased', 'motifEndOneBased', 'strand']]
+        main_intervals = [tuple(x) for x in main_subset.to_records(index=False)]
+
+
+        rand_subset = fimo_rand_sites[['chrom', 'motifStartZeroBased', 'motifEndOneBased', 'strand']]
+        rand_intervals = [tuple(x) for x in rand_subset.to_records(index=False)]
 
 
         rand_scores_phylop = phylop_wig.query(rand_intervals)
         rand_scores_gerp = gerp_wig.query(rand_intervals)
+
+        with open(os.path.join(fimo_rand_dir, 'phylop.txt'), 'w') as f:
+            f.write('\n'.join(rand_scores_phylop))
+        with open(os.path.join(fimo_rand_dir, 'gerp.txt'), 'w') as f:
+            f.write('\n'.join(rand_scores_gerp))
+
         main_scores_phylop = phylop_wig.query(main_intervals)
         main_scores_gerp = gerp_wig.query(main_intervals)
+
+        with open(os.path.join(fimo_main_dir, 'phylop.txt'), 'w') as f:
+            f.write('\n'.join(main_scores_phylop))
+        with open(os.path.join(fimo_main_dir, 'gerp.txt'), 'w') as f:
+            f.write('\n'.join(main_scores_gerp))
+
+        bar.update()
 
 
 if __name__ == '__main__':
