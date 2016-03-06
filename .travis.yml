@@ -1,8 +1,8 @@
 language: python
 
 env:
-    #- "2.6"
-  - "2.7"
+    - "2.6"
+    - "2.7"
 
 sudo: false
 
@@ -17,53 +17,52 @@ addons:
             - ghostscript
 cache:
     apt: true
-  directories:
-    - $HOME/miniconda
-    - $HOME/moca/tests/data
+    directories:
+        - $HOME/miniconda
+        - tests/data
 
 before_install:
- - export MINICONDA=$HOME/miniconda
- - export PATH="$MINICONDA/bin:$PATH"
- - hash -r
- - command -v conda >/dev/null || { wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
-   bash miniconda.sh -b -f -p $MINICONDA; }
- - conda config --set always_yes yes
- - conda update conda
- - conda info -a
- - conda install python=$TRAVIS_PYTHON_VERSION
- - conda remove --name moca-test --all
- - conda config --add channels bioconda
- - conda config --add channels r
- - conda install gcc perl
- - conda env create -f conda-env.yml -q -n moca-test python=$TRAVIS_PYTHON_VERSION
+    - export MINICONDA=$HOME/miniconda
+    - export PATH="$MINICONDA/bin:$PATH"
+    - hash -r
+    - command -v conda >/dev/null || { wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+    bash miniconda.sh -b -f -p $MINICONDA; }
+    - conda config --set always_yes yes
+    - conda update conda
+    - conda info -a
+    - conda install python=$TRAVIS_PYTHON_VERSION
+    - conda remove --name moca-test --all
+    - conda config --add channels bioconda
+    - conda config --add channels r
+    - conda install gcc perl
+    - conda env create -f conda-env.yml -q -n moca-test python=$TRAVIS_PYTHON_VERSION
 
- - source activate moca-test
- - export MEME_ETC_DIR="$MINICONDA/envs/moca-test/etc"
- - conda install meme -c saketkc
-   #- travis_retry pip install codecov nose2[coverage-plugin] coveralls
+    - source activate moca-test
+    - export MEME_ETC_DIR="$MINICONDA/envs/moca-test/etc"
+    - conda install meme -c saketkc
 
 install:
-  - python setup.py install --single-version-externally-managed --record=/tmp/record.txt
-  - wget -c -O tests/data/hg19.fa.tar.gz http://hgdownload.cse.ucsc.edu/goldenpath/hg19/bigZips/chromFa.tar.gz
-  - tar -zxvf tests/data/hg19.fa.tar.gz #&& mv tests/data/chromFa.tar.gz tests/data/hg19.fa
+    - python setup.py install --single-version-externally-managed --record=/tmp/record.txt
+    - wget -c -O tests/data/hg19.fa.tar.gz http://hgdownload.cse.ucsc.edu/goldenpath/hg19/bigZips/chromFa.tar.gz
+    - tar -zxvf tests/data/hg19.fa.tar.gz #&& mv tests/data/chromFa.tar.gz tests/data/hg19.fa
 
 script: nosetests -v --with-coverage
 
 after_success:
-  - codecov
-  - coveralls
+    - codecov
+    - coveralls
 
 after_script:
-  - source deactivate moca-test
-  - conda remove --name moca-test --all
+    - source deactivate moca-test
+    - conda remove --name moca-test --all
 
 deploy:
-  provider: pypi
-  distributions: sdist bdist_wheel
-  user: saketkc
-  password:
+    provider: pypi
+    distributions: sdist bdist_wheel
+    user: saketkc
+    password:
     secure: PLEASE_REPLACE_ME
-  on:
+    on:
     tags: true
     repo: saketkc/moca
     condition: $TOXENV == py27

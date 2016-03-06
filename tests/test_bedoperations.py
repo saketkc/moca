@@ -35,4 +35,5 @@ class TestBedoperations(unittest.TestCase):
         loaded_bed.determine_peaks()
         loaded_bed.slop_bed(flank_length=20)
         fasta_out = loaded_bed.extract_fasta(fasta_in='tests/data/hg19.fa', fasta_out='tests/data/generated_out/macsPeak.fasta')
+        assert filecmp.cmp('tests/data/generated_out/macsPeak.fasta', 'tests/data/expected_out/macsPeak.fasta')
 
