@@ -2,6 +2,8 @@
 
 import os
 import pandas as pd
+from moca.helpers import filename_extension
+
 
 def fimo_to_sites(fimo_file):
     """Convert fimo.txt to bed file
@@ -29,13 +31,18 @@ def fimo_to_sites(fimo_file):
                             Proc. Natl Acad. Sci. USA (2003) 100:9430-9445
     sequence:        The sequence matched to the motif.
     """
-    fimo_df = pd.read_table(os.path.abspath(fimo_file))
+    fimo_file = os.path.abspath(fimo_file)
+    fimo_df = pd.read_table(fimo_file)
+    filename, ext = filename_extension(os.path.abspath(fimo_file))
+    fimo_sites = os.path.join(os.path.dirname(fimo_file), '{}.sites{}'.format(filename, ext))
     #Split chr-start:end to three columns
     split_chr = lambda columnstr: pd.Series(s for s in columnstr.replace('-', ':').split(':'))
     fimo_df[['chrom', 'chromStart', 'chromEnd']] = fimo_df['sequence name'].apply(split_chr)
     fimo_df[['chromStart', 'chromEnd']] = fimo_df[['chromStart', 'chromEnd']].astype(int)
     fimo_df['motifStartZeroBased'] = fimo_df.chromStart+fimo_df.start-1
-    fimo_df['motifEndOneBased'] = fimo_df.chromEnd+fimo_df.stop
+    fimo_df['motifEndOneBased'] = fimo_df.chromStart+fimo_df.stop
+    fimo_df.to_csv(fimo_sites, index=False, sep='\t')
+    print filename
     return fimo_df
 
 

@@ -1,5 +1,6 @@
 """Perform query on bigwig files
 """
+import numpy as np
 import pyBigWig
 from ..helpers import MocaException
 
@@ -28,8 +29,8 @@ class WigReader(object):
 
         Returns
         -------
-        scores: list of lists
-            A list of lists containing scores for each tuple
+        scores: np.array
+            A numpy array containing scores for each tuple
         """
         scores = []
         for chrom, chromStart, chromEnd, strand in intervals:
@@ -37,7 +38,7 @@ class WigReader(object):
             if strand == '-':
                 score.reverse()
             scores.append(score)
-        return scores
+        return np.array(scores)
 
     def _get_chromosomes(self):
         """Return list of chromsome and their sizes

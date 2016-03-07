@@ -2,6 +2,7 @@ name: mocatest
 dependencies:
 - alabaster=0.7.7=py27_0
 - anaconda-client=1.2.1=py27_0
+- astroid=1.4.4=py27_0
 - babel=2.2.0=py27_0
 - bedtools=2.25.0=1
 - biopython=1.66=np110py27_0
@@ -15,6 +16,7 @@ dependencies:
 - cycler=0.9.0=py27_0
 - decorator=4.0.6=py27_0
 - docutils=0.12=py27_0
+- enum34=1.1.2=py27_0
 - expat=2.1.0=0
 - flake8=2.5.1=py27_0
 - fontconfig=2.11.1=5
@@ -26,11 +28,13 @@ dependencies:
 - ipython_genutils=0.1.0=py27_0
 - isl=0.12.2=0
 - jinja2=2.8=py27_0
+- lazy-object-proxy=1.2.1=py27_0
 - libgcc=4.8.5=1
 - libgfortran=1.0=0
 - libpng=1.6.17=0
 - libxml2=2.9.3=0
 - libxslt=1.1.28=0
+- logilab-common=1.0.2=py27_0
 - markupsafe=0.23=py27_0
 - matplotlib=1.5.0=np110py27_0
 - mccabe=0.3.1=py27_0
@@ -57,6 +61,7 @@ dependencies:
 - pybigwig=0.2.5=py27_0
 - pyflakes=1.0.0=py27_0
 - pygments=2.1=py27_0
+- pylint=1.5.4=py27_0
 - pyparsing=2.0.3=py27_0
 - pyqt=4.11.4=py27_1
 - pysam=0.8.4=py27_0
@@ -67,9 +72,11 @@ dependencies:
 - qt=4.8.7=1
 - readline=6.2=2
 - requests=2.9.0=py27_0
+- ruby=2.2.2=py27_1
 - scipy=0.17.0=np110py27_1
 - setuptools=20.1.1=py27_0
 - simplegeneric=0.8.1=py27_0
+- singledispatch=3.4.0.3=py27_1
 - sip=4.16.9=py27_0
 - six=1.10.0=py27_0
 - snowballstemmer=1.2.1=py27_0
@@ -80,6 +87,7 @@ dependencies:
 - tk=8.5.18=0
 - traitlets=4.1.0=py27_0
 - wheel=0.29.0=py27_0
+- wrapt=1.10.6=py27_0
 - yaml=0.1.6=0
 - zlib=1.2.8=0
 - pip:
@@ -89,7 +97,11 @@ dependencies:
   - docopt==0.6.2
   - ipython-genutils==0.1.0
   - moca==0.1.0
+  - nose2==0.5.0
   - pockets==0.3
+  - progressbar2==3.6.2
+  - psutil==4.0.0
+  - pyprind==2.9.5
   - sphinx-bootstrap-theme==0.4.8
   - sphinx-rtd-theme==0.1.9
   - sphinxcontrib-napoleon==0.5.0
