@@ -44,6 +44,7 @@ install:
   - python setup.py install --single-version-externally-managed --record=/tmp/record.txt
   - wget -c -O tests/data/hg19.fa.tar.gz http://hgdownload.cse.ucsc.edu/goldenpath/hg19/bigZips/chromFa.tar.gz
   - tar -zxvf tests/data/hg19.fa.tar.gz
+  - cat test/data/chr*.fa > test/data/hg19.fa
 
 script: nosetests -v --with-coverage
 
