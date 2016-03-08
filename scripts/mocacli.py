@@ -53,7 +53,7 @@ def show_progress(msg):
 @click.option('--genome-fasta', '-gf', help='Genome fasta', required=True)
 @click.option('--flank-length', default=100, help='Flanking sequence length', required=True)
 
-def mocacli(bedfile, genome_table, genome_fasta,
+def cli(bedfile, genome_table, genome_fasta,
             flank_length, configuration, phylop, gerp):
     """Run moca"""
     global bar
@@ -116,6 +116,4 @@ def mocacli(bedfile, genome_table, genome_fasta,
         show_progress('Process Scores Main')
         save_score(fimo_main_dir, phylop_wig, gerp_wig)
     bar.finish()
-if __name__ == '__main__':
-    mocacli()
 

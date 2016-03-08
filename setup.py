@@ -48,9 +48,10 @@ setup(
         'moca',
         'moca.helpers',
         'moca.bedoperations',
+        'moca.wigoperations',
         'moca.pipeline',
         'moca.plotter',
-        #'moca.webserver'
+        'scripts'
     ],
     package_dir={'moca':
                  'moca'},
@@ -77,6 +78,6 @@ setup(
     tests_require=test_requirements,
     entry_points = '''
             [console_scripts]
-            mocacli=moca.scripts.mocacli:cli
+            mocacli=scripts.mocacli:cli
     ''',
 )
