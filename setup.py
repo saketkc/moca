@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+"""setup.py"""
 # -*- coding: utf-8 -*-
 import os
 import re
@@ -23,20 +23,18 @@ fversion = None
 metadata = None
 
 with open(version_file, 'r') as f:
-   metadata = dict(re.findall("__([a-z]+)__ = '([^']+)'", f.read()))
+    metadata = dict(re.findall("__([a-z]+)__ = '([^']+)'", f.read()))
 
 assert metadata is not None
 fversion = metadata['version'].split('.')
 
-test_requirements = [
-    # TODO: put package test requirements here
-]
+test_requirements = ['nosetests']
 
-MAJOR                 = fversion[0]
-MINOR                 = fversion[1]
-MICRO                 = fversion[2]
-ISRELEASED            = False
-VERSION               = '%s.%s.%s' % (MAJOR, MINOR, MICRO)
+MAJOR      = fversion[0]
+MINOR      = fversion[1]
+MICRO      = fversion[2]
+ISRELEASED = False
+VERSION    = '%s.%s.%s' % (MAJOR, MINOR, MICRO)
 
 setup(
     name='moca',
@@ -46,13 +44,12 @@ setup(
     author="Saket Choudhary",
     author_email='saketkc@gmail.com',
     url='https://github.com/saketkc/moca',
-    #scripts=['bin/mocacli'],
     packages=[
         'moca',
         'moca.helpers',
         'moca.bedoperations',
         'moca.pipeline',
-        #'moca.visualiser',
+        'moca.plotter',
         #'moca.webserver'
     ],
     package_dir={'moca':
@@ -80,9 +77,6 @@ setup(
     tests_require=test_requirements,
     entry_points = '''
             [console_scripts]
-            yourscript=yourscript:cli
+            mocacli=moca.scripts.mocacli:cli
     ''',
-    #{
-     #   'console_scripts': ['mocacli=mocacli:cli'],
-     #   }
 )
