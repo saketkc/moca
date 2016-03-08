@@ -96,8 +96,6 @@ dependencies:
   - coveralls==1.1
   - docopt==0.6.2
   - ipython-genutils==0.1.0
-  - moca==0.1.0
-  - nose2==0.5.0
   - pockets==0.3
   - progressbar2==3.6.2
   - psutil==4.0.0
