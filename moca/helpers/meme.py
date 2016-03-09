@@ -17,6 +17,17 @@ def read_memefile(meme_file):
     summary['motif_records'] = records
     return summary
 
+def _find_minmax_occuring_bases(record, count, count_type='counts'):
+    """Find bases with minimum or maximum count type"""
+    mappings = {'A':0, 'C':1, 'T':2, 'G':3 }
+def find_max_occuring_bases(record, max_count, count_type='counts'):
+    """Find bases with maximum frequency at each position of motif record
+
+    Given a motif record, find at each position, the base with maximum
+    frequency and it's frequency
+
+    """
+
 def position_wise_profile(counts_dict, length):
     """
     Convert base to position wise profile

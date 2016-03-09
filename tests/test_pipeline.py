@@ -22,13 +22,6 @@ class TestPipeline(unittest.TestCase):
         self.meme_fasta = 'tests/data/expected_out/macsPeak.fasta'
         self.pipeline = Pipeline(self.configuration_file)
 
-    def tearDown(self):
-        if os.path.exists('tests/data/generated_out/meme_analysis'):
-            shutil.rmtree('tests/data/generated_out/meme_analysis')
-        if os.path.exists('tests/data/generated_out/fimo_analysis'):
-            shutil.rmtree('tests/data/generated_out/fimo_analysis')
-        if os.path.exists('tests/data/generated_out/macsPeak.fasta'):
-            os.remove('tests/data/generated_out/macsPeak.fasta')
 
     def test_meme(self):
         """Test meme runner"""

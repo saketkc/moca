@@ -7,10 +7,9 @@ Subpackages
 .. toctree::
 
     moca.bedoperations
-    moca.encode
     moca.helpers
     moca.pipeline
-    moca.visualiser
+    moca.plotter
     moca.wigoperations
 
 Submodules

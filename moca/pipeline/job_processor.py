@@ -1,6 +1,7 @@
 """Job Processor Module
 """
 import os
+import warnings
 from ..helpers import MocaException
 from ..helpers import ConfigurationParser
 from ..helpers import run_job
@@ -19,8 +20,8 @@ class Pipeline(object):
         #TODO This can be removed if config_file is optional
         if not os.path.isfile(xstr(config_file)):
             #TODO This should raise a warning and no xception
-            print 'Config file {} not found'.format(config_file)
             #raise MocaException('Config file {} not found'.format(config_file))
+            warnings.warn('No configuration file supplied. Defaults will be used.', UserWarning)
         self.conf = ConfigurationParser(config_file)
         self.meme_default_params = '-maxw 20 -dna -revcomp -maxsize 1000000 -nmotifs 3'
         self.meme_strargs = None
@@ -32,7 +33,9 @@ class Pipeline(object):
 
     def run_meme(self, fasta_in, out_dir=None, strargs=None):
         """Run meme
-        Arguments
+        Run meme on a given input fasta
+
+        Parameters
         ---------
         strargs: string
             A concatenated string containing parameters as would be passed to standalone meme
@@ -76,7 +79,7 @@ class Pipeline(object):
     def run_fimo(self, motif_file, motif_num, sequence_file, out_dir=None, strargs=None):
         """Run fimo to find out locations where motif occurs
 
-        Arguments
+        Parameters
         ---------
         motif_file: str
             Path to meme.txt

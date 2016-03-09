@@ -9,8 +9,13 @@ import time
 
 def safe_makedir(dname):
     """Make a directory if it doesn't exist, handling concurrent race conditions.
-    Credits: Brad Chapman for bcbio-nextgen:
-        https://github.com/chapmanb/bcbio-nextgen/blob/master/bcbio/utils.py#L172
+
+    Credits: Brad Chapman for bcbio-nextgen: https://github.com/chapmanb/bcbio-nextgen/blob/master/bcbio/utils.py#L172
+
+    Parameters
+    ----------
+    dname: str
+        Path of directory to be created
     """
     if not dname:
         return dname
@@ -33,9 +38,12 @@ def chdir(new_dir):
     """Context manager to temporarily change to a new directory.
 
     http://lucentbeing.com/blog/context-managers-and-the-with-statement-in-python/
+    Credits: Brad Chapman for bcbio-nextgen: https://github.com/chapmanb/bcbio-nextgen/blob/master/bcbio/utils.py#L192
 
-    Credits: Brad Chapman for bcbio-nextgen:
-        https://github.com/chapmanb/bcbio-nextgen/blob/master/bcbio/utils.py#L192
+    Parameters
+    ----------
+    new_dir: str
+        Location of directory to be created
     """
     cur_dir = os.getcwd()
     safe_makedir(new_dir)
@@ -46,18 +54,18 @@ def chdir(new_dir):
         os.chdir(cur_dir)
 
 def run_job(cmd, cwd):
-    """Execute command line jobs passed as string argument
+    """Execute command line jobs passed as str argument
 
     Parameters
     ----------
-    cmd: string
+    cmd: str
         Absolute command line statement as would be run on command line
 
     Returns
     -------
-    stdout: string
+    stdout: str
         standard output as written by cmd program
-    stderr: string
+    stderr: str
         standard output as written by cmd program
     returncode: int
         return code as returned by subprocess(not very informative in general)
