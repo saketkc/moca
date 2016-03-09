@@ -133,21 +133,21 @@ class Bedfile(object):
             peak: Point-source called for this peak; 0-based offset from chromStart. Use -1 if no point-source called.
             chromStart - The starting position of the feature in the chromosome or scaffold. The first base in a chromosome is numbered 0.
             """
-            # By default peak position is the  floor of mean of chromStart and chromEnd
-            self.bed_df['peak_position'] = np.floor(self.bed_df[['chromStart', 'chromEnd']].mean(axis=1))
+            # By default peka is at 0-based offset from chromStart
+            self.bed_df['peak_position'] = self.bed_df['chromStart'] + self.bed_df['peak']
             # Peak not called, so chromStart is the peak itself
             self.bed_df.ix[self.bed_df.peak==-1, 'peak_position'] = self.bed_df.ix[self.bed_df.peak==-1, 'chromStart']
 
             ## Append explicit chromStart and chromEnd position based on peak_position
-            self.bed_df['peakStartZeroBased'] = self.bed_df['peak_position'].astype(int)-1
-            self.bed_df['peakEndOneBased'] = self.bed_df['peak_position'].astype(int)
+            self.bed_df['peakStartZeroBased'] = self.bed_df['peak_position'].astype(int)
+            self.bed_df['peakEndOneBased'] = self.bed_df['peak_position'].astype(int)+1
         elif bed_format == 'broadPeak':
             #TODO
             raise MocaException('Broad region support not implemented')
         elif bed_format == 'macsPeak':
             self.bed_df['peak_position'] = np.floor(self.bed_df[['chromStart', 'chromEnd']].mean(axis=1))
-            self.bed_df['peakStartZeroBased'] = self.bed_df['peak_position'].astype(int)-1
-            self.bed_df['peakEndOneBased'] = self.bed_df['peak_position'].astype(int)
+            self.bed_df['peakStartZeroBased'] = self.bed_df['peak_position'].astype(int)
+            self.bed_df['peakEndOneBased'] = self.bed_df['peak_position'].astype(int)+1
         else:
             raise MocaException('Format should be one of {}'.format(__BED_TYPES__.values()))
 

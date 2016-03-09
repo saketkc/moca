@@ -4,11 +4,11 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation=  xmlns:fimo="http://noble.gs.washington.edu/schema/fimo"
 >
-<command-line>fimo --motif 1 -oc /media/data1/Development_Version_Controlled/OpenSource/saketkc/moca/tests/data/generated_out/fimo_analysis /media/data1/Development_Version_Controlled/OpenSource/saketkc/moca/tests/data/expected_out/meme_analysis/meme.txt /media/data1/Development_Version_Controlled/OpenSource/saketkc/moca/tests/data/expected_out/macsPeak.fasta</command-line>
+<command-line>fimo --motif 1 -oc /home/saket/moca/tests/data/generated_out/fimo_analysis /home/saket/moca/tests/data/expected_out/meme_analysis/meme.txt /home/saket/moca/tests/data/expected_out/macsPeak.fasta</command-line>
 <settings>
-<setting name="output directory">/media/data1/Development_Version_Controlled/OpenSource/saketkc/moca/tests/data/generated_out/fimo_analysis</setting>
-<setting name="MEME file name">/media/data1/Development_Version_Controlled/OpenSource/saketkc/moca/tests/data/expected_out/meme_analysis/meme.txt</setting>
-<setting name="sequence file name">/media/data1/Development_Version_Controlled/OpenSource/saketkc/moca/tests/data/expected_out/macsPeak.fasta</setting>
+<setting name="output directory">/home/saket/moca/tests/data/generated_out/fimo_analysis</setting>
+<setting name="MEME file name">/home/saket/moca/tests/data/expected_out/meme_analysis/meme.txt</setting>
+<setting name="sequence file name">/home/saket/moca/tests/data/expected_out/macsPeak.fasta</setting>
 <setting name="allow clobber">true</setting>
 <setting name="compute q-values">true</setting>
 <setting name="parse genomic coord.">false</setting>

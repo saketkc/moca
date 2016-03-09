@@ -74,50 +74,50 @@ clusterid CDATA #IMPLIED
 >
 <program-name>fimo</program-name>
 <parameters>
-<pattern-file>/media/data1/Development_Version_Controlled/OpenSource/saketkc/moca/tests/data/expected_out/meme_analysis/meme.txt</pattern-file>
-<sequence-file>/media/data1/Development_Version_Controlled/OpenSource/saketkc/moca/tests/data/expected_out/macsPeak.fasta</sequence-file>
+<pattern-file>/home/saket/moca/tests/data/expected_out/meme_analysis/meme.txt</pattern-file>
+<sequence-file>/home/saket/moca/tests/data/expected_out/macsPeak.fasta</sequence-file>
 <site-pvalue-cutoff>0.0001</site-pvalue-cutoff>
 <sequence-filtering on-off="off"/>
 </parameters>
 <pattern accession="1" name="1">
-<scanned-sequence accession="chr1:714075-714116" name="chr1:714075-714116">
+<scanned-sequence accession="chr1:714076-714117" name="chr1:714076-714117">
 </scanned-sequence>
-<scanned-sequence accession="chr1:29387-29428" name="chr1:29387-29428">
-<matched-element start="18" stop="35" score="21.561" pvalue="5.78e-08">
+<scanned-sequence accession="chr1:29388-29429" name="chr1:29388-29429">
+<matched-element start="17" stop="34" score="21.561" pvalue="5.78e-08">
 <sequence>CCCGCGCCTCCGGGTCCT</sequence>
-<mem:qvalue>5.27e-06</mem:qvalue>
+<mem:qvalue>5.25e-06</mem:qvalue>
 </matched-element>
 </scanned-sequence>
-<scanned-sequence accession="chr1:10165-10206" name="chr1:10165-10206">
+<scanned-sequence accession="chr1:10166-10207" name="chr1:10166-10207">
 </scanned-sequence>
-<scanned-sequence accession="chr1:237735-237776" name="chr1:237735-237776">
-<matched-element start="34" stop="17" score="23.1138" pvalue="1.42e-08">
+<scanned-sequence accession="chr1:237736-237777" name="chr1:237736-237777">
+<matched-element start="33" stop="16" score="23.1138" pvalue="1.42e-08">
 <sequence>CTGCTGCCACCTGGTGCT</sequence>
-<mem:qvalue>3.5e-06</mem:qvalue>
+<mem:qvalue>3.49e-06</mem:qvalue>
 </matched-element>
 </scanned-sequence>
-<scanned-sequence accession="chr1:521554-521595" name="chr1:521554-521595">
+<scanned-sequence accession="chr1:521555-521596" name="chr1:521555-521596">
 </scanned-sequence>
-<scanned-sequence accession="chr1:740100-740141" name="chr1:740100-740141">
+<scanned-sequence accession="chr1:740101-740142" name="chr1:740101-740142">
 </scanned-sequence>
-<scanned-sequence accession="chr1:757386-757427" name="chr1:757386-757427">
-<matched-element start="22" stop="39" score="19.7154" pvalue="1.89e-07">
+<scanned-sequence accession="chr1:757387-757428" name="chr1:757387-757428">
+<matched-element start="21" stop="38" score="19.7154" pvalue="1.89e-07">
 <sequence>CTGTCTACTCTACCTGCT</sequence>
-<mem:qvalue>1.38e-05</mem:qvalue>
+<mem:qvalue>1.37e-05</mem:qvalue>
 </matched-element>
 </scanned-sequence>
-<scanned-sequence accession="chr1:715241-715282" name="chr1:715241-715282">
+<scanned-sequence accession="chr1:715242-715283" name="chr1:715242-715283">
 </scanned-sequence>
-<scanned-sequence accession="chr1:712819-712860" name="chr1:712819-712860">
-<matched-element start="8" stop="25" score="22.4228" pvalue="2.88e-08">
+<scanned-sequence accession="chr1:712820-712861" name="chr1:712820-712861">
+<matched-element start="7" stop="24" score="22.4228" pvalue="2.88e-08">
 <sequence>CTGCAGCCTTGAGCTCCT</sequence>
-<mem:qvalue>3.5e-06</mem:qvalue>
+<mem:qvalue>3.49e-06</mem:qvalue>
 </matched-element>
 </scanned-sequence>
-<scanned-sequence accession="chr1:234323-234364" name="chr1:234323-234364">
-<matched-element start="20" stop="37" score="22.5528" pvalue="2.45e-08">
+<scanned-sequence accession="chr1:234324-234365" name="chr1:234324-234365">
+<matched-element start="19" stop="36" score="22.5528" pvalue="2.45e-08">
 <sequence>CTGTTGCCTCACCTTCCT</sequence>
-<mem:qvalue>3.5e-06</mem:qvalue>
+<mem:qvalue>3.49e-06</mem:qvalue>
 </matched-element>
 </scanned-sequence>
 <mem:has-qvalues>yes</mem:has-qvalues>

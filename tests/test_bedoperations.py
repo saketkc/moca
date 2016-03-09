@@ -41,3 +41,6 @@ class TestBedoperations(unittest.TestCase):
         fasta_out = loaded_bed.extract_fasta(fasta_in='tests/data/hg19.fa', fasta_out='tests/data/generated_out/macsPeak.fasta')
         assert filecmp.cmp('tests/data/generated_out/macsPeak.fasta', 'tests/data/expected_out/macsPeak.fasta')
 
+    def test_scorefile(self):
+        loaded_bed = Bedfile(self.narrowpeak, self.genome_table)
+        assert filecmp.cmp('tests/data/narrowPeak.sorted','tests/data/expected_out/narrowPeak.sorted')

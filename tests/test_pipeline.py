@@ -30,7 +30,6 @@ class TestPipeline(unittest.TestCase):
         if os.path.exists('tests/data/generated_out/macsPeak.fasta'):
             os.remove('tests/data/generated_out/macsPeak.fasta')
 
-
     def test_meme(self):
         """Test meme runner"""
         if os.path.exists('tests/data/generated_out/meme_analysis'):
@@ -47,13 +46,9 @@ class TestPipeline(unittest.TestCase):
         motif_record2 = meme_record['motif_records'][1]
         motif_record3 = meme_record['motif_records'][2]
 
-        print motif_record1.consensus
-        print motif_record2.consensus
-        print motif_record3.consensus
-
-        assert motif_record1.consensus == 'CTGTTGCCTCCAGGTCCT'
-        assert motif_record2.consensus == 'AGCAATTT'
-        assert motif_record3.consensus == 'AGCAGAGAGG'
+        assert motif_record1.consensus == 'GCTGAACCCTCCTGTCTGCT'
+        assert motif_record2.consensus == 'TTTCTCAATG'
+        assert motif_record3.consensus == 'AAGGCAAACCCGA'
 
     def test_fimo(self):
         """Test fimo runner"""
