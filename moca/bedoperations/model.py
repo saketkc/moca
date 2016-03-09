@@ -35,11 +35,12 @@ class Bedfile(object):
     genome_table: string
         Absolute path to geonme chromosome size file
     """
-    def __init__(self, filepath, genome_table):
+    def __init__(self, filepath, genome_table, peaks_to_keep=500):
         self.filepath = os.path.abspath(filepath)
         self.bed_format = None
         self.extracted_fasta = None
         self.bed = None
+        self.peaks_to_keep = peaks_to_keep
         if not os.path.isfile(self.filepath):
             raise MocaException('Bed file {} not found'.format(self.filepath))
         self._read()
@@ -92,7 +93,7 @@ class Bedfile(object):
         filename, file_extension = os.path.splitext(self.filepath)
         filename += '.sorted'
         self.scorefile = filename
-        self.bed_df.to_csv(self.scorefile, header=False,
+        self.bed_df[:self.peaks_to_keep].to_csv(self.scorefile, header=False,
                 sep='\t',
                 index=False,
                 columns=['chrom', 'peakStartZeroBased', 'peakEndOneBased', 'name', 'score'])
@@ -169,7 +170,8 @@ class Bedfile(object):
         #if self.bed is None:
             # Load bed fole into bedtools
             #self.bed = BedTool(self.scorefile)
-        self.extracted_fasta = self.bed.sequence(fi=os.path.abspath(fasta_in))
+        self.downsampled_bed = self.bed.at(range(0,self.peaks_to_keep))
+        self.extracted_fasta = self.downsampled_bed.sequence(fi=os.path.abspath(fasta_in))
         self.temp_fasta = self.extracted_fasta.seqfn
         make_uppercase_fasta(self.temp_fasta, os.path.abspath(fasta_out))
         os.remove(self.temp_fasta)

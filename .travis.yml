@@ -18,9 +18,10 @@ addons:
 cache:
   directories:
     - $HOME/miniconda
-    - $HOME/moca/tests
+    - $HOME/data
 
 before_install:
+ - mkdir -p "$HOME/data"
  - export MINICONDA=$HOME/miniconda
  - export PATH="$MINICONDA/bin:$PATH"
  - hash -r
@@ -30,20 +31,22 @@ before_install:
  - conda update conda
  - conda info -a
  - conda install python=$TRAVIS_PYTHON_VERSION
- - conda remove --name moca-test --all
+ - conda remove --name mocatest --all
  - conda config --add channels bioconda
  - conda config --add channels r
  - conda install gcc perl
- - conda env create -f environment.yml -q -n moca-test python=$TRAVIS_PYTHON_VERSION
+ - conda env create -q -f environment.yml python=$TRAVIS_PYTHON_VERSION
 
- - source activate moca-test
- - export MEME_ETC_DIR="$MINICONDA/envs/moca-test/etc"
+ - source activate mocatest
+ - export MEME_ETC_DIR="$MINICONDA/envs/mocatest/etc"
  - conda install meme -c saketkc
 
 install:
   - python setup.py install --single-version-externally-managed --record=/tmp/record.txt
-  - if [ -f "$HOME/miniconda/hg19.fa" ]; then ln -s "$HOME/miniconda/hg19.fa" "$TRAVIS_BUILD_DIR/tests/data/"; else wget -c -O tests/data/hg19.fa.tar.gz http://hgdownload.cse.ucsc.edu/goldenpath/hg19/bigZips/chromFa.tar.gz &&
-    cd tests/data && tar -zxvf hg19.fa.tar.gz && cat chr*.fa > hg19.fa && mv hg19.fa "$HOME/miniconda" && ln -s "$HOME/miniconda/hg19.fa" "$TRAVIS_BUILD_DIR/tests/data/" && cd ../../; fi
+
+before_script:
+    - if [ -f "$HOME/data/hg19.fa" ]; then ln -s "$HOME/data/hg19.fa" "$TRAVIS_BUILD_DIR/tests/data/"; else wget -c -O tests/data/hg19.fa.tar.gz http://hgdownload.cse.ucsc.edu/goldenpath/hg19/bigZips/chromFa.tar.gz &&
+    cd tests/data && tar -zxvf hg19.fa.tar.gz && cat chr*.fa > hg19.fa && mv hg19.fa "$HOME/miniconda" && ln -s "$HOME/data/hg19.fa" "$TRAVIS_BUILD_DIR/tests/data/" && cd ../../; fi
 
 script: nosetests -v --with-coverage
 
@@ -52,8 +55,8 @@ after_success:
   - coveralls
 
 after_script:
-  - source deactivate moca-test
-  - conda remove --name moca-test --all
+  - source deactivate mocatest
+  - conda remove --name mocatest --all
 
 deploy:
   provider: pypi

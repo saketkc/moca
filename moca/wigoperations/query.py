@@ -1,5 +1,6 @@
 """Perform query on bigwig files
 """
+import warnings
 import numpy as np
 import pyBigWig
 from ..helpers import MocaException
@@ -33,7 +34,17 @@ class WigReader(object):
             A numpy array containing scores for each tuple
         """
         scores = []
+        chrom_lengths = self._get_chromosomes()
         for chrom, chromStart, chromEnd, strand in intervals:
+            if chrom not in chrom_lengths.keys():
+                warnings.warn('Chromosome {} does not appear in the bigwig'.format(chrom), UserWarning)
+                continue
+
+            chrom_length = chrom_lengths[chrom]
+            if int(chromStart)> chrom_length:
+                raise MocaException('Chromsome start point exceeds chromosome length: {}>{}',format(chromStart, chrom_length))
+            elif int(chromEnd)> chrom_length:
+                raise MocaException('Chromsome end point exceeds chromosome length: {}>{}',format(chromEnd, chrom_length))
             score = self.wig.values(chrom, int(chromStart), int(chromEnd))
             if strand == '-':
                 score.reverse()

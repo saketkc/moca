@@ -47,6 +47,10 @@ class TestPipeline(unittest.TestCase):
         motif_record2 = meme_record['motif_records'][1]
         motif_record3 = meme_record['motif_records'][2]
 
+        print motif_record1.consensus
+        print motif_record2.consensus
+        print motif_record3.consensus
+
         assert motif_record1.consensus == 'CTGTTGCCTCCAGGTCCT'
         assert motif_record2.consensus == 'AGCAATTT'
         assert motif_record3.consensus == 'AGCAGAGAGG'

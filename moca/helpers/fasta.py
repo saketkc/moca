@@ -5,6 +5,9 @@ from random import seed
 from random import randint
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
+import pandas
+from pyfaidx import Fasta
+import numpy as np
 
 def get_fasta_metadata(in_fasta):
     """Return metadata about fasta
@@ -119,3 +122,42 @@ def generate_random_fasta(genome,
     logging.info('###########GeneratingRandomFA End########################')
     output_handle.close()
 
+def generate_random_fasta_fast(genome,
+                       genome_table,
+                       num_seq,
+                       len_seq,
+                       out_fasta):
+    """Generate fasta pooling seqe
+    Attributes
+    ---------
+    genome: str
+        Path to genome
+    genome_table: str
+        Path to chromosome size
+    len_seq: int
+        Length of fasta sequences to generate
+    num_seq: int
+        Number of fasta records to generate
+    out_fasta: str
+        Path to write random fasta
+    """
+    seed(1)
+    key_func = lambda chrom: '_' not in chrom and chrom[-1].isdigit()
+    gt_map = pandas.read_table(genome_table, index_col=0, header=None)
+    chr_keys = gt_map.index.tolist()
+    ## Avoid scaffolds and enforce the last chracter of chromsome key being numeric
+    ## TODO This is not  foolproofi. though I can't think of cases it will fail, but it is also not random in true sense
+    chr_keys_filtered = np.array(filter(lambda chrom: '_' not in chrom and chrom[-1].isdigit(), chr_keys))
+    chr_selected= np.random.choice(chr_keys_filtered, num_seq)
+
+    chr_selected_length = np.array([chr_keys_filtered[chr_s] for chr_s in chr_selected])
+    chr_selected_start = np.array([np.random.choice(range(1, chr_length-len_seq)) for chr_length in chr_selected_length])
+    chr_selected_end = chr_selected_start+len_seq-1
+
+    fasta = Fasta(genome, read_ahead=100000, key_function = key_func, sequence_always_upper=True)
+
+    with open(out_fasta, 'w') as f:
+        for chr_name, chr_start, chr_end in zip(chr_selected, chr_selected_start, chr_selected_end):
+            seq = fasta[chr_name][chr_start:chr_end]
+            f.write('>' + seq.name)
+            f.write(seq.seq)

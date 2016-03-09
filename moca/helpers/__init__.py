@@ -6,4 +6,5 @@ from .filename import filename_extension
 from .meme import read_memefile
 from .fasta import make_uppercase_fasta
 from .fasta import generate_random_fasta
+from .fasta import generate_random_fasta_fast
 from .fasta import get_fasta_metadata
