@@ -1,6 +1,5 @@
 """Fasta helper functions"""
 import os
-from random import seed
 from Bio import SeqIO
 import pandas
 from pyfaidx import Fasta
@@ -70,7 +69,6 @@ def generate_random_fasta(genome,
     out_fasta: str
         Path to write random fasta
     """
-    seed(1234562)
     filt_func = lambda chrom: '_' not in chrom and chrom[-1].isdigit()
     gt_map = pandas.read_table(genome_table, index_col=0, header=None)
     chr_keys = gt_map.index.tolist()
