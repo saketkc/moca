@@ -112,7 +112,7 @@ def read_peaks(peak_file):
             split = line.split('\t')
             chromosome = split[0]
             position = int(split[1])
-            score = float(split[2])
+            score = float(split[4])
             if chromosome not in peaks_by_chr.keys():
                 peaks_by_chr[chromosome] = []
                 scores_by_chr[chromosome] = []
@@ -130,11 +130,11 @@ def read_fimo_file(fimo_file):
     peaks_by_chr = {}
     strand_by_chr = {}
     for row in reader:
-        chromosome = row[0]
-        start = int(row[1])
-        end = int(row[2])
+        chromosome = row[-3]
+        start = int(row[-2])
+        end = int(row[-1])
         motif_center = (start+end)/2.0
-        strand = row[3]
+        strand = row[4]
 
         if chromosome not in peaks_by_chr:
             peaks_by_chr[chromosome] = []
@@ -207,18 +207,19 @@ def create_plot(meme_file, motif_number, flanking_sites, sample_phylop_file, con
 
     sample_phylo_scores = []
     for line in sample_phylo_data:
-        sample_phylo_scores.append(float(line[1]))
+        sample_phylo_scores.append(float(line[0]))
     control_phylo_scores = []
     for line in control_phylo_data:
-        control_phylo_scores.append(float(line[1]))
+        control_phylo_scores.append(float(line[0]))
 
+    print('LENFTH sample_phylop: {}'.format(len(sample_phylo_scores)))
     if sample_gerp_data:
         sample_gerp_scores = []
         for line in sample_gerp_data:
-            sample_gerp_scores.append(float(line[1]))
+            sample_gerp_scores.append(float(line[0]))
         control_gerp_scores = []
         for line in control_gerp_data:
-            control_gerp_scores.append(float(line[1]))
+            control_gerp_scores.append(float(line[0]))
 
     assert (len(sample_phylo_scores) == len(control_phylo_scores))
 
@@ -699,6 +700,7 @@ def create_plot(meme_file, motif_number, flanking_sites, sample_phylop_file, con
 
 
 
+"""
 @click.command()
 @click.option('-i', '--meme', help='Meme input file', required=True)
 @click.option('-m', '--motif', help='Motif number', default=1, required=True)
@@ -726,4 +728,4 @@ def options(meme,motif,flanking_sites,phylop_sample,phylop_control,gerp_sample,g
 
 if __name__ == '__main__':
     options()
-
+"""

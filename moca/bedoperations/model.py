@@ -84,7 +84,7 @@ class Bedfile(object):
     def _sort_bed(self):
         """Sort bed by default in descending order of scores
         """
-        return self.sort_by(columns=['score', 'chrom', 'peakStartZeroBased'], ascending=[False, True, False])
+        return self.sort_by(columns=['score', 'chrom', 'peakStartZeroBased'], ascending=[False, True, True])
 
     def write_to_scorefile(self):
         """Write bed file as score file

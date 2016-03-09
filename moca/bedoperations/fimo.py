@@ -42,7 +42,6 @@ def fimo_to_sites(fimo_file):
     fimo_df['motifStartZeroBased'] = fimo_df.chromStart+fimo_df.start-1
     fimo_df['motifEndOneBased'] = fimo_df.chromStart+fimo_df.stop
     fimo_df.to_csv(fimo_sites, index=False, sep='\t')
-    print filename
     return fimo_df
 
 
