@@ -45,7 +45,7 @@ install:
   - python setup.py install --single-version-externally-managed --record=/tmp/record.txt
 
 before_script:
-    - if [ -f "$HOME/data/hg19.fa" ]; then ln -s "$HOME/data/hg19.fa" "$TRAVIS_BUILD_DIR/tests/data/"; else wget -c -O tests/data/hg19.fa.tar.gz http://hgdownload.cse.ucsc.edu/goldenpath/hg19/bigZips/chromFa.tar.gz &&
+  - if [ -f "$HOME/data/hg19.fa" ]; then ln -s "$HOME/data/hg19.fa" "$TRAVIS_BUILD_DIR/tests/data/"; else wget -c -O tests/data/hg19.fa.tar.gz http://hgdownload.cse.ucsc.edu/goldenpath/hg19/bigZips/chromFa.tar.gz &&
     cd tests/data && tar -zxvf hg19.fa.tar.gz && cat chr*.fa > hg19.fa && mv hg19.fa "$HOME/miniconda" && ln -s "$HOME/data/hg19.fa" "$TRAVIS_BUILD_DIR/tests/data/" && cd ../../; fi
 
 script: nosetests -v --with-coverage
