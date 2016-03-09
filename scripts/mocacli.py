@@ -11,7 +11,7 @@ from progressbar import ProgressBar, Bar, Percentage, AnimatedMarker, Timer, ETA
 from moca import bedoperations, wigoperations, pipeline
 from moca.bedoperations import fimo_to_sites
 from moca.helpers import filename_extension
-from moca.helpers import generate_random_fasta_fast
+from moca.helpers import generate_random_fasta
 from moca.helpers import read_memefile
 from moca.helpers import get_fasta_metadata
 from moca.helpers.job_executor import safe_makedir
@@ -76,7 +76,7 @@ def cli(bedfile, genome_table, genome_fasta,
     moca_pipeline = pipeline.Pipeline(configuration)
     meme_out_dir = os.path.join(moca_out_dir, 'meme_analysis')
     show_progress('Running meme')
-    meme_run_out = moca_pipeline.run_meme(fasta_in=query_fasta, out_dir=meme_out_dir)
+    meme_run_out = moca_pipeline.run_meme(fasta_in=query_fasta, out_dir=meme_out_dir, strargs=' -p 24')
 
     meme_file = os.path.join(meme_out_dir, 'meme.txt')
     meme_summary = read_memefile(meme_file)
@@ -95,7 +95,7 @@ def cli(bedfile, genome_table, genome_fasta,
         random_fasta = os.path.join(fimo_rand_dir, 'random_{}.fa'.format(motif))
         show_progress('Generating Random Fasta: {}'.format(motif))
         ##TODO: This step takes 4 minutes!! This is the least efficient step!
-        generate_random_fasta_fast(genome_fasta,
+        generate_random_fasta(genome_fasta,
                               genome_table,
                               fasta_metadata['num_seq'],
                               fasta_metadata['len_seq'],

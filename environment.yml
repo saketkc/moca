@@ -59,6 +59,7 @@ dependencies:
 - py2cairo=1.10.0=py27_2
 - pybedtools=0.7.6=py27_1
 - pybigwig=0.2.5=py27_0
+- pyfaidx=0.4.4=py27_0
 - pyflakes=1.0.0=py27_0
 - pygments=2.1=py27_0
 - pylint=1.5.4=py27_0
@@ -96,6 +97,7 @@ dependencies:
   - coveralls==1.1
   - docopt==0.6.2
   - ipython-genutils==0.1.0
+  - moca==0.1.0
   - pockets==0.3
   - progressbar2==3.6.2
   - psutil==4.0.0
@@ -103,4 +105,5 @@ dependencies:
   - sphinx-bootstrap-theme==0.4.8
   - sphinx-rtd-theme==0.1.9
   - sphinxcontrib-napoleon==0.5.0
+  - tqdm==3.8.0
 
