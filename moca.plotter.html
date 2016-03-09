@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>moca.plotter package &mdash; MoCA 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootswatch-3.3.4/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="MoCA 0.1.0 documentation" href="index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          MoCA</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="readme.html">MoCA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">History</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">moca.plotter package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-moca.plotter.plotter">moca.plotter.plotter module</a></li>
+<li><a class="reference internal" href="#module-moca.plotter">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/moca.plotter.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="moca-plotter-package">
+<h1>moca.plotter package<a class="headerlink" href="#moca-plotter-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-moca.plotter.plotter">
+<span id="moca-plotter-plotter-module"></span><h2>moca.plotter.plotter module<a class="headerlink" href="#module-moca.plotter.plotter" title="Permalink to this headline">¶</a></h2>
+<p>Generate conservation plots</p>
+<dl class="function">
+<dt id="moca.plotter.plotter.create_plot">
+<tt class="descclassname">moca.plotter.plotter.</tt><tt class="descname">create_plot</tt><big>(</big><em>meme_file</em>, <em>motif_number</em>, <em>flanking_sites</em>, <em>sample_phylop_file</em>, <em>control_phylop_file</em>, <em>sample_gerp_file</em>, <em>control_gerp_file</em>, <em>peak_file</em>, <em>fimo_file</em>, <em>annotate</em><big>)</big><a class="reference internal" href="_modules/moca/plotter/plotter.html#create_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.create_plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="moca.plotter.plotter.find_max_occurence">
+<tt class="descclassname">moca.plotter.plotter.</tt><tt class="descname">find_max_occurence</tt><big>(</big><em>profile</em>, <em>max_count=2</em><big>)</big><a class="reference internal" href="_modules/moca/plotter/plotter.html#find_max_occurence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.find_max_occurence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return profile with base corresponding to max scores[CHECK!]</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="moca.plotter.plotter.get_motif_distances">
+<tt class="descclassname">moca.plotter.plotter.</tt><tt class="descname">get_motif_distances</tt><big>(</big><em>peak_file</em>, <em>fimo_file</em><big>)</big><a class="reference internal" href="_modules/moca/plotter/plotter.html#get_motif_distances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.get_motif_distances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get distance between motif center and peak position</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="moca.plotter.plotter.path_leaf">
+<tt class="descclassname">moca.plotter.plotter.</tt><tt class="descname">path_leaf</tt><big>(</big><em>path</em><big>)</big><a class="reference internal" href="_modules/moca/plotter/plotter.html#path_leaf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.path_leaf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the parent path, and the childname
+given an absolute path.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="moca.plotter.plotter.perform_t_test">
+<tt class="descclassname">moca.plotter.plotter.</tt><tt class="descname">perform_t_test</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="reference internal" href="_modules/moca/plotter/plotter.html#perform_t_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.perform_t_test" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="moca.plotter.plotter.position_wise_profile">
+<tt class="descclassname">moca.plotter.plotter.</tt><tt class="descname">position_wise_profile</tt><big>(</big><em>counts_dict</em>, <em>length</em><big>)</big><a class="reference internal" href="_modules/moca/plotter/plotter.html#position_wise_profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.position_wise_profile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert base to position wise profile</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="moca.plotter.plotter.read_fimo_file">
+<tt class="descclassname">moca.plotter.plotter.</tt><tt class="descname">read_fimo_file</tt><big>(</big><em>fimo_file</em><big>)</big><a class="reference internal" href="_modules/moca/plotter/plotter.html#read_fimo_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.read_fimo_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fimo file reader</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="moca.plotter.plotter.read_peaks">
+<tt class="descclassname">moca.plotter.plotter.</tt><tt class="descname">read_peaks</tt><big>(</big><em>peak_file</em><big>)</big><a class="reference internal" href="_modules/moca/plotter/plotter.html#read_peaks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.read_peaks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Peak file reader</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="moca.plotter.plotter.save_figure">
+<tt class="descclassname">moca.plotter.plotter.</tt><tt class="descname">save_figure</tt><big>(</big><em>fig</em>, <em>ax</em>, <em>name</em>, <em>form</em><big>)</big><a class="reference internal" href="_modules/moca/plotter/plotter.html#save_figure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.save_figure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a given subplot(ax)</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-moca.plotter">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-moca.plotter" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2016, Saket Choudhary.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

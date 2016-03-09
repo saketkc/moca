@@ -236,27 +236,75 @@ Format: {&#8216;genome_name&#8217;: {&#8216;&lt;wig_prefix&gt;&#8217;: wig_prefi
 <em class="property">exception </em><tt class="descclassname">moca.helpers.exceptions.</tt><tt class="descname">MocaException</tt><big>(</big><em>msg</em><big>)</big><a class="reference internal" href="_modules/moca/helpers/exceptions.html#MocaException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.helpers.exceptions.MocaException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
 <p>Base class for MoCA Exceptions</p>
+<dl class="method">
+<dt id="moca.helpers.exceptions.MocaException.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/moca/helpers/exceptions.html#MocaException.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.helpers.exceptions.MocaException.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>string representation of MoCA Exception</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>mocastr</strong></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string representation</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 </div>
 <div class="section" id="module-moca.helpers.job_executor">
 <span id="moca-helpers-job-executor-module"></span><h2>moca.helpers.job_executor module<a class="headerlink" href="#module-moca.helpers.job_executor" title="Permalink to this headline">¶</a></h2>
+<p>Utility function to run jobs</p>
 <dl class="function">
-<dt id="moca.helpers.job_executor.run_job">
-<tt class="descclassname">moca.helpers.job_executor.</tt><tt class="descname">run_job</tt><big>(</big><em>self</em>, <em>cmd</em><big>)</big><a class="reference internal" href="_modules/moca/helpers/job_executor.html#run_job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.helpers.job_executor.run_job" title="Permalink to this definition">¶</a></dt>
-<dd><p>Execute command line jobs passed as string argument</p>
+<dt id="moca.helpers.job_executor.chdir">
+<tt class="descclassname">moca.helpers.job_executor.</tt><tt class="descname">chdir</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="_modules/moca/helpers/job_executor.html#chdir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.helpers.job_executor.chdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context manager to temporarily change to a new directory.</p>
+<p><a class="reference external" href="http://lucentbeing.com/blog/context-managers-and-the-with-statement-in-python/">http://lucentbeing.com/blog/context-managers-and-the-with-statement-in-python/</a>
+Credits: Brad Chapman for bcbio-nextgen: <a class="reference external" href="https://github.com/chapmanb/bcbio-nextgen/blob/master/bcbio/utils.py#L192">https://github.com/chapmanb/bcbio-nextgen/blob/master/bcbio/utils.py#L192</a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmd</strong> (<em>string</em>) &#8211; Absolute command line statement as would be run on command line</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>new_dir</strong> (<em>str</em>) &#8211; Location of directory to be created</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="moca.helpers.job_executor.run_job">
+<tt class="descclassname">moca.helpers.job_executor.</tt><tt class="descname">run_job</tt><big>(</big><em>cmd</em>, <em>cwd</em><big>)</big><a class="reference internal" href="_modules/moca/helpers/job_executor.html#run_job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.helpers.job_executor.run_job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute command line jobs passed as str argument</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmd</strong> (<em>str</em>) &#8211; Absolute command line statement as would be run on command line</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
-<li><strong>stdout</strong> (<em>string</em>) &#8211; standard output as written by cmd program</li>
-<li><strong>stderr</strong> (<em>string</em>) &#8211; standard output as written by cmd program</li>
+<li><strong>stdout</strong> (<em>str</em>) &#8211; standard output as written by cmd program</li>
+<li><strong>stderr</strong> (<em>str</em>) &#8211; standard output as written by cmd program</li>
 <li><strong>returncode</strong> (<em>int</em>) &#8211; return code as returned by subprocess(not very informative in general)</li>
 </ul>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="moca.helpers.job_executor.safe_makedir">
+<tt class="descclassname">moca.helpers.job_executor.</tt><tt class="descname">safe_makedir</tt><big>(</big><em>dname</em><big>)</big><a class="reference internal" href="_modules/moca/helpers/job_executor.html#safe_makedir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.helpers.job_executor.safe_makedir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a directory if it doesn&#8217;t exist, handling concurrent race conditions.</p>
+<p>Credits: Brad Chapman for bcbio-nextgen: <a class="reference external" href="https://github.com/chapmanb/bcbio-nextgen/blob/master/bcbio/utils.py#L172">https://github.com/chapmanb/bcbio-nextgen/blob/master/bcbio/utils.py#L172</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dname</strong> (<em>str</em>) &#8211; Path of directory to be created</td>
 </tr>
 </tbody>
 </table>

@@ -118,36 +118,123 @@
     <div class="col-md-12 content">
       
   <h1>Source code for moca.pipeline.job_processor</h1><div class="highlight"><pre>
-<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="sd">&quot;&quot;&quot;Job Processor Module</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">MocaException</span>
 <span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">ConfigurationParser</span>
+<span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">run_job</span>
+<span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">xstr</span>
 
 <div class="viewcode-block" id="Pipeline"><a class="viewcode-back" href="../../../moca.pipeline.html#moca.pipeline.job_processor.Pipeline">[docs]</a><span class="k">class</span> <span class="nc">Pipeline</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Generic class to run pipelines</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    config_file: string</span>
-<span class="sd">        Absolute path to configuration file</span>
-
-
+<span class="sd">        Optional file input to load all configurations</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_file</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_file</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">commands_run</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">config_file</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">MocaException</span><span class="p">(</span><span class="s1">&#39;Config file {} not found&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">config_file</span><span class="p">))</span>
+        <span class="c1">#TODO This can be removed if config_file is optional</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">xstr</span><span class="p">(</span><span class="n">config_file</span><span class="p">)):</span>
+            <span class="c1">#TODO This should raise a warning and no xception</span>
+            <span class="c1">#raise MocaException(&#39;Config file {} not found&#39;.format(config_file))</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No configuration file supplied. Defaults will be used.&#39;</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conf</span> <span class="o">=</span> <span class="n">ConfigurationParser</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meme_default_params</span> <span class="o">=</span> <span class="s1">&#39;-maxw 20 -dna -revcomp -maxsize 1000000 -nmotifs 3&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meme_strargs</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meme_location</span> <span class="o">=</span> <span class="s1">&#39;meme&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fimo_default_params</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fimo_strargs</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fimo_location</span> <span class="o">=</span> <span class="s1">&#39;fimo&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">commands_run</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="Pipeline.run_meme"><a class="viewcode-back" href="../../../moca.pipeline.html#moca.pipeline.job_processor.Pipeline.run_meme">[docs]</a>    <span class="k">def</span> <span class="nf">run_meme</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-        <span class="k">pass</span>
+<div class="viewcode-block" id="Pipeline.run_meme"><a class="viewcode-back" href="../../../moca.pipeline.html#moca.pipeline.job_processor.Pipeline.run_meme">[docs]</a>    <span class="k">def</span> <span class="nf">run_meme</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fasta_in</span><span class="p">,</span> <span class="n">out_dir</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">strargs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run meme</span>
+<span class="sd">        Run meme on a given input fasta</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ---------</span>
+<span class="sd">        strargs: string</span>
+<span class="sd">            A concatenated string containing parameters as would be passed to standalone meme</span>
+<span class="sd">            Defualt parametes used: &#39;-dna -revcomp -maxsize 1000000 -nmotifs 3 -p 4&#39;</span>
+<span class="sd">            To modify: Pipeline.meme_default_params</span>
+<span class="sd">        fasta_in: string</span>
+<span class="sd">            Location of the fasta file</span>
+<span class="sd">        out_dir: string</span>
+<span class="sd">            Location to write all meme analysis output</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        meme_out: string</span>
+<span class="sd">            Location of meme output</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meme_strargs</span> <span class="o">=</span> <span class="n">strargs</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">meme_strargs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">meme_strargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meme_default_params</span>
+        <span class="n">meme_binary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get_binary_path</span><span class="p">(</span><span class="s1">&#39;meme&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">meme_binary</span> <span class="ow">or</span> <span class="n">meme_binary</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="c1"># Use meme from envirnonment</span>
+            <span class="n">meme_binary</span> <span class="o">=</span> <span class="s1">&#39;meme&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1">#  Use absolute path meme</span>
+            <span class="n">meme_binary</span> <span class="o">+=</span> <span class="s1">&#39;/meme&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meme_location</span> <span class="o">=</span> <span class="n">meme_binary</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">out_dir</span><span class="p">:</span>
+            <span class="n">out_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fasta_in</span><span class="p">),</span> <span class="s1">&#39;meme_out&#39;</span><span class="p">)</span>
+        <span class="n">out_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">out_dir</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;{} {} -oc {} {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meme_location</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">meme_strargs</span><span class="p">,</span>
+                                       <span class="n">out_dir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">fasta_in</span><span class="p">))</span>
+        <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">exitcode</span> <span class="o">=</span> <span class="n">run_job</span><span class="p">(</span><span class="n">cmd</span><span class="o">=</span><span class="n">cmd</span><span class="p">,</span>
+                                           <span class="n">cwd</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">out_dir</span><span class="p">))</span>
+
+        <span class="n">output</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;out_dir&#39;</span><span class="p">:</span> <span class="n">out_dir</span><span class="p">,</span> <span class="s1">&#39;stdout&#39;</span><span class="p">:</span> <span class="n">stdout</span><span class="p">,</span>
+                  <span class="s1">&#39;stderr&#39;</span><span class="p">:</span> <span class="n">stderr</span><span class="p">,</span> <span class="s1">&#39;exitcode&#39;</span><span class="p">:</span> <span class="n">exitcode</span><span class="p">,</span>
+                  <span class="s1">&#39;cmd&#39;</span><span class="p">:</span> <span class="n">cmd</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">commands_run</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;cmd&#39;</span><span class="p">:</span> <span class="n">cmd</span><span class="p">,</span> <span class="s1">&#39;metadata&#39;</span><span class="p">:</span> <span class="n">output</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">output</span>
 </div>
-<div class="viewcode-block" id="Pipeline.run_fimo"><a class="viewcode-back" href="../../../moca.pipeline.html#moca.pipeline.job_processor.Pipeline.run_fimo">[docs]</a>    <span class="k">def</span> <span class="nf">run_fimo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-        <span class="k">pass</span>
-</div>
-<div class="viewcode-block" id="Pipeline.conservation_analysis"><a class="viewcode-back" href="../../../moca.pipeline.html#moca.pipeline.job_processor.Pipeline.conservation_analysis">[docs]</a>    <span class="k">def</span> <span class="nf">conservation_analysis</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-        <span class="k">pass</span>
-</div>
-<div class="viewcode-block" id="Pipeline.plot_results"><a class="viewcode-back" href="../../../moca.pipeline.html#moca.pipeline.job_processor.Pipeline.plot_results">[docs]</a>    <span class="k">def</span> <span class="nf">plot_results</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-        <span class="k">pass</span></div></div>
+<div class="viewcode-block" id="Pipeline.run_fimo"><a class="viewcode-back" href="../../../moca.pipeline.html#moca.pipeline.job_processor.Pipeline.run_fimo">[docs]</a>    <span class="k">def</span> <span class="nf">run_fimo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">motif_file</span><span class="p">,</span> <span class="n">motif_num</span><span class="p">,</span> <span class="n">sequence_file</span><span class="p">,</span> <span class="n">out_dir</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">strargs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run fimo to find out locations where motif occurs</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ---------</span>
+<span class="sd">        motif_file: str</span>
+<span class="sd">            Path to meme.txt</span>
+<span class="sd">        motif_num: int</span>
+<span class="sd">            Motif number to investigate</span>
+<span class="sd">        sequence_file: str</span>
+<span class="sd">            Path to sequence file</span>
+<span class="sd">        out_dir: str</span>
+<span class="sd">            Location to output fimo results</span>
+<span class="sd">        strargs: str</span>
+<span class="sd">            string arguments as would be passed to fimo commandline</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#TODO This code is same as in the above fmethod. Make this a separate method?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fimo_strargs</span> <span class="o">=</span> <span class="n">strargs</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">out_dir</span><span class="p">:</span>
+            <span class="n">out_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">motif_file</span><span class="p">),</span> <span class="s1">&#39;fimo_out&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fimo_strargs</span> <span class="o">=</span> <span class="n">xstr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fimo_strargs</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; --motif {} -oc {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">motif_num</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">out_dir</span><span class="p">))</span>
+        <span class="n">fimo_binary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get_binary_path</span><span class="p">(</span><span class="s1">&#39;meme&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">fimo_binary</span> <span class="ow">or</span> <span class="n">fimo_binary</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="c1"># Use meme from envirnonment</span>
+            <span class="n">fimo_binary</span> <span class="o">=</span> <span class="s1">&#39;fimo&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1">#  Use absolute path meme</span>
+            <span class="n">fimo_binary</span> <span class="o">+=</span> <span class="s1">&#39;/fimo&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fimo_location</span> <span class="o">=</span> <span class="n">fimo_binary</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;{}{} {} {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fimo_location</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fimo_strargs</span><span class="p">,</span>
+                                  <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">motif_file</span><span class="p">),</span>
+                                  <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">sequence_file</span><span class="p">))</span>
+        <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">exitcode</span> <span class="o">=</span> <span class="n">run_job</span><span class="p">(</span><span class="n">cmd</span><span class="o">=</span><span class="n">cmd</span><span class="p">,</span>
+                                           <span class="n">cwd</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">out_dir</span><span class="p">))</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;out_dir&#39;</span><span class="p">:</span> <span class="n">out_dir</span><span class="p">,</span> <span class="s1">&#39;stdout&#39;</span><span class="p">:</span> <span class="n">stdout</span><span class="p">,</span>
+                  <span class="s1">&#39;stderr&#39;</span><span class="p">:</span> <span class="n">stderr</span><span class="p">,</span> <span class="s1">&#39;exitcode&#39;</span><span class="p">:</span> <span class="n">exitcode</span><span class="p">,</span>
+                  <span class="s1">&#39;cmd&#39;</span><span class="p">:</span> <span class="n">cmd</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">commands_run</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;cmd&#39;</span><span class="p">:</span> <span class="n">cmd</span><span class="p">,</span> <span class="s1">&#39;metadata&#39;</span><span class="p">:</span> <span class="n">output</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">output</span></div></div>
 </pre></div>
 
     </div>

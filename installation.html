@@ -135,13 +135,15 @@
       
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<p>At the command line:</p>
-<div class="highlight-shell"><div class="highlight"><pre>$ easy_install moca
+<p>Recommended method of installation is using the <a class="reference external" href="http://conda.pydata.org/docs/install/quick.html">Conda</a> package manager.
+You should preferably install PYTHON2.7 version, since <tt class="docutils literal"><span class="pre">moca</span></tt>  is not yet 3.x compatible.</p>
+<p>Recommended method:</p>
+<div class="highlight-shell"><div class="highlight"><pre>$ conda create env -f environment.yml <span class="nv">python</span><span class="o">=</span>2.7
+$ <span class="nb">source</span> activate mocatest
 </pre></div>
 </div>
-<p>Or, if you have virtualenvwrapper installed:</p>
-<div class="highlight-shell"><div class="highlight"><pre>$ mkvirtualenv moca
-$ pip install moca
+<p>Using pip:</p>
+<div class="highlight-shell"><div class="highlight"><pre>$  pip install moca
 </pre></div>
 </div>
 </div>

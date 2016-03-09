@@ -218,7 +218,9 @@
                 <span class="k">raise</span> <span class="n">MocaException</span><span class="p">(</span><span class="s1">&#39;{} is not executable.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">binary_path</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">is_executable</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">binary_path</span><span class="p">,</span><span class="s1">&#39;meme&#39;</span><span class="p">)):</span>
-                <span class="k">raise</span> <span class="n">MocaException</span><span class="p">(</span><span class="s1">&#39;{}/meme is not executable&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">binary_path</span><span class="p">))</span>
+                <span class="k">pass</span>
+                <span class="c1">#TODO This should also raise warning</span>
+                <span class="c1">#raise MocaException(&#39;{}/meme is not executable&#39;.format(binary_path))</span>
         <span class="k">return</span> <span class="n">binary_path</span>
 </pre></div></div></div>
 

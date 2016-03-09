@@ -1,14 +1,19 @@
 .. highlight:: shell
 
+
 ============
 Installation
 ============
 
-At the command line::
+Recommended method of installation is using the `Conda <http://conda.pydata.org/docs/install/quick.html>`_ package manager.
+You should preferably install PYTHON2.7 version, since ``moca``	 is not yet 3.x compatible.
 
-    $ easy_install moca
 
-Or, if you have virtualenvwrapper installed::
+Recommended method::
 
-    $ mkvirtualenv moca
-    $ pip install moca
+    $ conda create env -f environment.yml python=2.7
+    $ source activate mocatest
+
+Using pip::
+
+    $  pip install moca

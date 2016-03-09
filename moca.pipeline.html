@@ -86,7 +86,6 @@
 <li><a class="reference internal" href="#">moca.pipeline package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-moca.pipeline.job_processor">moca.pipeline.job_processor module</a></li>
-<li><a class="reference internal" href="#module-moca.pipeline.meme">moca.pipeline.meme module</a></li>
 <li><a class="reference internal" href="#module-moca.pipeline">Module contents</a></li>
 </ul>
 </li>
@@ -136,41 +135,75 @@
 </div>
 <div class="section" id="module-moca.pipeline.job_processor">
 <span id="moca-pipeline-job-processor-module"></span><h2>moca.pipeline.job_processor module<a class="headerlink" href="#module-moca.pipeline.job_processor" title="Permalink to this headline">¶</a></h2>
+<p>Job Processor Module</p>
 <dl class="class">
 <dt id="moca.pipeline.job_processor.Pipeline">
-<em class="property">class </em><tt class="descclassname">moca.pipeline.job_processor.</tt><tt class="descname">Pipeline</tt><big>(</big><em>config_file</em><big>)</big><a class="reference internal" href="_modules/moca/pipeline/job_processor.html#Pipeline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.pipeline.job_processor.Pipeline" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">moca.pipeline.job_processor.</tt><tt class="descname">Pipeline</tt><big>(</big><em>config_file=None</em><big>)</big><a class="reference internal" href="_modules/moca/pipeline/job_processor.html#Pipeline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.pipeline.job_processor.Pipeline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Generic class to run pipelines
-:param config_file: Absolute path to configuration file
-:type config_file: string</p>
-<dl class="method">
-<dt id="moca.pipeline.job_processor.Pipeline.conservation_analysis">
-<tt class="descname">conservation_analysis</tt><big>(</big><em>object</em><big>)</big><a class="reference internal" href="_modules/moca/pipeline/job_processor.html#Pipeline.conservation_analysis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.pipeline.job_processor.Pipeline.conservation_analysis" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="moca.pipeline.job_processor.Pipeline.plot_results">
-<tt class="descname">plot_results</tt><big>(</big><em>object</em><big>)</big><a class="reference internal" href="_modules/moca/pipeline/job_processor.html#Pipeline.plot_results"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.pipeline.job_processor.Pipeline.plot_results" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<p>Generic class to run pipelines</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config_file</strong> (<em>string</em>) &#8211; Optional file input to load all configurations</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="moca.pipeline.job_processor.Pipeline.run_fimo">
-<tt class="descname">run_fimo</tt><big>(</big><em>object</em><big>)</big><a class="reference internal" href="_modules/moca/pipeline/job_processor.html#Pipeline.run_fimo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.pipeline.job_processor.Pipeline.run_fimo" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<tt class="descname">run_fimo</tt><big>(</big><em>motif_file</em>, <em>motif_num</em>, <em>sequence_file</em>, <em>out_dir=None</em>, <em>strargs=None</em><big>)</big><a class="reference internal" href="_modules/moca/pipeline/job_processor.html#Pipeline.run_fimo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.pipeline.job_processor.Pipeline.run_fimo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run fimo to find out locations where motif occurs</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>motif_file</strong> (<em>str</em>) &#8211; Path to meme.txt</li>
+<li><strong>motif_num</strong> (<em>int</em>) &#8211; Motif number to investigate</li>
+<li><strong>sequence_file</strong> (<em>str</em>) &#8211; Path to sequence file</li>
+<li><strong>out_dir</strong> (<em>str</em>) &#8211; Location to output fimo results</li>
+<li><strong>strargs</strong> (<em>str</em>) &#8211; string arguments as would be passed to fimo commandline</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="moca.pipeline.job_processor.Pipeline.run_meme">
-<tt class="descname">run_meme</tt><big>(</big><em>object</em><big>)</big><a class="reference internal" href="_modules/moca/pipeline/job_processor.html#Pipeline.run_meme"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.pipeline.job_processor.Pipeline.run_meme" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<tt class="descname">run_meme</tt><big>(</big><em>fasta_in</em>, <em>out_dir=None</em>, <em>strargs=None</em><big>)</big><a class="reference internal" href="_modules/moca/pipeline/job_processor.html#Pipeline.run_meme"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.pipeline.job_processor.Pipeline.run_meme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run meme
+Run meme on a given input fasta</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>strargs</strong> (<em>string</em>) &#8211; A concatenated string containing parameters as would be passed to standalone meme
+Defualt parametes used: &#8216;-dna -revcomp -maxsize 1000000 -nmotifs 3 -p 4&#8217;
+To modify: Pipeline.meme_default_params</li>
+<li><strong>fasta_in</strong> (<em>string</em>) &#8211; Location of the fasta file</li>
+<li><strong>out_dir</strong> (<em>string</em>) &#8211; Location to write all meme analysis output</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>meme_out</strong> &#8211; Location of meme output</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">string</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
 </div>
-<div class="section" id="module-moca.pipeline.meme">
-<span id="moca-pipeline-meme-module"></span><h2>moca.pipeline.meme module<a class="headerlink" href="#module-moca.pipeline.meme" title="Permalink to this headline">¶</a></h2>
-</div>
 <div class="section" id="module-moca.pipeline">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-moca.pipeline" title="Permalink to this headline">¶</a></h2>
+<p>Pipeline runner</p>
 </div>
 </div>
 

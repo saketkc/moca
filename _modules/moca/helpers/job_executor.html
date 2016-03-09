@@ -118,31 +118,88 @@
     <div class="col-md-12 content">
       
   <h1>Source code for moca.helpers.job_executor</h1><div class="highlight"><pre>
-<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="sd">&quot;&quot;&quot;Utility function to run jobs</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="run_job"><a class="viewcode-back" href="../../../moca.helpers.html#moca.helpers.job_executor.run_job">[docs]</a><span class="k">def</span> <span class="nf">run_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Execute command line jobs passed as string argument</span>
+<span class="kn">import</span> <span class="nn">contextlib</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<div class="viewcode-block" id="safe_makedir"><a class="viewcode-back" href="../../../moca.helpers.html#moca.helpers.job_executor.safe_makedir">[docs]</a><span class="k">def</span> <span class="nf">safe_makedir</span><span class="p">(</span><span class="n">dname</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Make a directory if it doesn&#39;t exist, handling concurrent race conditions.</span>
+
+<span class="sd">    Credits: Brad Chapman for bcbio-nextgen: https://github.com/chapmanb/bcbio-nextgen/blob/master/bcbio/utils.py#L172</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    cmd: string</span>
+<span class="sd">    dname: str</span>
+<span class="sd">        Path of directory to be created</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dname</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">dname</span>
+    <span class="n">num_tries</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">max_tries</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dname</span><span class="p">):</span>
+        <span class="c1"># we could get an error here if multiple processes are creating</span>
+        <span class="c1"># the directory at the same time. Grr, concurrency.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dname</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">num_tries</span> <span class="o">&gt;</span> <span class="n">max_tries</span><span class="p">:</span>
+                <span class="k">raise</span>
+            <span class="n">num_tries</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dname</span>
+</div>
+<span class="nd">@contextlib.contextmanager</span>
+<div class="viewcode-block" id="chdir"><a class="viewcode-back" href="../../../moca.helpers.html#moca.helpers.job_executor.chdir">[docs]</a><span class="k">def</span> <span class="nf">chdir</span><span class="p">(</span><span class="n">new_dir</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Context manager to temporarily change to a new directory.</span>
+
+<span class="sd">    http://lucentbeing.com/blog/context-managers-and-the-with-statement-in-python/</span>
+<span class="sd">    Credits: Brad Chapman for bcbio-nextgen: https://github.com/chapmanb/bcbio-nextgen/blob/master/bcbio/utils.py#L192</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    new_dir: str</span>
+<span class="sd">        Location of directory to be created</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cur_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+    <span class="n">safe_makedir</span><span class="p">(</span><span class="n">new_dir</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">new_dir</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">cur_dir</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="run_job"><a class="viewcode-back" href="../../../moca.helpers.html#moca.helpers.job_executor.run_job">[docs]</a><span class="k">def</span> <span class="nf">run_job</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">cwd</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Execute command line jobs passed as str argument</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cmd: str</span>
 <span class="sd">        Absolute command line statement as would be run on command line</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    stdout: string</span>
+<span class="sd">    stdout: str</span>
 <span class="sd">        standard output as written by cmd program</span>
-<span class="sd">    stderr: string</span>
+<span class="sd">    stderr: str</span>
 <span class="sd">        standard output as written by cmd program</span>
 <span class="sd">    returncode: int</span>
 <span class="sd">        return code as returned by subprocess(not very informative in general)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Replace multiple spaces with single space</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\s+&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
     <span class="n">cmd_split</span> <span class="o">=</span> <span class="n">cmd</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
-    <span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd_split</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
-    <span class="n">stdout</span><span class="p">,</span> <span class="n">stderrr</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+    <span class="k">with</span> <span class="n">chdir</span><span class="p">(</span><span class="n">cwd</span><span class="p">):</span>
+        <span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd_split</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+    <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
     <span class="n">returncode</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">returncode</span>
-    <span class="k">return</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">returncode</span>
-</pre></div></div>
+    <span class="k">return</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">returncode</span></div>
+</pre></div>
 
     </div>
       
