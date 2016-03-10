@@ -4,6 +4,8 @@ from .job_executor import run_job
 from .xstr import xstr
 from .filename import filename_extension
 from .meme import read_memefile
+from .meme import get_motif_ic
+from .meme import get_motif_bg_freq
 from .fasta import make_uppercase_fasta
 from .fasta import generate_random_fasta
 from .fasta import get_fasta_metadata
