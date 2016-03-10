@@ -5,6 +5,9 @@ include LICENSE
 include README.rst
 
 recursive-include tests *
+exclude hg19.fa
+recursive-exclude test/data/generated_out *
+recursive-exclude test/data/moca_output *
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
 
