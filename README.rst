@@ -32,6 +32,7 @@ Installation
 ``moca`` is most compatible with the `conda`_ environment.
 
 ::
+
     $ git clone https://github.com:saketkc/moca.git
     $ cd moca
     $ conda create env -f environment.yml python=2.7
@@ -46,6 +47,7 @@ Tests
 Run tests locally
 
 ::
+
     $ nosetests -v
      nosetests -v
      Test load broadPeak ... ok
