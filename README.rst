@@ -3,7 +3,7 @@ MoCA
 ===============================
 
 .. image:: https://img.shields.io/pypi/v/moca.svg
-        :target: https://pypi.python.org/pypi/moca
+        :target: https://testpypi.python.org/pypi
 
 .. image:: https://img.shields.io/travis/saketkc/moca.svg
         :target: https://travis-ci.org/saketkc/moca
