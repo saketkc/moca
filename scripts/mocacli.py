@@ -25,8 +25,8 @@ def save_score(directory, phylop_wig, gerp_wig, flanking_sites):
     fimo_sites = fimo_to_sites(fimo_file)
 
     subset = fimo_sites[['chrom', 'motifStartZeroBased', 'motifEndOneBased', 'strand']]
-    subset['motifStartZeroBased'] = subset['motifStartZeroBased'] - flanking_sites
-    subset['motifEndOneBased'] = subset['motifEndOneBased'] + flanking_sites
+    subset.loc[:, 'motifStartZeroBased'] = subset['motifStartZeroBased'] - flanking_sites
+    subset.loc[:, 'motifEndOneBased'] = subset['motifEndOneBased'] + flanking_sites
     intervals = [tuple(x) for x in subset.to_records(index=False)]
 
     scores_phylop = phylop_wig.query(intervals)
@@ -101,11 +101,12 @@ def cli(bedfile, genome_table, genome_fasta,
         random_fasta = os.path.join(fimo_rand_dir, 'random_{}.fa'.format(motif))
         show_progress('Generating Random Fasta: {}'.format(motif))
         ##TODO: This step takes 4 minutes!! This is the least efficient step!
-        generate_random_fasta(genome_fasta,
-                              genome_table,
-                              fasta_metadata['num_seq'],
-                              fasta_metadata['len_seq'],
-                              random_fasta)
+        #generate_random_fasta(genome_fasta,
+        #                      genome_table,
+        #                      fasta_metadata['num_seq'],
+        #                      fasta_metadata['len_seq'],
+        #                      random_fasta)
+        moca_pipeline.run_fasta_shuffler(fasta_in=query_fasta, fasta_out=random_fasta)
 
         #Random
         show_progress('Running Fimo Random')
