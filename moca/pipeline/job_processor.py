@@ -23,12 +23,13 @@ class Pipeline(object):
             #raise MocaException('Config file {} not found'.format(config_file))
             warnings.warn('No configuration file supplied. Defaults will be used.', UserWarning)
         self.conf = ConfigurationParser(config_file)
-        self.meme_default_params = '-maxw 20 -dna -revcomp -maxsize 1000000 -nmotifs 3'
+        self.meme_default_params = '-dna -mod zoops -nmotifs 3 -minw 6 -maxw 30 -revcomp -nostatus -maxsize 1000000'
         self.meme_strargs = None
         self.meme_location = 'meme'
         self.fimo_default_params = ''
         self.fimo_strargs = None
         self.fimo_location = 'fimo'
+        self.shuffler_location = 'fasta-s'
         self.commands_run = []
 
     def run_meme(self, fasta_in, out_dir=None, strargs=None):
@@ -115,3 +116,20 @@ class Pipeline(object):
                   'cmd': cmd}
         self.commands_run.append({'cmd': cmd, 'metadata': output})
         return output
+
+    def run_fasta_shuffler(self, fasta_in, fasta_out):
+        """Run fasta-dinucleotide-shuffle to generate random fasta"""
+        shuffler_binary = self.conf.get_binary_path('meme')
+        if not shuffler_binary or shuffler_binary == '':
+            # Use meme from envirnonment
+            shuffler_binary = 'fasta-shuffle-letters'
+        else:
+            #  Use absolute path meme
+            shuffler_binary += '/fasta-shuffle-letters'
+        self.shuffler_location = shuffler_binary
+        cmd = '{} -kmer 2 -dna {} '.format(self.shuffler_location,
+                                             os.path.abspath(fasta_in))
+        stdout, stderr, exitcode = run_job(cmd=cmd,
+                                           cwd=os.path.dirname(fasta_out))
+        with open(os.path.abspath(fasta_out), 'w') as f:
+            f.write(stdout)

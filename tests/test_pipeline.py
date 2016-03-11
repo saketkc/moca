@@ -38,10 +38,14 @@ class TestPipeline(unittest.TestCase):
         motif_record1 = meme_record['motif_records'][0]
         motif_record2 = meme_record['motif_records'][1]
         motif_record3 = meme_record['motif_records'][2]
+        print motif_record1.consensus
+        print motif_record2.consensus
+        print motif_record3.consensus
 
-        assert motif_record1.consensus == 'GCTGAACCCTCCTGTCTGCT'
-        assert motif_record2.consensus == 'TTTCTCAATG'
-        assert motif_record3.consensus == 'AAGGCAAACCCGA'
+        assert motif_record1.consensus == 'CAGAACGCTGCTGCCAACCCGACCT'
+        assert motif_record2.consensus == 'TCTGCT'
+        assert motif_record3.consensus == 'CAGTTT'
+
 
     def test_fimo(self):
         """Test fimo runner"""
@@ -69,4 +73,10 @@ class TestPipeline(unittest.TestCase):
             else:
                 assert str(fasta_sequence[start:end].reverse_complement()) == fimo_sequence
 
-
+    def test_shuffler(self):
+        """Smoke test for shuffler"""
+        fasta_in = 'tests/data/expected_out/macsPeak.fasta'
+        fasta_out = 'tests/data/generated_out/macsPeak.shuffled.fastsa'
+        output = self.pipeline.run_fasta_shuffler(fasta_in=fasta_in, fasta_out=fasta_out)
+        with open(fasta_out) as f:
+            assert 'chr1' in f.readline()

@@ -39,9 +39,9 @@
 <letter id="Y" symbol="Y" equals="CT" name="Pyrimidine"/>
 <letter id="K" symbol="K" equals="GT" name="Keto"/>
 </alphabet>
-<motif name="1" width="18" best-possible-match="CTGTTGCCTCCAGGTCCT"/>
-<motif name="2" width="8" best-possible-match="AGCAATTT"/>
-<motif name="3" width="10" best-possible-match="AGCAGAGAGG"/>
+<motif name="1" width="20" best-possible-match="GCTAAACCCTCCTGTCTGCT"/>
+<motif name="2" width="10" best-possible-match="TTTCTCAATG"/>
+<motif name="3" width="13" best-possible-match="AAGGCAAACCCTA"/>
 <background source="non-redundant database">
 <value letter="A">0.275</value>
 <value letter="C">0.225</value>

@@ -83,41 +83,41 @@ clusterid CDATA #IMPLIED
 <scanned-sequence accession="chr1:714076-714117" name="chr1:714076-714117">
 </scanned-sequence>
 <scanned-sequence accession="chr1:29388-29429" name="chr1:29388-29429">
-<matched-element start="17" stop="34" score="21.561" pvalue="5.78e-08">
-<sequence>CCCGCGCCTCCGGGTCCT</sequence>
-<mem:qvalue>5.25e-06</mem:qvalue>
-</matched-element>
 </scanned-sequence>
 <scanned-sequence accession="chr1:10166-10207" name="chr1:10166-10207">
 </scanned-sequence>
 <scanned-sequence accession="chr1:237736-237777" name="chr1:237736-237777">
-<matched-element start="33" stop="16" score="23.1138" pvalue="1.42e-08">
-<sequence>CTGCTGCCACCTGGTGCT</sequence>
-<mem:qvalue>3.49e-06</mem:qvalue>
+<matched-element start="41" stop="22" score="22.6585" pvalue="2.73e-08">
+<sequence>GCTGACCTCTGCTGCCACCT</sequence>
+<mem:qvalue>2.44e-06</mem:qvalue>
 </matched-element>
 </scanned-sequence>
 <scanned-sequence accession="chr1:521555-521596" name="chr1:521555-521596">
 </scanned-sequence>
 <scanned-sequence accession="chr1:740101-740142" name="chr1:740101-740142">
+<matched-element start="21" stop="40" score="23.561" pvalue="1.26e-08">
+<sequence>GCTAAACAGACCTCTCTGCT</sequence>
+<mem:qvalue>2.25e-06</mem:qvalue>
+</matched-element>
 </scanned-sequence>
 <scanned-sequence accession="chr1:757387-757428" name="chr1:757387-757428">
-<matched-element start="21" stop="38" score="19.7154" pvalue="1.89e-07">
-<sequence>CTGTCTACTCTACCTGCT</sequence>
-<mem:qvalue>1.37e-05</mem:qvalue>
+<matched-element start="10" stop="29" score="23.0894" pvalue="1.94e-08">
+<sequence>GCAGATCCACCCTGTCTACT</sequence>
+<mem:qvalue>2.31e-06</mem:qvalue>
 </matched-element>
 </scanned-sequence>
 <scanned-sequence accession="chr1:715242-715283" name="chr1:715242-715283">
 </scanned-sequence>
 <scanned-sequence accession="chr1:712820-712861" name="chr1:712820-712861">
-<matched-element start="7" stop="24" score="22.4228" pvalue="2.88e-08">
-<sequence>CTGCAGCCTTGAGCTCCT</sequence>
-<mem:qvalue>3.49e-06</mem:qvalue>
+<matched-element start="20" stop="1" score="21.9756" pvalue="4.29e-08">
+<sequence>GCTCAAGGCTGCAGTGAGCT</sequence>
+<mem:qvalue>3.06e-06</mem:qvalue>
 </matched-element>
 </scanned-sequence>
 <scanned-sequence accession="chr1:234324-234365" name="chr1:234324-234365">
-<matched-element start="19" stop="36" score="22.5528" pvalue="2.45e-08">
-<sequence>CTGTTGCCTCACCTTCCT</sequence>
-<mem:qvalue>3.49e-06</mem:qvalue>
+<matched-element start="25" stop="6" score="25.2276" pvalue="2.46e-09">
+<sequence>GCAACAGCTTCCTGTCTGCT</sequence>
+<mem:qvalue>8.79e-07</mem:qvalue>
 </matched-element>
 </scanned-sequence>
 <mem:has-qvalues>yes</mem:has-qvalues>

@@ -22,37 +22,31 @@ class TestMemeOperations(unittest.TestCase):
         self.meme_file = 'tests/data/expected_out/meme_analysis/meme.txt'
 
     def test_memeprofile(self):
-        """
-        bits            2.3                    *
-                        2.1                    *
-                        1.8 **         *      **
-                        1.6 **         **     **
-        Relative        1.4 *** *      ** * * **
-        Entropy         1.2 *** *      ** * * **
-        (22.8 bits)     0.9 *** **   * ****** **
-                        0.7 *** ***  ******** **
-                        0.5 *******  ***********
-                        0.2 *******  ***********
-                        0.0 --------------------
+        """ Test entropy caclulations
+	         bits    2.3
+                 2.1
+                 1.8                        *
+                 1.6                        **
+Relative         1.4                *     * **
+Entropy          1.2 *      **  *** *     * **
+(23.5 bits)      0.9 ** * * **  *******  ** **
+                 0.7 **** * **  *******  *****
+                 0.5 ********** **************
+                 0.2 *************************
+                 0.0 -------------------------
 
 
         """
         motifs = read_memefile(self.meme_file)
         record = motifs['motif_records'][0]
         motif_ic = get_motif_ic(self.meme_file, 0)
-        #motif_ic = motif_ic+np.min(motif_ic)
-        print motif_ic
-        target = np.array([1.8,1.8,1.4,0.5,1.4,
-                           0.9,0.7,0.0,0.0,0.9,
-                           0.7,1.8,1.6,0.9,1.4,
-                           0.9,1.4,0.5,1.8,2.3])
-        print target
-        print target-motif_ic
-        print np.sum(motif_ic)
-        assert np.allclose(np.array([1.8,1.8,1.4,0.5,1.4,
-                                     0.9,0.7,0.0,0.0,0.9,
-                                     0.7,1.8,1.6,0.9,1.4,
-                                     0.9,1.4,0.5,1.8,2.3]), motif_ic, atol=0.6)
+        target = np.array([1.2,0.9,0.7,0.9,0.5,
+                           0.9,0.5,1.2,1.2,0.5,
+                           0.2,1.2,1.2,1.2,0.9,
+                           1.4,1.2,1.2,0.5,0.9,
+                           1.2,1.4,0.7,1.8,1.6])
+
+        assert np.allclose(target, motif_ic, atol=0.6)
         bg_freq = get_motif_bg_freq(self.meme_file)
         assert bg_freq == {'A':0.202, 'C':0.298, 'G': 0.298, 'T': 0.202}
 
