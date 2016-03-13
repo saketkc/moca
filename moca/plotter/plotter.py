@@ -212,7 +212,6 @@ def create_plot(meme_file, motif_number, flanking_sites, sample_phylop_file, con
     for line in control_phylo_data:
         control_phylo_scores.append(float(line[0]))
 
-    print('LENFTH sample_phylop: {}'.format(len(sample_phylo_scores)))
     if sample_gerp_data:
         sample_gerp_scores = []
         for line in sample_gerp_data:
