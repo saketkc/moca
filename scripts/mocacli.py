@@ -24,7 +24,7 @@ def save_score(directory, phylop_wig, gerp_wig, flanking_sites):
     fimo_file = os.path.join(directory, 'fimo.txt')
     fimo_sites = fimo_to_sites(fimo_file)
 
-    subset = fimo_sites[['chrom', 'motifStartZeroBased', 'motifEndOneBased', 'strand']]
+    subset = fimo_sites.loc[:, ['chrom', 'motifStartZeroBased', 'motifEndOneBased', 'strand']]
     subset.loc[:, 'motifStartZeroBased'] = subset['motifStartZeroBased'] - flanking_sites
     subset.loc[:, 'motifEndOneBased'] = subset['motifEndOneBased'] + flanking_sites
     intervals = [tuple(x) for x in subset.to_records(index=False)]

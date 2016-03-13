@@ -44,8 +44,3 @@ def fimo_to_sites(fimo_file):
     fimo_df.loc[:, 'motifEndOneBased'] = fimo_df.chromStart+fimo_df.stop
     fimo_df.to_csv(fimo_sites, index=False, sep='\t')
     return fimo_df
-
-
-
-
-
