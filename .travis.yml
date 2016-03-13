@@ -50,11 +50,9 @@ before_script:
 
 script: nosetests -v --with-coverage
 
-after_success:
+after_script:
   - codecov
   - coveralls
-
-after_script:
   - source deactivate mocatest
   - conda remove --name mocatest --all
 
