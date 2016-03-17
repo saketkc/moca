@@ -1,3 +1,4 @@
+import operator
 from math import log
 from Bio import motifs
 import numpy as np
@@ -63,7 +64,7 @@ def read_memefile(meme_file):
     summary['bg_frequencies'] = bg_frequencies
     return summary
 
-def find_minmax_occuring_bases(record, count, count_type='pwm'):
+def create_position_profile(record, count_type='pwm'):
     """Find bases with minimum or maximum count type"""
     bases = ['A', 'C','T','G']
     base_profile = getattr(record, count_type)
@@ -78,13 +79,19 @@ def find_minmax_occuring_bases(record, count, count_type='pwm'):
         position_profile.append({k:v for k,v in zip(bases,p_profile)})
     return position_profile
 
-def find_max_occuring_bases(record, max_count, count_type='counts'):
+def get_max_occuring_bases(record, max_count, count_type='counts'):
     """Find bases with maximum frequency at each position of motif record
 
     Given a motif record, find at each position, the base with maximum
     frequency and it's frequency
 
     """
+    profile = create_position_profile(record, count_type)
+    sorted_profile = []
+    for i, p in enumerate(profile):
+        sorted_p = sorted(p.items(), key=operator.itemgetter(1), reverse=True)
+        sorted_profile.append(sorted_p[-max_count:])
+    return sorted_profile
 
 def position_wise_profile(counts_dict, length):
     """
