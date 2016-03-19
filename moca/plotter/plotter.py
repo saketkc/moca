@@ -1,477 +1,568 @@
-#!/usr/bin/env python
+#!/usr/bin/anv python
 """
 Generate conservation plots
 """
 from __future__ import division
+import json
+import os
+import sys
 import matplotlib
 matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-plt.rc('text', usetex=True)
-plt.rc('font', family='monospace')
-plt.rcParams.update({'axes.titlesize': 'small'})
-plt.rcParams.update({'backend' : 'Agg'})
-import csv
-import sys
-import numpy as np
-from scipy import stats
-from scipy.stats.stats import pearsonr
-import statsmodels.api as sm
-from Bio import motifs
-import ntpath
-import os
-from math import log
-import matplotlib.gridspec as gridspec
 from pylab import setp
-from scipy.stats import binom
+import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
 from matplotlib.font_manager import FontProperties
-flankingstemcolor='y'
-import json
-import click
+import numpy as np
+import statsmodels.api as sm
 
-ENRICHMENT_SEQ_LENGTH = 401
+from moca.helpers import read_memefile
+from moca.helpers import MocaException
 
-a=39.33333333
-__scale__ = 1#0.51#2.5
+from moca.helpers import get_motif_ic
+from moca.helpers import get_max_occuring_bases
+from moca.helpers import create_position_profile
+
+from moca.plotter import perform_t_test
+from moca.plotter import get_pearson_corr
+
+MAGIC_NUM=39.33333333
+COUNT_TYPE = 'counts'
 # Use 'pssm' or 'counts' to score:
-score_type = 'counts' #'pssm'
 bases = ['A', 'T', 'G', 'C']
-histogram_nbins = 20
 
 ## Plot parameters
-linewidth=3
-plot_linewidth=5
-markeredgewidth=3.5
-greycolor='0.65'
-markersize=13
-fontsize=20
-legend_fontsize = 26
-pointsize=20
-dpi=300
-tickpad = 20
-ticklength = 10
+LINEWIDTH = 3
+PHYLOP_BAR_LINEWIDTH = 5
+HIST_NBINS = 20
 
 
-plt.rcParams['xtick.labelsize'] = fontsize
-plt.rcParams['ytick.labelsize'] = fontsize
-plt.rcParams['text.latex.preamble'] = [r'\boldmath']
+FONTSIZE = 20
+LEGEND_FONTSIZE = 26
+POINTSIZE = 20
+DPI = 300
+
+TICKPAD = 20
+TICKLENGTH= 10
+
+GREYNESS = '0.65'
+STEM_MARKER_SIZE = 13
+STEM_MARKER_EDGEWIDTH = 3.5
+STEM_FLANKING_COLOR = 'y'
+STEM_LINEWIDTH = 3
 
 ##  Text position
-txtx=0.02
-txty=0.09
+TXT_XPOS = 0.02
+TXT_YPOS = 0.09
 
-legend_xmultiplier = 1.4
-legend_ymultiplier = 1
+LEGEND_XMULTIPLIER = 1.8
+LEGEND_YMULTIPLIER = 1
 
+MAX_YTICKS = 3
 
-def path_leaf(path):
+def remove_flanking_scores(all_scores, flank_length):
+    """ Returns center scores, removing the flanking ones
+
+    Parameters
+    ----------
+    all_scores: array_like
+        An array containting all scores
+    flank_length: int
+        Number of flanking sites on each side
     """
-    Returns the parent path, and the childname
-    given an absolute path.
+    assert flank_length>0
+    return all_scores[flank_length:-flank_length]
+
+def get_flanking_scores(all_scores, flank_length):
+    """ Returns concatenated flanking scores, removing the center ones
+
+    Parameters
+    ----------
+    all_scores: array_like
+        An array containting all scores
+    flank_length: int
+        Number of flanking sites on each side
     """
-    head, tail = ntpath.split(path)
-    return tail or ntpath.basename(head)
+    assert flank_length>0
+    return np.concatenate((all_scores[:flank_length], all_scores[-flank_length:]))
+
+
+def setup_matplotlib():
+    """Setup matplotlib
+    """
+    plt.rc('text', usetex=True)
+    plt.rc('font', family='monospace', weight='bold')
+    plt.rcParams.update({'axes.titlesize': 'small'})
+    plt.rcParams.update({'backend' : 'Agg'})
+    plt.rcParams['xtick.labelsize'] = FONTSIZE
+    plt.rcParams['ytick.labelsize'] = FONTSIZE
+    plt.rcParams['text.latex.preamble'] = [r'\boldmath']
 
 def save_figure(fig, ax, name, form):
-    """
-    Save a given subplot(ax)
+    """Save figure to file
     """
     extent = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
-    fig.savefig('{}.{}'.format(name, form), format=form, dpi=dpi, bbox_inches=extent.expanded(1.2, 1.1))
+    fig.savefig('{}.{}'.format(name, form), format=form, dpi=DPI, bbox_inches=extent.expanded(1.2, 1.1))
     if form!='png':
-        fig.savefig('{}.{}'.format(name, 'png'), format='png', dpi=dpi, bbox_inches=extent.expanded(1.2, 1.1))
+        fig.savefig('{}.{}'.format(name, 'png'), format='png', dpi=DPI, bbox_inches=extent.expanded(1.2, 1.1))
 
-def position_wise_profile(counts_dict, length):
-    """
-    Convert base to position wise profile
-    """
-    profile = map(dict, zip(*[[(k, v) for v in value] for k, value in counts_dict.items()]))
-    return profile
+def setp_lines(stemlines, markerline, baseline):
+    """Set up format for stem plots"""
+    setp(stemlines, 'linewidth', STEM_LINEWIDTH)
+    setp(markerline, 'markersize', STEM_MARKER_SIZE)
+    setp(baseline, 'linewidth', STEM_LINEWIDTH-0.5)
+    setp(markerline, 'markeredgewidth', STEM_MARKER_EDGEWIDTH)
 
-def find_max_occurence(profile, max_count=2):
-    """
-    Return profile with base corresponding to max scores[CHECK!]
-    """
-    sorted_profile = []
-    for p in profile:
-        sorted_profile.append(sorted(p.items(), key=lambda x:x[1]))
-    for i,p in enumerate(sorted_profile):
-        sorted_profile[i] = p[-max_count:]
-    return sorted_profile
+def create_stemplot(matplot_dict, X_values, Y_values, motif_length, flank_length=0):
+    """Create stem plot for phylop/scores scoresi
 
-def perform_t_test(a,b):
-    return stats.ttest_ind(a,b)
+    Parameters
+    ----------
+    matplot_dict: dict like
+        A dict like object with the following fields: {'figure': plt.figure, 'gridspec': plt.gridspec, 'shareX': plt.axes}
+        where 'gridspec' represents the grid specification  and shareX represents the axis to share X axis with.
 
-def read_peaks(peak_file):
-    """
-    Peak file reader
-    """
-    peaks_by_chr = {}
-    scores_by_chr = {}
-    with open(peak_file,'r') as f:
-        for line in f:
-            split = line.split('\t')
-            chromosome = split[0]
-            position = int(split[1])
-            score = float(split[4])
-            if chromosome not in peaks_by_chr.keys():
-                peaks_by_chr[chromosome] = []
-                scores_by_chr[chromosome] = []
-            peaks_by_chr[chromosome].append(position)
-            scores_by_chr[chromosome].append(score)
-    return peaks_by_chr, scores_by_chr
+    figure: plt.figure
+        matplotlib figure
 
-def read_fimo_file(fimo_file):
-    """
-    Fimo file reader
-    """
-    f = open(fimo_file, 'r')
-    reader = csv.reader(f, delimiter='\t')
-    reader.next()
-    peaks_by_chr = {}
-    strand_by_chr = {}
-    for row in reader:
-        chromosome = row[-3]
-        start = int(row[-2])
-        end = int(row[-1])
-        motif_center = (start+end)/2.0
-        strand = row[4]
+    X_values: np.array
+        Array of X values
 
-        if chromosome not in peaks_by_chr:
-            peaks_by_chr[chromosome] = []
-            strand_by_chr[chromosome] = []
-        peaks_by_chr[chromosome].append(motif_center)
-        strand_by_chr[chromosome].append(strand)
+    Y_values: np.array
+        Array of Y-values
 
-    return peaks_by_chr, strand_by_chr
+    motif_length: int
+        Motif length(redundant)
 
-def get_motif_distances(peak_file, fimo_file):
+    flank_length: int
+        Number of flanking sites
     """
-    Get distance between motif center and peak position
-    """
-    peaks_by_chr, scores_by_chr = read_peaks(peak_file)
-    fimo_data, strand_by_chr = read_fimo_file(fimo_file)
-    chr_wise_distances = {}
-    for chr in peaks_by_chr.keys():
-        peak_positions = peaks_by_chr[chr]
-        try:
-            fimo_positions = fimo_data[chr]
-        except KeyError:
-            ## There is no motif site correpsonding to the chromosome of the peak
-            continue
-        distances = []
-        ## For each peak position we calculate the distance
-        ## from its centere to all known  fimo sites in the same chromsome
-        for peak_pos in peak_positions:
-            for index, fimo_pos in enumerate(fimo_positions):
-                strand = strand_by_chr[chr][index]
-                if strand=='+':
-                    distances.append(fimo_pos-peak_pos)
-                else:
-                    distances.append(-(fimo_pos-peak_pos))
-        chr_wise_distances[chr] = distances
-    ## Flatten list of lists
-    all_distances = [item for sublist in chr_wise_distances.values() for item in sublist]
-    return all_distances
+    indices_str=[]
+    indices_left = np.linspace(-flank_length, -1, 2)
+    indices_str = ['' for x in indices_left]
+    indices_center = np.arange(0, len(X_values)-2*flank_length, 5)
+    for i in indices_center:
+        indices_str.append('${}$'.format(int(i)+1))
 
-def create_plot(meme_file, motif_number, flanking_sites, sample_phylop_file, control_phylop_file, sample_gerp_file, control_gerp_file, peak_file, fimo_file, annotate):
-    handle = open(meme_file)
-    records = motifs.parse(handle, 'meme')
-    record = records[motif_number-1]
+    indices_right = np.linspace(motif_length, motif_length+flank_length-1, 2)
+
+    for i in indices_right:
+        indices_str.append('')
+
+    indices = np.hstack((indices_left, indices_center, indices_right))
+    xticks = [X_values[int(i)+flank_length] for i in indices]
+    #if len(X_values)!=len(Y_values):
+    #    raise MocaException('Error creating stem plots. (X,Y) dimenstion mismatch:\
+    #                        ({},{})'.format(len(X_values), len(Y_values)))
+    f = matplot_dict['figure']
+    gs = matplot_dict['gridspec']
+    shareX = matplot_dict['shareX']
+    stem_plot = plt.Subplot(f, gs, sharex=shareX)
+    if flank_length>0:
+        X_flank_left = X_values[:flank_length]
+        Y_flank_left = Y_values[:flank_length]
+        X_center = X_values[flank_length:-flank_length]
+        Y_center = Y_values[flank_length:-flank_length]
+        X_flank_right = X_values[-flank_length:]
+        Y_flank_right = Y_values[-flank_length:]
+    else:
+        X_center = X_values
+        Y_center = Y_values
+
+    markerline, stemlines, baseline  = stem_plot.stem(X_center, Y_center,
+                                                      markerfmt="g_",
+                                                      linefmt="g-",
+                                                      basefmt="r-")
+    setp_lines(stemlines, markerline, baseline)
+    if flank_length>0:
+        markerline, stemlines, baseline  = stem_plot.stem(X_flank_left,
+                                                          Y_flank_left,
+                                                          markerfmt="_",
+                                                          linefmt="-",
+                                                          markerfacecolor=STEM_FLANKING_COLOR,
+                                                          color=GREYNESS)
+        setp(stemlines, 'color', STEM_FLANKING_COLOR)
+        setp(markerline, 'markerfacecolor', STEM_FLANKING_COLOR)
+        setp_lines(stemlines, markerline, baseline)
+        setp(markerline, 'color', STEM_FLANKING_COLOR)
+        markerline, stemlines, baseline  =  stem_plot.stem(X_flank_right, Y_flank_right,
+                                                           markerfmt="_",
+                                                           linefmt="-",
+                                                           markerfacecolor=STEM_FLANKING_COLOR,
+                                                           color=GREYNESS)
+        setp(stemlines, 'color', STEM_FLANKING_COLOR)
+        setp(markerline, 'markerfacecolor', STEM_FLANKING_COLOR)
+        setp(markerline, 'color', STEM_FLANKING_COLOR)
+        setp_lines(stemlines, markerline, baseline)
+
+    yloc = plt.MaxNLocator(MAX_YTICKS)
+    stem_plot.yaxis.set_major_locator(yloc)
+
+    stem_plot.set_xlabel('$\mathrm{Base}\ \mathrm{Position}$',
+                         fontsize=FONTSIZE,
+                         fontweight='bold')
+    stem_plot.set_xlim([1.2*MAGIC_NUM, X_values[-1]+LINEWIDTH*1.8])
+    stem_plot.set_ylim([min(np.min(Y_values), -0.01)-0.03, np.max(Y_values,0.01)])
+    stem_plot.get_xaxis().tick_bottom()
+    stem_plot.get_yaxis().tick_left()
+    stem_plot.set_xticks(xticks)
+    stem_plot.set_xticklabels(indices_str, fontsize=FONTSIZE)
+    stem_plot.spines['top'].set_visible(False)
+    stem_plot.spines['right'].set_visible(False)
+    stem_plot.yaxis.set_ticks_position('left')
+    stem_plot.xaxis.set_ticks_position('bottom')
+    stem_plot.spines['left'].set_position('zero')
+    stem_plot.get_yaxis().set_tick_params(direction='out')
+    stem_plot.get_xaxis().set_tick_params(direction='out')
+    stem_plot.tick_params(axis='y', which='major', pad=TICKPAD)
+    stem_plot.tick_params(axis='x', which='major', pad=TICKPAD)
+    stem_plot.tick_params('both', length=TICKLENGTH, width=2, which='major')
+    stem_plot.set_ylabel('$\mathrm{PhyloP}\ \mathrm{Score}$', fontsize=FONTSIZE)
+    f.add_subplot(stem_plot)
+
+def create_logo_plot(matplot_dict, meme_dir, motif_number, motif_length):
+    """Create stem plot for phylop/scores scoresi
+
+    Parameters
+    ----------
+    matplot_dict: dict like
+        A dict like object with the following fields: {'figure': plt.figure, 'gridspec': plt.gridspec, 'shareX': plt.axes}
+        where 'gridspec' represents the grid specification  and shareX represents the axis to share X axis with.
+
+    """
+    f = matplot_dict['figure']
+    gs = matplot_dict['gridspec']
+    logo_plot = plt.Subplot(f, gs)
+    logo = plt.imread(os.path.join(meme_dir, 'logo{}.png'.format(motif_number)))
+    ##TODO Check this
+    if motif_length>45:
+        XSCALE_FACTOR = motif_length/1.9
+        z=2
+    elif motif_length>40:
+        XSCALE_FACTOR = motif_length/2.25
+        z=2.5
+    elif motif_length>36:
+        XSCALE_FACTOR = motif_length/1.95
+        z=2
+    elif motif_length>21:
+        XSCALE_FACTOR = motif_length/5
+        z=3
+    else:
+        XSCALE_FACTOR = 4.5
+        z=3
+
+    logo_plot.imshow(logo, extent=[40+15+z*(MAGIC_NUM+1.9),logo.shape[1]+15+XSCALE_FACTOR*(MAGIC_NUM+1.9),0,logo.shape[0]])
+    logo_plot.set_axis_off()
+    f.add_subplot(logo_plot)
+    return logo_plot
+
+
+def create_regression_plot(plot_type='gerp'):
+    pass
+
+def _get_logo_path(meme_dir, motif, rc=False):
+    return os.path.join(meme_dir, 'logo_rc{}.png'.format(motif) if rc else 'logo{}.png'.format(motif))
+
+def init_figure(meme_dir=None, X_values=None, motif=1, use_gerp=False, annotate=False):
+    """Initialize plot based on logo size"""
+    logo = plt.imread(_get_logo_path(meme_dir, motif))
+    height_px = logo.shape[0] # Should be 212
+
+    if use_gerp:
+        if annotate:
+            total_px = X_values[-1]+8*height_px+140
+            right = (8*height_px+10+140-0.2*height_px)/total_px
+        else:
+            total_px = X_values[-1]+6*height_px+140
+            right = (6*height_px+10+140-0.2*height_px)/total_px
+    else:
+        if annotate:
+            total_px = X_values[-1]+6*height_px+140
+            right = (6*height_px+10+140-0.2*height_px)/total_px
+        else:
+            total_px = X_values[-1]+4*height_px+140
+            right = (4*height_px+10+140-0.2*height_px)/total_px
+
+    figsize=(total_px/100,(2*height_px)/100+0.6)
+
+    gs =  gridspec.GridSpec(2, 1)#, width_ratios=[1, right], height_ratios=[1,1])
+    gs.update(top=1.0, bottom=0.14, left=0.08, right=1-right)#, right=0.8)#, left=0.06)#, right=right, wspace=0.025, hspace=0.03, wd)
+    f = plt.figure(figsize=figsize, dpi=DPI, facecolor='w', edgecolor='k')
+
+    return {'figure': f,
+            'gs': gs,
+            'figsize': figsize,
+            'right_margin': right,
+            'total_px': total_px}
+
+def enrichment_plot(matplot_dict, motif_length, peak_file, fimo_file):
+    f = matplot_dict['figure']
+    gs = matplot_dict['gridspec']
+    shareX = matplot_dict['shareX']
+    enrichment_plot = plt.Subplot(f, gs, autoscale_on=True)
+    enrichment_plot.set_frame_on(False)
+    enrichment_plot.set_xticks([])
+    enrichment_plot.set_yticks([])
+    all_distances = get_motif_distances(peak_file, fimo_file)
+    fimo_dir = os.path.dirname(fimo_file)
+    motifs_within_100 = filter(lambda x: x<=100 and x>=-100, all_distances)
+    motifs_within_100_200 = filter(lambda x: (x<200 and x>100) or (x>-200 and x<-100), all_distances)
+    if len(motifs_within_100_200)>0:
+        enrichment = len(motifs_within_100)/(len(motifs_within_100_200))#+len(motifs_within_100))
+    else:
+        enrichment = 1
+    enrichment_pval = 0
+    number_of_sites = len(motifs_within_100)+len(motifs_within_100_200) #fimo_sites_intersect(fimo_file)
+    probability = 200/(ENRICHMENT_SEQ_LENGTH-motif_length)
+    enrichment_pval=binom.sf(len(motifs_within_100), number_of_sites, probability)
+    enrichment_pval = str('%.1g'%enrichment_pval)
+    if 'e' in enrichment_pval:
+        enrichment_pval+= '}'
+        enrichment_pval= enrichment_pval.replace('e', '*10^{').replace('-0','-')
+    textstr = r'\noindent$Enrichment={0:.2f}$\\~\\$(p={1})$'.format(enrichment, enrichment_pval)
+    txtx = 0.1*len(textstr)/100.0
+    enrichment_plot.text(txtx, TXT_YPOS, textstr, fontsize=LEGEND_FONTSIZE)
+    f.add_subplot(enrichment_plot)
+    enrichment_plot = plt.Subplot(f, histogram_subplot_gs, autoscale_on=True)
+    enrichment_plot.hist(all_distances, histogram_nbins, color='white', alpha=0.8, range=[-200,200])
+    enrichment_plot.set_xticks([-200,-100,0,100,200])
+    max_yticks = 3
+    yloc = plt.MaxNLocator(max_yticks)
+    enrichment_plot.yaxis.set_major_locator(yloc)
+    ticks_and_labels = [-200,-100,0,100,200]
+    all_distances = np.asarray(all_distances)
+    enrichment_plot.set_xticklabels(['${}$'.format(x) for x in ticks_and_labels])
+    enrichment_plot.tick_params(axis='y', which='major', pad=TICKPAD)
+    enrichment_plot.tick_params(axis='x', which='major', pad=TICKPAD)
+    enrichment_plot.tick_params('both', length=TICKLENGTH, width=2, which='major')
+    enrichment_plot.get_xaxis().tick_bottom()
+    enrichment_plot.get_yaxis().tick_left()
+    enrichment_plot.get_yaxis().set_tick_params(direction='out')
+    enrichment_plot.get_xaxis().set_tick_params(direction='out')
+    enrichment_plot.axvline(x=-100, linewidth=3, color='red', linestyle='-.')
+    enrichment_plot.axvline(x=100, linewidth=3, color='red', linestyle='-.')
+    f.add_subplot(enrichment_plot)
+
+def create_annnotation_plot(matplot_dict, annotate):
+    f = matplot_dict['figure']
+    gs = matplot_dict['gridspec']
+    shareX = matplot_dict['shareX']
+    filename = r'$'+annotate[0]+'$'
+    try:
+        a_motif = r'$'+annotate[1]+'$'
+    except IndexError:
+        a_motif = ''
+    try:
+        cell_line = r'$'+annotate[2]+'$'
+    except IndexError:
+        cell_line = ''
+    try:
+        assay = r'$'+annotate[3]+'$'
+    except IndexError:
+        assay = ''
+    keys = ['title', 'gene_name', 'dataset', 'assembly']
+    data = [[r'$'+key.replace("_", " ").upper()+'$', r'$'+annotate_dict[key]+'$'] for key in keys]
+    ann_header = plt.Subplot(f, ann_header_subplot_gs, autoscale_on=True)
+    ann_header.set_frame_on(False)
+    ann_header.set_xticks([])
+    ann_header.set_yticks([])
+    f.add_subplot(ann_header)
+    textstr = r'$Metadata$'
+    txtx = 1.7*len(textstr)/100.0
+    ann_header.text(txtx, TXT_YPOS, textstr, fontsize=LEGEND_FONTSIZE)
+    ann_plot = plt.Subplot(f, ann_subplot_gs, autoscale_on=True)
+    ann_plot.set_xticks([])
+    ann_plot.set_yticks([])
+    ann_plot.set_frame_on(False)
+    table = ann_plot.table(cellText=data,loc='center')
+    table.scale(1,2)
+    fontproperties=FontProperties(size=LEGEND_FONTSIZE*8)#, family='serif' )
+    for key, cell in table.get_celld().items():
+        row, col = key
+        if row > 0 and col > 0:
+            cell.set_text_props(fontproperties=fontproperties)
+
+    table.set_fontsize(LEGEND_FONTSIZE*8)
+    f.add_subplot(ann_plot)
+
+def create_phylop_legend_plot(matplot_dict, motif_freq, sample_phylop_scores, control_phylop_scores, flank_length):
+    f = matplot_dict['figure']
+    gs = matplot_dict['gridspec']
+
+    phlyop_plots_legend = plt.Subplot(f, gs, autoscale_on=True)
+    corr_result = get_pearson_corr(motif_freq, remove_flanking_scores(sample_phylop_scores, flank_length))
+    corr_pval = corr_result[1]
+    corr_r2 = corr_result[0]
+    ttest_result = perform_t_test(remove_flanking_scores(sample_phylop_scores, flank_length), get_flanking_scores(sample_phylop_scores, flank_length))
+    p_deltaphylop = ttest_result['one_sided_pval']
+    delta_phylop = ttest_result['delta']
+    T_deltaphylop = ttest_result['T']
+    pearsonr_pval = str('%.1g'%corr_pval)
+    if 'e' in pearsonr_pval:
+        pearsonr_pval += '}'
+        pearsonr_pval = pearsonr_pval.replace('e', '*10^{').replace('-0','-')
+    score_pval = str('%.1g'%p_deltaphylop)
+    if 'e' in score_pval:
+        score_pval += '}'
+        score_pval = score_pval.replace('e', '*10^{').replace('-0','-')
+
+    textstr = r'$R_{pearson}=%.2f(p=%s)$' '\n' r'$\Delta_{Phylop}=%.2f(p=%s)$' %(corr_r2, pearsonr_pval, delta_phylop, score_pval)
+    txtx = 1-LEGEND_XMULTIPLIER*len(textstr)/100.0
+    phlyop_plots_legend.set_frame_on(False)
+    phlyop_plots_legend.set_xticks([])
+    phlyop_plots_legend.set_yticks([])
+    phlyop_plots_legend.text(txtx, TXT_YPOS, textstr, fontsize=LEGEND_FONTSIZE)
+    f.add_subplot(phlyop_plots_legend)
+
+
+def perform_OLS(dependent_variable, independent_variable):
+    """Perform Ordinary least square
+
+    Parameters
+    ----------
+
+    dependent_variable: array_like
+        Array of dependet variable(Y)
+
+    independent_variable: array_like
+        Array of indepdent variable(X)
+
+    Returns
+    -------
+
+    regression_line: Array like
+        Regression line
+
+    """
+
+    regression_fit = sm.OLS(dependent_variable, sm.add_constant(independent_variable)).fit()
+    if (len(regression_fit.params)<2):
+        ## In cases of multicollinearity simply draw a straight line
+        regression_line = independent_variable
+    else:
+        regression_line = independent_variable*regression_fit.params[1]+regression_fit.params[0]
+
+    return {'regression_fit': regression_fit,
+            'regression_line': regression_line}
+
+def create_phylop_scatter(matplot_dict, motif_freq, sample_phylop_scores, control_phylop_scores, flank_length, num_occurrences, y_label):
+
+    f = matplot_dict['figure']
+    gs = matplot_dict['gridspec']
+    phylop_scatter_plot = plt.Subplot(f, gs, autoscale_on=True)
+    control_phylop_scores = remove_flanking_scores(control_phylop_scores, flank_length)
+    sample_phylop_scores = remove_flanking_scores(sample_phylop_scores, flank_length)
+
+    fit = np.polyfit(motif_freq, sample_phylop_scores,1)
+    fit_fn = np.poly1d(fit)
+
+
+    control_ols = perform_OLS(control_phylop_scores, motif_freq)
+    sample_ols = perform_OLS(sample_phylop_scores, motif_freq)
+
+    sample_regression_line = sample_ols['regression_line']
+    control_regression_line = control_ols['regression_line']
+
+
+    phylop_scatter_plot.scatter(motif_freq, sample_phylop_scores, color='g', s=[POINTSIZE for i in motif_freq])
+    phylop_scatter_plot.plot(motif_freq, sample_regression_line, 'g', motif_freq, fit_fn(motif_freq), color='g', linewidth=PHYLOP_BAR_LINEWIDTH)
+    phylop_scatter_plot.scatter(motif_freq, control_phylop_scores, color=GREYNESS, s=[POINTSIZE for i in motif_freq])
+    phylop_scatter_plot.plot(motif_freq, control_regression_line, color=GREYNESS, linewidth=PHYLOP_BAR_LINEWIDTH)
+
+    ticks_and_labels = np.linspace(1.02*min(motif_freq), 1.02*max(motif_freq), num = 5, endpoint=True)
+    phylop_scatter_plot.set_xticks(ticks_and_labels)
+    ticks_and_labels = ["$%.2f$"%(x/(1.02*num_occurrences)) for x in ticks_and_labels]
+    phylop_scatter_plot.set_xticklabels(ticks_and_labels)
+
+    max_yticks = 4
+    yloc = plt.MaxNLocator(max_yticks)
+    phylop_scatter_plot.yaxis.set_major_locator(yloc)
+    phylop_scatter_plot.set_xlabel('$\mathrm{Base}\ \mathrm{Frequency}$', fontsize=FONTSIZE, fontweight='bold')
+    phylop_scatter_plot.get_xaxis().tick_bottom()
+    phylop_scatter_plot.get_yaxis().tick_left()
+    phylop_scatter_plot.set_ylabel('$\mathrm{%s}\ \mathrm{Score}$'%(y_label), fontsize=FONTSIZE, fontweight='bold')
+    phylop_scatter_plot.tick_params(axis='y', which='major', pad=TICKPAD)
+    phylop_scatter_plot.tick_params(axis='x', which='major', pad=TICKPAD)
+    phylop_scatter_plot.get_yaxis().set_tick_params(direction='out')
+    phylop_scatter_plot.get_xaxis().set_tick_params(direction='out')
+    phylop_scatter_plot.tick_params('both', length=TICKLENGTH, width=2, which='major')
+
+    f.add_subplot(phylop_scatter_plot)
+
+
+def create_plot(meme_file,
+                peak_file,
+                fimo_file,
+                sample_phylop_file,
+                control_phylop_file,
+                sample_gerp_file=None,
+                control_gerp_file=None,
+                annotate=None,
+                motif_number=1,
+                flank_length=5):
+    meme_record = read_memefile(meme_file)
+    record = meme_record['motif_records'][motif_number-1]
+    motif_lenth = record.length
     num_occurrences = getattr(record, 'num_occurrences', 'Unknown')
-    sample_phylo_data = None
-    control_phylo_data = None
-    sample_gerp_data = None
-    control_gerp_data = None
+    meme_dir = os.path.abspath(os.path.dirname(meme_file))
+    fimo_dir = os.path.abspath(os.path.dirname(fimo_file))
+
+    use_gerp = False
     annotate_dict = None
+    print sample_gerp_file
+    print control_gerp_file
+
     if annotate == "" or annotate == ' ':
         annotate = None
     elif annotate:
         with open(annotate) as f:
             annotate_dict = json.load(f)
 
+    if sample_gerp_file:
+        use_gerp = True
 
-    handle =  open(sample_phylop_file, 'r')
-    sample_phylo_data = csv.reader(handle, delimiter='\t')
-
-    handle = open(control_phylop_file, 'r')
-    control_phylo_data = csv.reader(handle, delimiter='\t')
-
-
-    if sample_gerp_file and control_gerp_file:
-
-        handle = open(sample_gerp_file, 'r')
-        sample_gerp_data = csv.reader(handle, delimiter='\t')
-
-        handle = open(control_gerp_file, 'r')
-        control_gerp_data = csv.reader(handle, delimiter='\t')
-
-    sample_phylo_scores = []
-    for line in sample_phylo_data:
-        sample_phylo_scores.append(float(line[0]))
-    control_phylo_scores = []
-    for line in control_phylo_data:
-        control_phylo_scores.append(float(line[0]))
-
-    if sample_gerp_data:
-        sample_gerp_scores = []
-        for line in sample_gerp_data:
-            sample_gerp_scores.append(float(line[0]))
-        control_gerp_scores = []
-        for line in control_gerp_data:
-            control_gerp_scores.append(float(line[0]))
-
-    assert (len(sample_phylo_scores) == len(control_phylo_scores))
-
-    handle.close()
-    profile = position_wise_profile(getattr(record, score_type), record.length)
-    max_occur = find_max_occurence(profile, max_count=1)
-    ## motif_scores is tn array of scores of the max  occuring base at each position of the motif
-    motif_scores = []
+    #profile = create_position_profile(record, COUNT_TYPE)
+    max_occur = get_max_occuring_bases(record, max_count=1, count_type=COUNT_TYPE)
+    ## motif_freq is tn array of scores of the max  occuring base at each position of the motif
+    #profile = position_wise_profile(getattr(record, COUNT_TYPE), record.length)
+    #max_occur = find_max_occurence(profile, max_count=1)
+    motif_freq = []
     for position in max_occur:
-        motif_scores.append(position[0][1])
+        motif_freq.append(position[0][1])
 
-    motif_scores = np.asarray(motif_scores)
-    sample_phylo_scores = np.asarray(sample_phylo_scores)
-    control_phylo_scores = np.asarray(control_phylo_scores)
-    if sample_gerp_data:
-        sample_gerp_scores = np.asarray(sample_gerp_scores)
-        control_gerp_scores = np.asarray(control_gerp_scores)
-
-    motif_junk = [0 for i in range(0, flanking_sites)]
-    motif_junk = np.asarray(motif_junk)
-    motif_concat = np.concatenate((motif_junk, motif_scores))
-    motif_concat = np.concatenate((motif_concat, motif_junk))
-
-
-    ##Mean of flanking sites
-    ms_p = np.mean(np.concatenate((sample_phylo_scores[0:flanking_sites], sample_phylo_scores[-flanking_sites:])))
-    mc_p = np.mean(np.concatenate((control_phylo_scores[0:flanking_sites], control_phylo_scores[-flanking_sites:])))
-
-
-    if sample_gerp_data:
-        ms_g = np.mean(np.concatenate((sample_gerp_scores[0:flanking_sites], sample_gerp_scores[-flanking_sites:])))
-        mc_g = np.mean(np.concatenate((control_gerp_scores[0:flanking_sites], control_gerp_scores[-flanking_sites:])))
-        flanking_sample_gerp_scores = np.concatenate((sample_gerp_scores[0:flanking_sites], sample_gerp_scores[-flanking_sites:]))
-        flanking_control_gerp_scores = np.concatenate((control_gerp_scores[0:flanking_sites], control_gerp_scores[-flanking_sites:]))
-        motif_control_gerp_scores = control_gerp_scores[flanking_sites:-flanking_sites]
-        motif_sample_gerp_scores = sample_gerp_scores[flanking_sites:-flanking_sites]
-
-    flanking_sample_phylo_scores = np.concatenate((sample_phylo_scores[0:flanking_sites], sample_phylo_scores[-flanking_sites:]))
-    flanking_control_phylo_scores = np.concatenate((control_phylo_scores[0:flanking_sites], control_phylo_scores[-flanking_sites:]))
-    motif_control_phylo_scores = control_phylo_scores[flanking_sites:-flanking_sites]
-    motif_sample_phylo_scores = sample_phylo_scores[flanking_sites:-flanking_sites]
-
-    if flanking_sites>0:
-        shifted_sample_phylo_scores = sample_phylo_scores[flanking_sites:-flanking_sites]-ms_p
-        shifted_control_phylo_scores = control_phylo_scores[flanking_sites:-flanking_sites]-mc_p
-        if sample_gerp_data:
-            shifted_sample_gerp_scores = sample_gerp_scores[flanking_sites:-flanking_sites]-ms_g
-            shifted_control_gerp_scores = control_gerp_scores[flanking_sites:-flanking_sites]-mc_g
-    else:
-        shifted_sample_phylo_scores = sample_phylo_scores
-        shifted_control_phylo_scores = control_phylo_scores
-        if sample_gerp_data:
-            shifted_sample_gerp_scores = sample_gerp_scores
-            shifted_control_gerp_scores = control_gerp_scores
-
-    pr_p = pearsonr(motif_scores, motif_sample_phylo_scores)
-    if sample_gerp_data:
-        pr_g = pearsonr(motif_scores, motif_sample_gerp_scores)
-
-    ## H_0: Mean phylop scores for motif sites and flanking sites are the same
-    ## H_!: Mean phylop score for motif sites > Mean phylop score of flanking sites
-    ## NOTE: the perform_t_test functions returns a 2 tailed p-value forn independet t-test with unequal sample size, eqaul variances
-
-    T_deltaphylop, p_deltaphylop = perform_t_test(motif_sample_phylo_scores, flanking_sample_phylo_scores)
-    delta_phylop = np.mean(motif_sample_phylo_scores)-np.mean(flanking_sample_phylo_scores)#-shifted_control_phylo_scores)
-    if sample_gerp_data:
-        T_deltagerp, p_deltagerp = perform_t_test(motif_sample_gerp_scores, flanking_sample_gerp_scores)
-        delta_gerp = np.mean(motif_sample_gerp_scores)-np.mean(flanking_sample_gerp_scores)
-        if T_deltagerp<0:
-            p_deltagerp = 1-p_deltagerp*0.5
-        else:
-            p_deltagerp = p_deltagerp*0.5
-
-
-    if T_deltaphylop<0:
-        p_deltaphylop = 1-p_deltaphylop*0.5
-    else:
-        p_deltaphylop = p_deltaphylop*0.5
-
-
-    ## Ordinary least square fit for phylop scores and motif_scores
-    reg_phylop_sample = sm.OLS(motif_sample_phylo_scores,sm.add_constant(motif_scores)).fit()
-    if (len(reg_phylop_sample.params)<2):
-        y_reg_phylop_sample = motif_scores
-    else:
-        y_reg_phylop_sample = motif_scores*reg_phylop_sample.params[1]+reg_phylop_sample.params[0]
-    reg_phylop_control = sm.OLS(motif_control_phylo_scores,sm.add_constant(motif_scores)).fit()
-    if (len(reg_phylop_control.params)<2):
-        y_reg_phylop_control = motif_scores
-    else:
-        y_reg_phylop_control = motif_scores*reg_phylop_control.params[1]+reg_phylop_control.params[0]
-
-
-    if sample_gerp_data:
-        reg_gerp_sample = sm.OLS(motif_sample_gerp_scores,sm.add_constant(motif_scores)).fit()
-        if (len(reg_gerp_sample.params)==1):
-            y_reg_gerp_sample = motif_scores
-        else:
-            y_reg_gerp_sample = motif_scores*reg_gerp_sample.params[1]+reg_gerp_sample.params[0]
-
-        reg_gerp_control = sm.OLS(motif_control_gerp_scores,sm.add_constant(motif_scores)).fit()
-        if (len(reg_gerp_control.params)==1):
-            y_reg_gerp_control = motif_scores
-        else:
-            y_reg_gerp_control = motif_scores*reg_gerp_control.params[1]+reg_gerp_control.params[0]
+    motif_freq = np.asarray(motif_freq)
+    sample_phylop_scores = np.loadtxt(sample_phylop_file)
+    control_phylop_scores = np.loadtxt(control_phylop_file)
+    sample_gerp_scores = np.loadtxt(sample_gerp_file)
+    control_gerp_scores = np.loadtxt(control_gerp_file)
 
     motif = record
     motif_length = motif.length
-    meme_dir = os.path.dirname(meme_file)
+    meme_dir = os.path.abspath(os.path.dirname(meme_file))
     X = [40+15] ## this is by trial and error, the position for the first base logo
-    logo = plt.imread(os.path.join(meme_dir, 'logo{}.png'.format(motif_number)))
     ## Generate all other X coordinates
-    fs = flanking_sites
-    for j in range(1,len(motif)+2*fs):
-        t = X[j-1]+a+1.9
-        X.append(t)
-    motif_bits = []
-    for i in range(0, motif.length):
-        s = 0
-        for base in bases:
-            s = s + -motif.pwm[base][i]*log(motif.pwm[base][i], 2) if motif.pwm[base][i]!=0 else s
-            s = 2-s
-        motif_bits.append(s)
+    for j in range(1,len(motif)+2*flank_length):
+        X.append( X[j-1]+MAGIC_NUM+1.9 )
 
-    y_phylop_pixels = [__scale__*x for x in sample_phylo_scores]#[fs:-fs]]#[flanking_sites:-flanking_sites]]
-
+    motif_bits = get_motif_ic(meme_file, motif_number)
 
     ##FIXME This is a big dirty hacl to get thegenerate plots for the Reverse complement logo too
     logo_name =['logo{}.png'.format(motif_number), 'logo_rc{}.png'.format(motif_number)]
     for ln in logo_name:
+        setup_matplotlib()
         if 'rc'in ln:
-            y_phylop_pixels.reverse()
-        logo = plt.imread(os.path.join(meme_dir, ln))
-        height_px = logo.shape[0] # Should be 212
+            sample_phylop_scores = sample_phylop_scores[::-1]
+        matplot_dict =init_figure(meme_dir=meme_dir, X_values=X, motif=motif_number,
+                                    use_gerp=use_gerp, annotate=annotate)
+        f = matplot_dict['figure']
+        gs = matplot_dict['gs']
+        figsize = matplot_dict['figsize']
+        right_margin = matplot_dict['right_margin']
+        total_px= matplot_dict['total_px']
 
-        if sample_gerp_data:
-            if annotate:
-                total_px = X[-1]+8*height_px+140
-                right = (8*height_px+10+140-0.2*height_px)/total_px
-            else:
-                total_px = X[-1]+6*height_px+140
-                right = (6*height_px+10+140-0.2*height_px)/total_px
-        else:
-            if annotate:
-                total_px = X[-1]+6*height_px+140
-                right = (6*height_px+10+140-0.2*height_px)/total_px
-            else:
-                total_px = X[-1]+4*height_px+140
-                right = (4*height_px+10+140-0.2*height_px)/total_px
-
-        figsize=(total_px/100,(2*height_px)/100+0.6)
-
-        gs =  gridspec.GridSpec(2, 1)#, width_ratios=[1, right], height_ratios=[1,1])
-        gs.update(top=1.0, bottom=0.14, left=0.08, right=1-right)#, right=0.8)#, left=0.06)#, right=right, wspace=0.025, hspace=0.03, wd)
-        f = plt.figure(figsize=figsize, dpi=dpi, facecolor='w', edgecolor='k')
-
-        # ax => Logo
-        # stem_plot => Trend
-        # gerp_scatter_plot => Phylop
-        # enrichment_plot => Gerp
-        logo_plot = plt.Subplot(f, gs[0])
-        ##TODO Check this
-        if motif_length>45:
-            XSCALE_FACTOR = motif_length/1.9
-            z=2
-        elif motif_length>40:
-            XSCALE_FACTOR = motif_length/2.25
-            z=2.5
-        elif motif_length>36:
-            XSCALE_FACTOR = motif_length/1.95
-            z=2
-        elif motif_length>21:
-            XSCALE_FACTOR = motif_length/5
-            z=3
-        else:
-            XSCALE_FACTOR = 4.5
-            z=3
-
-        logo_plot.imshow(logo, extent=[40+15+z*(a+1.9),logo.shape[1]+15+XSCALE_FACTOR*(a+1.9),0,logo.shape[0]])
-        logo_plot.set_axis_off()
-        f.add_subplot(logo_plot)
-
-        stem_plot = plt.Subplot(f, gs[1], sharex=logo_plot)
-        markerline, stemlines, baseline  = stem_plot.stem(X[:fs], [y for y in y_phylop_pixels[:fs]], markerfmt="_", linefmt="-", markerfacecolor=flankingstemcolor, color=greycolor)
-        setp(stemlines, 'color', flankingstemcolor)
-        setp(markerline, 'markerfacecolor', flankingstemcolor)
-        setp(markerline, 'color', flankingstemcolor)
-        setp(stemlines, 'linewidth', linewidth)
-        setp(markerline, 'markersize', markersize)
-        setp(baseline, 'linewidth', linewidth-0.5)
-        setp(markerline, 'markeredgewidth', markeredgewidth)
-        markerline, stemlines, baseline  = stem_plot.stem(X[fs:-fs], [y for y in y_phylop_pixels[fs:-fs]], markerfmt="g_", linefmt="g-", basefmt="r-")
-        setp(stemlines, 'linewidth', linewidth)
-        setp(markerline, 'markersize', markersize)
-        setp(markerline, 'markeredgewidth', markeredgewidth)
-        setp(baseline, 'linewidth', linewidth-0.5)
-        markerline, stemlines, baseline  =  stem_plot.stem(X[-fs:], [y for y in y_phylop_pixels[-fs:]], markerfmt="_", linefmt="-", markerfacecolor=flankingstemcolor, color=greycolor)
-        setp(stemlines, 'color', flankingstemcolor)
-        setp(markerline, 'markerfacecolor', flankingstemcolor)
-        setp(stemlines, 'linewidth', linewidth)
-        setp(markerline, 'markersize', markersize)
-        setp(markerline, 'markeredgewidth', markeredgewidth)
-        setp(markerline, 'color', flankingstemcolor)
-        setp(baseline, 'linewidth', linewidth-0.5)
+        logo_plot = create_logo_plot({'figure':f, 'gridspec': gs[0]}, meme_dir, motif_number, motif_length)
 
 
-        indices_str=[]
-        indices1 = np.linspace(-fs,-1, 2)
-        for i in indices1:
-            indices_str.append('')
-        indices2 = np.arange(0, len(X)-2*fs,5)
-        for i in indices2:
-            indices_str.append('${}$'.format(int(i)+1))
-
-        indices3 = np.linspace(motif_length, motif_length+fs-1, 2)
-
-        for i in indices3:
-            indices_str.append('')
-
-
-        indices12 = np.concatenate((indices1, indices2))
-        indices = np.concatenate((indices12, indices3))
-        xticks = [X[int(i)+fs] for i in indices]
-
-        max_yticks = 3
-        yloc = plt.MaxNLocator(max_yticks)
-        stem_plot.yaxis.set_major_locator(yloc)
-
-        #ticks_and_labels = np.linspace(1.02*min(min(y_phylop_pixels), -0.1), 1.02*max(y_phylop_pixels), num = 5, endpoint=True)
-        #stem_plot.set_yticks(ticks_and_labels)
-        #stem_plot.set_yticklabels(['$%.2f$' %x for x in ticks_and_labels])#(["%0.2f"%(min(y_phylop_pixels)/__scale__), "%0.2f"%(np.mean(y_phylop_pixels)/__scale__), "%0.2f"%(max(y_phylop_pixels)/__scale__)], fontsize=fontsize)
-        stem_plot.set_xlabel('$\mathrm{Base}\ \mathrm{Position}$', fontsize=fontsize, fontweight='bold')
-        stem_plot.set_xlim([1.2*a,X[-1]+linewidth*1.8])
-        stem_plot.set_ylim([min(np.min(y_phylop_pixels), -0.01)-0.03, np.max(y_phylop_pixels,0.01)])
-        stem_plot.get_xaxis().tick_bottom()
-        stem_plot.get_yaxis().tick_left()
-        stem_plot.set_xticks(xticks)
-        stem_plot.set_xticklabels(indices_str, fontsize=fontsize)
-        stem_plot.spines['top'].set_visible(False)
-        stem_plot.spines['right'].set_visible(False)
-        stem_plot.yaxis.set_ticks_position('left')
-        stem_plot.xaxis.set_ticks_position('bottom')
-        stem_plot.spines['left'].set_position('zero')
-        #stem_plot.spines['bottom'].set_position(matplotlib.transforms.Bbox(array([[0.125,0.63],[0.25,0.25]])))
-        stem_plot.get_yaxis().set_tick_params(direction='out')
-        stem_plot.get_xaxis().set_tick_params(direction='out')
-        stem_plot.tick_params(axis='y', which='major', pad=tickpad)
-        stem_plot.tick_params(axis='x', which='major', pad=tickpad)
-        stem_plot.tick_params('both', length=ticklength, width=2, which='major')
-        stem_plot.set_ylabel('$\mathrm{PhyloP}\ \mathrm{Score}$', fontsize=fontsize)
-        f.add_subplot(stem_plot)
-
-        if sample_gerp_data:
+        if use_gerp:
             if annotate:
                 gs1 =  gridspec.GridSpec(2, 4, height_ratios=[1,4], width_ratios=[1,1,1,1])
                 gerp_header_subplot_gs = gs1[0,1]
@@ -498,155 +589,19 @@ def create_plot(meme_file, motif_number, flanking_sites, sample_phylop_file, con
                 histogram_header_subplot_gs = gs1[0,1]
                 histogram_subplot_gs = gs1[1,1]
 
-        gs1.update(bottom=0.14, right=0.95, left=1-right*0.85, wspace=0.5)
+        gs1.update(bottom=0.14, right=0.95, left=1-right_margin*0.85, wspace=0.5)
+        create_stemplot({'figure': f, 'gridspec': gs[1], 'shareX': logo_plot}, X, sample_phylop_scores, motif_length, flank_length=flank_length)
 
 
-        phlyop_plots_leg = plt.Subplot(f, gs1[0,0], autoscale_on=True)
-        pearsonr_pval = str('%.1g'%pr_p[1])
-        if 'e' in pearsonr_pval:
-            pearsonr_pval += '}'
-            pearsonr_pval = pearsonr_pval.replace('e', '*10^{').replace('-0','-')
-        score_pval = str('%.1g'%p_deltaphylop)
-        if 'e' in score_pval:
-            score_pval += '}'
-            score_pval = score_pval.replace('e', '*10^{').replace('-0','-')
+        create_phylop_legend_plot({'figure':f, 'gridspec':gs1[0,0]},  motif_freq, sample_phylop_scores, control_phylop_scores, flank_length)
+        create_phylop_scatter({'figure':f, 'gridspec':gs1[1,0]}, motif_freq, sample_phylop_scores, control_phylop_scores, flank_length, num_occurrences, y_label='Phylop')
 
-        textstr = r'\noindent$R_{pearson}=%.2f$($p=%s$)\\~\\$\Delta_{Phylop}=%.2f$($p=%s$)\\~\\' %(pr_p[0], pearsonr_pval, delta_phylop, score_pval)#, reg_phylop_control.rsquared, num_occurrences*reg_phylop_control.params[1])
-        txtx = 1-legend_xmultiplier*len(textstr)/100.0
-        phlyop_plots_leg.set_frame_on(False)
-        phlyop_plots_leg.set_xticks([])
-        phlyop_plots_leg.set_yticks([])
-        phlyop_plots_leg.text(txtx, txty, textstr, fontsize=legend_fontsize)
-        f.add_subplot(phlyop_plots_leg)
-
-        phylop_scatter_plot = plt.Subplot(f, gs1[1,0], autoscale_on=True)
-        fit = np.polyfit(motif_scores,motif_sample_phylo_scores,1)
-        fit_fn = np.poly1d(fit)
-
-        phylop_scatter_plot.scatter(motif_scores, motif_sample_phylo_scores, color='g', s=[pointsize for i in motif_scores])
-        phylop_scatter_plot.plot(motif_scores, y_reg_phylop_sample, 'g', motif_scores, fit_fn(motif_scores), color='g', linewidth=plot_linewidth)
-        phylop_scatter_plot.scatter(motif_scores, motif_control_phylo_scores, color=greycolor, s=[pointsize for i in motif_scores])
-        phylop_scatter_plot.plot(motif_scores, y_reg_phylop_control, color=greycolor, linewidth=plot_linewidth)
-
-        ticks_and_labels = np.linspace(1.02*min(motif_scores), 1.02*max(motif_scores), num = 5, endpoint=True)
-        phylop_scatter_plot.set_xticks(ticks_and_labels)
-        ticks_and_labels = ["$%.2f$"%(x/num_occurrences) for x in ticks_and_labels]
-        phylop_scatter_plot.set_xticklabels(ticks_and_labels)
-
-        ##max_xticks = 5
-        ##xloc = plt.MaxNLocator(max_xticks)
-        ##print xloc
-        ##phylop_scatter_plot.xaxis.set_major_locator(xloc)
-        #ticks_and_labels = np.linspace(1.02*min(min(shifted_sample_phylo_scores), min(shifted_control_phylo_scores)), 1.02*max(max(shifted_sample_phylo_scores),max(shifted_control_phylo_scores)),
-                                    #num = 4, endpoint=True)
-        #phylop_scatter_plot.set_yticks(ticks_and_labels)
-        #phylop_scatter_plot.set_yticklabels(["$%0.2f$"%x for x in ticks_and_labels])
-        max_yticks = 4
-        yloc = plt.MaxNLocator(max_yticks)
-        phylop_scatter_plot.yaxis.set_major_locator(yloc)
-        phylop_scatter_plot.set_xlabel('$\mathrm{Base}\ \mathrm{Frequency}$', fontsize=fontsize, fontweight='bold')
-        phylop_scatter_plot.get_xaxis().tick_bottom()
-        phylop_scatter_plot.get_yaxis().tick_left()
-        phylop_scatter_plot.set_ylabel('$\mathrm{PhyloP}\ \mathrm{Score}$', fontsize=fontsize, fontweight='bold')
-        phylop_scatter_plot.tick_params(axis='y', which='major', pad=tickpad)
-        phylop_scatter_plot.tick_params(axis='x', which='major', pad=tickpad)
-        phylop_scatter_plot.get_yaxis().set_tick_params(direction='out')
-        phylop_scatter_plot.get_xaxis().set_tick_params(direction='out')
-        phylop_scatter_plot.tick_params('both', length=ticklength, width=2, which='major')
-
-        f.add_subplot(phylop_scatter_plot)
-
-        gerp_plots_leg = plt.Subplot(f, gerp_header_subplot_gs, autoscale_on=True)
-        gerp_plots_leg.set_frame_on(False)
-        gerp_plots_leg.set_xticks([])
-        gerp_plots_leg.set_yticks([])
-        pearsonr_pval = str('%.1g'%pr_p[1])
-        if 'e' in pearsonr_pval:
-            pearsonr_pval += '}'
-            pearsonr_pval = pearsonr_pval.replace('e', '*10^{').replace('-0','-')
-
-        if sample_gerp_data:
-            score_pval = str('%.1g'%p_deltagerp)
-            if 'e' in score_pval:
-                score_pval += '}'
-                score_pval = score_pval.replace('e', '*10^{').replace('-0','-')
-            textstr = r'\noindent$R_{pearson}=%.2f$($p=%s$)\\~\\$\Delta_{{Gerp}}=%.2f$($p=%s$)\\~\\'%(pr_g[0], pearsonr_pval, delta_gerp, score_pval)
-            txtx = 1-legend_xmultiplier*len(textstr)/100.0
-            gerp_plots_leg.text(txtx, txty, textstr, fontsize=legend_fontsize)
-            f.add_subplot(gerp_plots_leg)
-
-            gerp_scatter_plot = plt.Subplot(f, gerp_subplot_gs, autoscale_on=True)
-            gerp_scatter_plot.scatter(motif_scores, motif_sample_gerp_scores, color='g', s=[pointsize for i in motif_scores])
-            gerp_scatter_plot.plot(motif_scores, y_reg_gerp_sample, color='g', linewidth=plot_linewidth)
-            gerp_scatter_plot.scatter(motif_scores, motif_control_gerp_scores, color=greycolor, s=[pointsize for i in motif_scores])
-            gerp_scatter_plot.plot(motif_scores, y_reg_gerp_control, color=greycolor, linewidth=plot_linewidth)
-            ticks_and_labels = np.linspace(1.02*min(motif_scores), 1.02*max(motif_scores), num = 5, endpoint=True)
-            gerp_scatter_plot.set_xticks(ticks_and_labels)
-            ticks_and_labels = ["$%.2f$"%(x/num_occurrences) for x in ticks_and_labels]
-            gerp_scatter_plot.set_xticklabels(ticks_and_labels)
-
-            ##max_xticks = 5
-            ##xloc = plt.MaxNLocator(max_xticks)
-            ##gerp_scatter_plot.xaxis.set_major_locator(xloc)
-            max_yticks = 4
-            yloc = plt.MaxNLocator(max_yticks)
-            gerp_scatter_plot.yaxis.set_major_locator(yloc)
-            gerp_scatter_plot.set_xlabel('$\mathrm{Base}\ \mathrm{Frequency}$', fontsize=fontsize, fontweight='bold')
-            gerp_scatter_plot.set_ylabel('$\mathrm{GERP}\ \mathrm{Score}$', fontsize=fontsize, fontweight='bold')
-            gerp_scatter_plot.get_xaxis().tick_bottom()
-            gerp_scatter_plot.get_yaxis().tick_left()
-            gerp_scatter_plot.get_yaxis().set_tick_params(direction='out')
-            gerp_scatter_plot.get_xaxis().set_tick_params(direction='out')
-            gerp_scatter_plot.tick_params(axis='y', which='major', pad=tickpad)
-            gerp_scatter_plot.tick_params(axis='x', which='major', pad=tickpad)
-            gerp_scatter_plot.tick_params('both', length=ticklength, width=2, which='major')
-            f.add_subplot(gerp_scatter_plot)
+        print(use_gerp)
+        if use_gerp:
+            create_phylop_legend_plot({'figure':f, 'gridspec':gerp_header_subplot_gs},  motif_freq, sample_gerp_scores, control_gerp_scores, flank_length)
+            create_phylop_scatter({'figure':f, 'gridspec':gerp_subplot_gs}, motif_freq, sample_gerp_scores, control_gerp_scores, flank_length, num_occurrences, y_label='Gerp')
 
 
-        enrichment_plot4 = plt.Subplot(f, histogram_header_subplot_gs, autoscale_on=True)
-        enrichment_plot4.set_frame_on(False)
-        enrichment_plot4.set_xticks([])
-        enrichment_plot4.set_yticks([])
-        all_distances = get_motif_distances(peak_file, fimo_file)
-        fimo_dir = os.path.dirname(fimo_file)
-        motifs_within_100 = filter(lambda x: x<=100 and x>=-100, all_distances)
-        motifs_within_100_200 = filter(lambda x: (x<200 and x>100) or (x>-200 and x<-100), all_distances)
-        if len(motifs_within_100_200)>0:
-            enrichment = len(motifs_within_100)/(len(motifs_within_100_200))#+len(motifs_within_100))
-        else:
-            enrichment = 1
-        enrichment_pval = 0
-        number_of_sites = len(motifs_within_100)+len(motifs_within_100_200) #fimo_sites_intersect(fimo_file)
-        probability = 200/(ENRICHMENT_SEQ_LENGTH-motif_length)
-        enrichment_pval=binom.sf(len(motifs_within_100), number_of_sites, probability)
-        enrichment_pval = str('%.1g'%enrichment_pval)
-        if 'e' in enrichment_pval:
-            enrichment_pval+= '}'
-            enrichment_pval= enrichment_pval.replace('e', '*10^{').replace('-0','-')
-        textstr = r'\noindent$Enrichment={0:.2f}$\\~\\$(p={1})$'.format(enrichment, enrichment_pval)
-        txtx = 0.1*len(textstr)/100.0
-        enrichment_plot4.text(txtx, txty, textstr, fontsize=legend_fontsize)
-        f.add_subplot(enrichment_plot4)
-        enrichment_plot = plt.Subplot(f, histogram_subplot_gs, autoscale_on=True)
-        enrichment_plot.hist(all_distances, histogram_nbins, color='white', alpha=0.8, range=[-200,200])
-        enrichment_plot.set_xticks([-200,-100,0,100,200])
-        max_yticks = 3
-        yloc = plt.MaxNLocator(max_yticks)
-        enrichment_plot.yaxis.set_major_locator(yloc)
-        #enrichment_plot.set_yticks(range(1,6))
-        ticks_and_labels = [-200,-100,0,100,200]
-        all_distances = np.asarray(all_distances)
-        enrichment_plot.set_xticklabels(['${}$'.format(x) for x in ticks_and_labels])
-        enrichment_plot.tick_params(axis='y', which='major', pad=tickpad)
-        enrichment_plot.tick_params(axis='x', which='major', pad=tickpad)
-        enrichment_plot.tick_params('both', length=ticklength, width=2, which='major')
-        enrichment_plot.get_xaxis().tick_bottom()
-        enrichment_plot.get_yaxis().tick_left()
-        enrichment_plot.get_yaxis().set_tick_params(direction='out')
-        enrichment_plot.get_xaxis().set_tick_params(direction='out')
-        enrichment_plot.axvline(x=-100, linewidth=3, color='red', linestyle='-.')
-        enrichment_plot.axvline(x=100, linewidth=3, color='red', linestyle='-.')
-        f.add_subplot(enrichment_plot)
         if 'rc' not in ln:
             out_file = os.path.join(fimo_dir,'motif{}Combined_plots.png'.format(motif_number))
             out_file = 'motif{}Combined_plots.png'.format(motif_number)
@@ -655,76 +610,19 @@ def create_plot(meme_file, motif_number, flanking_sites, sample_phylop_file, con
             out_file = 'motif{}Combined_plots_rc.png'.format(motif_number)
 
         if annotate:
-            filename = r'$'+annotate[0]+'$'
-            try:
-                a_motif = r'$'+annotate[1]+'$'
-            except IndexError:
-                a_motif = ''
-            try:
-                cell_line = r'$'+annotate[2]+'$'
-            except IndexError:
-                cell_line = ''
-            try:
-                assay = r'$'+annotate[3]+'$'
-            except IndexError:
-                assay = ''
+            cretate_annnotation_plot()
 
-            #data = [[r'$Filename$', filename], [r'$Motif$', a_motif], [r'$Cell\ Line$', cell_line], [r'Assay', assay]]
-            keys = ['title', 'gene_name', 'dataset', 'assembly']
-            data = [[r'$'+key.replace("_", " ").upper()+'$', r'$'+annotate_dict[key]+'$'] for key in keys]
-            ann_header = plt.Subplot(f, ann_header_subplot_gs, autoscale_on=True)
-            ann_header.set_frame_on(False)
-            ann_header.set_xticks([])
-            ann_header.set_yticks([])
-            f.add_subplot(ann_header)
-            textstr = r'$Metadata$'
-            txtx = 1.7*len(textstr)/100.0
-            ann_header.text(txtx, txty, textstr, fontsize=legend_fontsize)
-            ann_plot = plt.Subplot(f, ann_subplot_gs, autoscale_on=True)
-            ann_plot.set_xticks([])
-            ann_plot.set_yticks([])
-            ann_plot.set_frame_on(False)
-            table = ann_plot.table(cellText=data,loc='center')
-            table.scale(1,2)
-            fontproperties=FontProperties(size=legend_fontsize*8)#, family='serif' )
-            for key, cell in table.get_celld().items():
-                row, col = key
-                if row > 0 and col > 0:
-                    cell.set_text_props(fontproperties=fontproperties)
-
-            table.set_fontsize(legend_fontsize*8)
-            f.add_subplot(ann_plot)
-
-        f.savefig(out_file, figsize=figsize, dpi=dpi)
-
-
-
-"""
-@click.command()
-@click.option('-i', '--meme', help='Meme input file', required=True)
-@click.option('-m', '--motif', help='Motif number', default=1, required=True)
-@click.option('-ps', '--phylop_sample', help='Sample PhyloP conservation scores', required=True)
-@click.option('-pc', '--phylop_control',  help='Control PhyloP conservation scores', required=True)
-@click.option('-gs', '--gerp_sample', default=None)
-@click.option('-gc', '--gerp_control', default=None)
-@click.option('-peak', '--peak_file', help='Path to peaks file')
-@click.option('-fimo', '--fimo_file', help='Path to fimo_2_sites output')
-@click.option('-f', '--flanking_sites',  default=10)
-@click.option('-a', '--annotate', default=None)
-
-def options(meme,motif,flanking_sites,phylop_sample,phylop_control,gerp_sample,gerp_control,peak_file,fimo_file, annotate):
-    create_plot(meme,
-                motif,
-                flanking_sites,
-                phylop_sample,
-                phylop_control,
-                gerp_sample,
-                gerp_control,
-                peak_file,
-                fimo_file,
-                annotate)
-
+        f.savefig(out_file, figsize=figsize, dpi=DPI)
 
 if __name__ == '__main__':
-    options()
-"""
+    meme_file, peak_file, fimo_file, sample_phylop_file, control_phylop_file, sample_gerp_file,  control_gerp_file= sys.argv[1:]
+    create_plot(meme_file,
+                peak_file,
+                fimo_file,
+                sample_phylop_file,
+                control_phylop_file,
+                sample_gerp_file,
+                control_gerp_file,
+                annotate=None,
+                motif_number=1,
+                flank_length=5)

@@ -89,7 +89,7 @@ def get_max_occuring_bases(record, max_count, count_type='counts'):
     profile = create_position_profile(record, count_type)
     sorted_profile = []
     for i, p in enumerate(profile):
-        sorted_p = sorted(p.items(), key=operator.itemgetter(1), reverse=True)
+        sorted_p = sorted(p.items(), key=operator.itemgetter(1))
         sorted_profile.append(sorted_p[-max_count:])
     return sorted_profile
 
