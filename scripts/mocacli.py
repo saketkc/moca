@@ -125,15 +125,16 @@ def cli(bedfile, genome_table, genome_fasta,
         save_score(fimo_rand_dir, phylop_wig, gerp_wig, flank_motif)
         show_progress('Processing Scores Main')
         save_score(fimo_main_dir, phylop_wig, gerp_wig, flank_motif)
-        create_plot(meme_file,
-                    motif,
-                    flank_motif,
-                    os.path.join(fimo_main_dir, 'phylop.mean.txt'),
-                    os.path.join(fimo_rand_dir, 'phylop.mean.txt'),
-                    os.path.join(fimo_main_dir, 'gerp.mean.txt'),
-                    os.path.join(fimo_rand_dir, 'gerp.mean.txt'),
-                    os.path.join(root_dir, bedfile_fn + '.sorted'),
-                    os.path.join(fimo_main_dir, 'fimo.sites.txt'),
-                    False)
+        create_plot(meme_file=meme_file,
+                    peak_file=os.path.join(root_dir, bedfile_fn + '.sorted'),
+                    fimo_file=os.path.join(fimo_main_dir, 'fimo.sites.txt'),
+                    sample_phylop_file=os.path.join(fimo_main_dir, 'phylop.mean.txt'),
+                    control_phylop_file=os.path.join(fimo_rand_dir, 'phylop.mean.txt'),
+                    sample_gerp_file=os.path.join(fimo_main_dir, 'gerp.mean.txt'),
+                    control_gerp_file=os.path.join(fimo_rand_dir, 'gerp.mean.txt'),
+                    annotate=False,
+                    motif_number=motif,
+                    flank_length=flank_motif
+                    )
     bar.close()
 

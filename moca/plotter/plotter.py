@@ -543,7 +543,7 @@ def create_plot(meme_file,
     for j in range(1,len(motif)+2*flank_length):
         X.append( X[j-1]+MAGIC_NUM+1.9 )
 
-    motif_bits = get_motif_ic(meme_file, motif_number)
+    motif_bits = get_motif_ic(meme_file, motif_number-1)
 
     ##FIXME This is a big dirty hacl to get thegenerate plots for the Reverse complement logo too
     logo_name =['logo{}.png'.format(motif_number), 'logo_rc{}.png'.format(motif_number)]
