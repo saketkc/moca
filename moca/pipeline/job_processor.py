@@ -29,7 +29,11 @@ class Pipeline(object):
         self.fimo_default_params = ''
         self.fimo_strargs = None
         self.fimo_location = 'fimo'
-        self.shuffler_location = 'fasta-s'
+        self.shuffler_location = 'fasta-shuffle-letters'
+        self.centrimo_args = None
+        self.centrimo_location = 'centrimo'
+        self.memechip_args = None
+        self.memechip_location = 'meme-chip'
         self.commands_run = []
 
     def run_meme(self, fasta_in, out_dir=None, strargs=None):
@@ -133,3 +137,7 @@ class Pipeline(object):
                                            cwd=os.path.dirname(fasta_out))
         with open(os.path.abspath(fasta_out), 'w') as f:
             f.write(stdout)
+
+    def run_memechip(self, fasta_in):
+        pass
+
