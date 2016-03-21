@@ -32,6 +32,7 @@ class Pipeline(object):
         self.shuffler_location = 'fasta-shuffle-letters'
         self.centrimo_args = None
         self.centrimo_location = 'centrimo'
+        self.memechip_default_params = '-dna -meme-mod zoops -nmotifs 3 -meme-minw 6 -meme-maxw 30 -centrimo-flip -meme-maxsize 1000000'
         self.memechip_args = None
         self.memechip_location = 'meme-chip'
         self.commands_run = []
@@ -139,5 +140,47 @@ class Pipeline(object):
             f.write(stdout)
 
     def run_memechip(self, fasta_in):
-        pass
+        """Run meme-chip
+        Run meme-chip on a given input fasta
+
+        Parameters
+        ---------
+        strargs: string
+            A concatenated string containing parameters as would be passed to standalone meme
+            Defualt parametes used: '-dna -revcomp -maxsize 1000000 -nmotifs 3 -p 4'
+            To modify: Pipeline.meme_default_params
+        fasta_in: string
+            Location of the fasta file
+        out_dir: string
+            Location to write all meme analysis output
+
+        Returns
+        -------
+        meme_out: string
+            Location of meme output
+        """
+        self.meme_strargs = strargs
+        if not self.meme_strargs:
+            self.meme_strargs = self.meme_default_params
+        meme_binary = self.conf.get_binary_path('meme').strip()
+        if not meme_binary or meme_binary == '':
+            # Use meme from envirnonment
+            meme_binary = 'meme'
+        else:
+            #  Use absolute path meme
+            meme_binary += '/meme'
+        self.meme_location = meme_binary
+        if not out_dir:
+            out_dir = os.path.join(os.path.dirname(fasta_in), 'meme_out')
+        out_dir = os.path.abspath(out_dir)
+        cmd = '{} {} -oc {} {}'.format(self.meme_location, self.meme_strargs,
+                                       out_dir, os.path.abspath(fasta_in))
+        stdout, stderr, exitcode = run_job(cmd=cmd,
+                                           cwd=os.path.dirname(out_dir))
+
+        output = {'out_dir': out_dir, 'stdout': stdout,
+                  'stderr': stderr, 'exitcode': exitcode,
+                  'cmd': cmd}
+        self.commands_run.append({'cmd': cmd, 'metadata': output})
+        return output
 
