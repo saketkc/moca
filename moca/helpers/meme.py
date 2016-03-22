@@ -1,3 +1,4 @@
+import os
 import operator
 from math import log
 from Bio import motifs
@@ -50,7 +51,7 @@ def read_memefile(meme_file):
     """
     summary = {}
     summary['motif_occurrences'] = {}
-    records = motifs.parse(open(meme_file), 'meme')
+    records = motifs.parse(open(os.path.abspath(meme_file)), 'meme')
     summary['total_motifs'] = len(records)
     num_occurrences = []
     for index, record in enumerate(records):
