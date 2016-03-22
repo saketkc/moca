@@ -16,6 +16,7 @@ import numpy as np
 import statsmodels.api as sm
 
 from moca.helpers import read_memefile
+from moca.helpers import safe_makedir
 from moca.helpers import get_max_occuring_bases
 from moca.helpers import read_centrimo_txt
 from moca.helpers import read_centrimo_stats
@@ -298,7 +299,6 @@ def create_enrichment_plot(matplot_dict, motif_number, centrimo_txt, centrimo_st
     all_stats = read_centrimo_stats(centrimo_stats)
     motif_stats = all_stats['MEME']['MOTIF_{}'.format(motif_number)]
     X_values = np.array(motif_stats['pos'])
-    print X_values
     Y_values = np.array(motif_stats['count'])
     normalized_Y = Y_values#/np.sum(Y_values)
 
@@ -491,10 +491,10 @@ def create_plot(meme_file,
     num_occurrences = getattr(record, 'num_occurrences', 'Unknown')
     meme_dir = os.path.abspath(os.path.dirname(meme_file))
     fimo_dir = os.path.abspath(os.path.dirname(fimo_file))
+    output_dir = os.path.join(meme_dir, 'moca_plots')
+    safe_makedir(output_dir)
 
     use_gerp = False
-    print sample_gerp_file
-    print control_gerp_file
 
     if annotate == "" or annotate == ' ':
         annotate = None
@@ -570,7 +570,13 @@ def create_plot(meme_file,
                 histogram_subplot_gs = gs1[1,1]
 
         gs1.update(bottom=0.14, right=0.95, left=1-right_margin*0.85, wspace=0.5)
-        create_stemplot({'figure': f, 'gridspec': gs[1], 'shareX': logo_plot}, X, sample_phylop_scores, motif_length, flank_length=flank_length)
+        create_stemplot({'figure': f,
+                         'gridspec': gs[1],
+                         'shareX': logo_plot},
+                        X,
+                        sample_phylop_scores,
+                        motif_length,
+                        flank_length=flank_length)
 
 
         create_phylop_legend_plot({'figure':f, 'gridspec':gs1[0,0]},  motif_freq, sample_phylop_scores, control_phylop_scores, flank_length)
@@ -589,11 +595,9 @@ def create_plot(meme_file,
                                centrimo_stats)
 
         if 'rc' not in ln:
-            out_file = os.path.join(fimo_dir,'motif{}Combined_plots.png'.format(motif_number))
-            out_file = 'motif{}Combined_plots.png'.format(motif_number)
+            out_file = os.path.join(output_dir,'moca{}.png'.format(motif_number))
         else:
-            out_file = os.path.join(fimo_dir,'motif{}Combined_plots_rc.png'.format(motif_number))
-            out_file = 'motif{}Combined_plots_rc.png'.format(motif_number)
+            out_file = os.path.join(output_dir,'moca{}_rc.png'.format(motif_number))
 
         if annotate:
             create_annnotation_plot({'figure':f, 'gridspec_header':ann_header_subplot_gs,

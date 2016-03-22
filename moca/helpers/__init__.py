@@ -4,6 +4,7 @@ from .cpu_count import get_cpu_count
 from .centrimo import read_centrimo_txt
 from .centrimo import read_centrimo_stats
 from .job_executor import run_job
+from .job_executor import safe_makedir
 from .xstr import xstr
 from .filename import filename_extension
 from .meme import read_memefile

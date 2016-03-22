@@ -34,7 +34,7 @@ class Pipeline(object):
         self.shuffler_location = 'fasta-shuffle-letters'
         self.centrimo_args = None
         self.centrimo_location = 'centrimo'
-        self.memechip_default_params = '-dna -meme-mod zoops -meme-nmotifs 3 -meme-minw 6 -meme-maxw 30 -centrimo-flip -meme-maxsize 1000000 -meme-p {}'.format(self.cpu_cores)
+        self.memechip_default_params = '-dna -meme-mod zoops -meme-nmotifs 3 -meme-minw 6 -meme-maxw 30 -meme-maxsize 1000000 -meme-p {}'.format(self.cpu_cores)
         self.memechip_args = None
         self.memechip_location = 'meme-chip'
         self.commands_run = []
@@ -140,6 +140,9 @@ class Pipeline(object):
                                            cwd=os.path.dirname(fasta_out))
         with open(os.path.abspath(fasta_out), 'w') as f:
             f.write(stdout)
+
+    def run_centrimo(self, fasta_in, meme_file):
+
 
     def run_memechip(self, fasta_in, out_dir=None, strargs=None):
         """Run meme-chip
