@@ -46,9 +46,9 @@ def fimo_to_sites(fimo_file):
     else:
         fimo_df['chrom'] = fimo_df['sequence name']
         fimo_df['chromStart'] = fimo_df['start']
-        fimo_df['chromEnd'] = fimo_df['end']
+        fimo_df['chromEnd'] = fimo_df['stop']
         fimo_df[:, 'motifStartZeroBased'] = fimo_df.start-1
-        fimo_df['motifEndOneBased'] = fimo_df['end']
+        fimo_df['motifEndOneBased'] = fimo_df['stop']
 
 
     fimo_df.to_csv(fimo_sites, index=False, sep='\t')
