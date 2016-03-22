@@ -140,7 +140,7 @@ class Pipeline(ConfigurationParser):
         with open(os.path.abspath(fasta_out), 'w') as f:
             f.write(stdout)
 
-    def run_centrimo(self, fasta_in, meme_file, out_dir=None):
+    def run_centrimo(self, fasta_in, meme_file, out_dir):
         """Run centrimo
 
         Parameters
@@ -165,6 +165,8 @@ class Pipeline(ConfigurationParser):
         self.centrimo_location = centrimo_binary
         if not out_dir:
             out_dir = os.path.join(os.path.abspath(os.path.join(os.path.dirname(fasta_in), os.pardir)), 'centrimo_out')
+        else:
+            out_dir = os.path.abspath(out_dir)
 
         cmd = '{} -oc {} {} {}'.format(self.centrimo_location, out_dir, os.path.abspath(fasta_in), os.path.abspath(meme_file))
         stdout, stderr, exitcode = run_job(cmd=cmd,

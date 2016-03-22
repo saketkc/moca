@@ -135,6 +135,8 @@ def create_stemplot(matplot_dict, X_values, Y_values, motif_length, flank_length
     flank_length: int
         Number of flanking sites
     """
+    if not len(Y_values):
+        return
     indices_str=[]
     indices_left = np.linspace(-flank_length, -1, 2)
     indices_str = ['' for x in indices_left]

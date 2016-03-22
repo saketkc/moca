@@ -15,10 +15,11 @@ from tqdm import tqdm
 from time import sleep
 bar = None
 
+def touch(fp):
+    open(fp, 'a').close()
 
 def save_score(directory, phylop_wig, gerp_wig, flanking_sites):
     fimo_file = os.path.join(directory, 'fimo.txt')
-    print fimo_file
     fimo_sites = fimo_to_sites(fimo_file)
 
     subset = fimo_sites.loc[:, ['chrom', 'motifStartZeroBased', 'motifEndOneBased', 'strand']]
@@ -29,14 +30,20 @@ def save_score(directory, phylop_wig, gerp_wig, flanking_sites):
     scores_phylop = phylop_wig.query(intervals)
     scores_gerp = gerp_wig.query(intervals)
 
-    scores_phylop_mean = np.nanmean(scores_phylop, axis=0)
-    scores_gerp_mean = np.nanmean(scores_gerp, axis=0)
+    if len(fimo_sites.index):
+        scores_phylop_mean = np.nanmean(scores_phylop, axis=0)
+        scores_gerp_mean = np.nanmean(scores_gerp, axis=0)
 
-    np.savetxt(os.path.join(directory, 'phylop.raw.txt'), scores_phylop, fmt='%.4f')
-    np.savetxt(os.path.join(directory, 'gerp.raw.txt'), scores_gerp, fmt='%.4f')
+        np.savetxt(os.path.join(directory, 'phylop.raw.txt'), scores_phylop, fmt='%.4f')
+        np.savetxt(os.path.join(directory, 'gerp.raw.txt'), scores_gerp, fmt='%.4f')
 
-    np.savetxt(os.path.join(directory, 'phylop.mean.txt'), scores_phylop_mean, fmt='%.4f')
-    np.savetxt(os.path.join(directory, 'gerp.mean.txt'), scores_gerp_mean, fmt='%.4f')
+        np.savetxt(os.path.join(directory, 'phylop.mean.txt'), scores_phylop_mean, fmt='%.4f')
+        np.savetxt(os.path.join(directory, 'gerp.mean.txt'), scores_gerp_mean, fmt='%.4f')
+    else:
+        touch(os.path.join(directory, 'phylop.raw.txt'))
+        touch(os.path.join(directory, 'gerp.raw.txt'))
+        touch(os.path.join(directory, 'phylop.mean.txt'))
+        touch(os.path.join(directory, 'gerp.mean.txt'))
 
 def show_progress(msg):
     bar.set_description(msg)
@@ -45,15 +52,22 @@ def show_progress(msg):
 
 @click.command()
 @click.option('--bedfile', '-i', help='Bed file input', required=True)
+@click.option('--oc', '-o', help='Output Directory')
 @click.option('--configuration', '-c', help='Configuration file', required=True)
 @click.option('--flank-seq', default=100, help='Flanking sequence length', required=True)
 @click.option('--flank-motif', default=5, help='Length of sequence flanking motif', required=True)
 @click.option('--genome-build', '-g', '-gb',  help='Key denoting genome build to use in configuration file', required=True)
 
-def cli(bedfile, configuration, flank_seq, flank_motif, genome_build):
+
+def cli(bedfile, oc, configuration, flank_seq, flank_motif, genome_build):
     """Run moca"""
     global bar
     root_dir = os.path.dirname(os.path.abspath(bedfile))
+    if not oc:
+        moca_out_dir = os.path.join(root_dir, 'moca_output')
+    else:
+        moca_out_dir = oc
+
     msg_list = ['Extracting Fasta', 'Running meme', 'Reading phylop bigwig', 'Reading gerp bigwig']
     pipeline_msg = ['Generating random fasta', 'Running fimo random', 'Running fimo main', 'Process main scores', 'Process random scores']
     for i in range(0,3):
@@ -62,7 +76,6 @@ def cli(bedfile, configuration, flank_seq, flank_motif, genome_build):
                    smoothing=0,
                    miniters=1,
                    mininterval=0.01)
-    moca_out_dir = os.path.join(root_dir, 'moca_output')
     safe_makedir(moca_out_dir)
     bedfile_fn, _ = filename_extension(bedfile)
 
@@ -83,11 +96,13 @@ def cli(bedfile, configuration, flank_seq, flank_motif, genome_build):
 
     bed_df.extract_fasta(fasta_in=genome_fasta, fasta_out=query_fasta)
 
-    memechip_out_dir = os.path.join(moca_out_dir, 'memechip_analysis')
-    meme_out_dir = os.path.join(memechip_out_dir, 'meme_out')
+    #memechip_out_dir = os.path.join(moca_out_dir, 'memechip_analysis')
+    meme_out_dir = os.path.join(moca_out_dir, 'meme_out')
+    memechip_out_dir = meme_out_dir
     show_progress('Running meme')
 
-    meme_run_out = moca_pipeline.run_memechip(fasta_in=query_fasta, out_dir=memechip_out_dir)
+    #meme_run_out = moca_pipeline.run_memechip(fasta_in=query_fasta, out_dir=memechip_out_dir)
+    meme_run_out = moca_pipeline.run_meme(fasta_in=query_fasta, out_dir=meme_out_dir)
 
     meme_file = os.path.join(meme_out_dir, 'meme.txt')
     meme_summary = read_memefile(meme_file)
@@ -97,9 +112,15 @@ def cli(bedfile, configuration, flank_seq, flank_motif, genome_build):
     show_progress('Reading Gerp bigwig')
     gerp_wig = wigoperations.WigReader(gerp)
 
+    centrimo_main_dir = os.path.join(moca_out_dir, 'centrimo_out')
+    centrimo_main = moca_pipeline.run_centrimo(meme_file=meme_file,
+                                                fasta_in=query_fasta,
+                                                out_dir=centrimo_main_dir)
+
     for motif in range(1, meme_summary['total_motifs']+1):
-        fimo_rand_dir = os.path.join(memechip_out_dir, 'motif_{}_fimo_analysis_random'.format(motif))
+        fimo_rand_dir = os.path.join(memechip_out_dir, 'fimo_random_{}'.format(motif))
         fimo_main_dir = os.path.join(memechip_out_dir, 'fimo_out_{}'.format(motif))
+
         safe_makedir(fimo_rand_dir)
         random_fasta = os.path.join(fimo_rand_dir, 'random_{}.fa'.format(motif))
         show_progress('Generating Random Fasta: {}'.format(motif))
@@ -111,6 +132,14 @@ def cli(bedfile, configuration, flank_seq, flank_motif, genome_build):
                                            motif_num=motif,
                                            sequence_file=random_fasta,
                                            out_dir=fimo_rand_dir)
+        #Main
+        show_progress('Running Fimo Main')
+        fimo_main = moca_pipeline.run_fimo(motif_file=meme_file,
+                                           motif_num=motif,
+                                           sequence_file=query_fasta,
+                                           out_dir=fimo_main_dir)
+
+
 
         show_progress('Processing Scores Random')
         save_score(fimo_rand_dir, phylop_wig, gerp_wig, flank_motif)
@@ -121,6 +150,7 @@ def cli(bedfile, configuration, flank_seq, flank_motif, genome_build):
                     fimo_file=os.path.join(fimo_main_dir, 'fimo.sites.txt'),
                     sample_phylop_file=os.path.join(fimo_main_dir, 'phylop.mean.txt'),
                     control_phylop_file=os.path.join(fimo_rand_dir, 'phylop.mean.txt'),
+                    centrimo_dir=centrimo_main_dir,
                     sample_gerp_file=os.path.join(fimo_main_dir, 'gerp.mean.txt'),
                     control_gerp_file=os.path.join(fimo_rand_dir, 'gerp.mean.txt'),
                     annotate=False,
