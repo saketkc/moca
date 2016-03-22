@@ -8,14 +8,13 @@ import click
 from moca import bedoperations, wigoperations, pipeline
 from moca.bedoperations import fimo_to_sites
 from moca.helpers import filename_extension
-from moca.helpers import generate_random_fasta
 from moca.helpers import read_memefile
-from moca.helpers import get_fasta_metadata
 from moca.helpers.job_executor import safe_makedir
 from moca.plotter import create_plot
 from tqdm import tqdm
 from time import sleep
 bar = None
+
 
 def save_score(directory, phylop_wig, gerp_wig, flanking_sites):
     fimo_file = os.path.join(directory, 'fimo.txt')
@@ -45,17 +44,13 @@ def show_progress(msg):
     sleep(0.5)
 
 @click.command()
-@click.option('--bedfile', help='Bed file input')
-@click.option('--phylop', help='phlyop file input', required=True)
-@click.option('--gerp', help='Gerp file input', required=True)
-@click.option('--configuration', help='Configuration file', required=True)
-@click.option('--genome-table', '-gt', help='Chromosome size file', required=True)
-@click.option('--genome-fasta', '-gf', help='Genome fasta', required=True)
-@click.option('--flank-seq', default=50, help='Flanking sequence length', required=True)
+@click.option('--bedfile', '-i', help='Bed file input', required=True)
+@click.option('--configuration', '-c', help='Configuration file', required=True)
+@click.option('--flank-seq', default=100, help='Flanking sequence length', required=True)
 @click.option('--flank-motif', default=5, help='Length of sequence flanking motif', required=True)
+@click.option('--genome-build', '-g', '-gb',  help='Key denoting genome build to use in configuration file', required=True)
 
-def cli(bedfile, genome_table, genome_fasta,
-        flank_seq, flank_motif, configuration, phylop, gerp):
+def cli(bedfile, configuration, flank_seq, flank_motif, genome_build):
     """Run moca"""
     global bar
     root_dir = os.path.dirname(os.path.abspath(bedfile))
@@ -70,14 +65,24 @@ def cli(bedfile, genome_table, genome_fasta,
     moca_out_dir = os.path.join(root_dir, 'moca_output')
     safe_makedir(moca_out_dir)
     bedfile_fn, _ = filename_extension(bedfile)
+
+    moca_pipeline = pipeline.Pipeline(configuration)
+    genome_data = moca_pipeline.get_genome_data(genome_build)
+    phylop = genome_data['phylop_wig']
+    gerp = genome_data['gerp_wig']
+    genome_fasta = genome_data['fasta']
+    genome_table = genome_data['genome_table']
+
     query_fasta = os.path.join(moca_out_dir, bedfile_fn + '_flank_{}.fasta'.format(flank_seq))
     bed_df = bedoperations.Bedfile(bedfile, genome_table)
+
     bed_df.determine_peaks()
     bed_df.slop_bed(flank_length=flank_seq)
     show_progress('Extracting Fasta')
+
+
     bed_df.extract_fasta(fasta_in=genome_fasta, fasta_out=query_fasta)
 
-    moca_pipeline = pipeline.Pipeline(configuration)
     memechip_out_dir = os.path.join(moca_out_dir, 'memechip_analysis')
     meme_out_dir = os.path.join(memechip_out_dir, 'meme_out')
     show_progress('Running meme')
@@ -86,7 +91,6 @@ def cli(bedfile, genome_table, genome_fasta,
 
     meme_file = os.path.join(meme_out_dir, 'meme.txt')
     meme_summary = read_memefile(meme_file)
-    fasta_metadata = get_fasta_metadata(query_fasta)
 
     show_progress('Reading Phylop bigwig')
     phylop_wig = wigoperations.WigReader(phylop)

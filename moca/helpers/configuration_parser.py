@@ -76,6 +76,7 @@ class ConfigurationParser(object):
             Format: {'genome_name': {'<wig_prefix>': wig_prefix_path, 'genome_table': genome_table_path}}
         """
         genome_dict = dict(self.config_blob.items('genome:{}'.format(genome_name)))
+        return genome_dict
 
     def get_binary_path(self, binary_name):
         """ Returns absolute path to installed binaries

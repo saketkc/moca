@@ -2,13 +2,12 @@
 """
 import os
 import warnings
-from ..helpers import MocaException
 from ..helpers import ConfigurationParser
 from ..helpers import run_job
 from ..helpers import xstr
 from ..helpers import get_cpu_count
 
-class Pipeline(object):
+class Pipeline(ConfigurationParser):
     """Generic class to run pipelines
 
     Parameters
@@ -17,13 +16,13 @@ class Pipeline(object):
         Optional file input to load all configurations
     """
     def __init__(self, config_file=None):
+        super(Pipeline, self).__init__(config_file)
         self.commands_run = list()
         #TODO This can be removed if config_file is optional
         if not os.path.isfile(xstr(config_file)):
             #TODO This should raise a warning and no xception
             #raise MocaException('Config file {} not found'.format(config_file))
             warnings.warn('No configuration file supplied. Defaults will be used.', UserWarning)
-        self.conf = ConfigurationParser(config_file)
         self.cpu_cores = get_cpu_count()
         self.meme_default_params = '-dna -mod zoops -nmotifs 3 -minw 6 -maxw 30 -revcomp -nostatus -maxsize 1000000 -p {}'.format(self.cpu_cores)
         self.meme_strargs = None
@@ -62,7 +61,7 @@ class Pipeline(object):
         self.meme_strargs = strargs
         if not self.meme_strargs:
             self.meme_strargs = self.meme_default_params
-        meme_binary = self.conf.get_binary_path('meme').strip()
+        meme_binary = self.get_binary_path('meme').strip()
         if not meme_binary or meme_binary == '':
             # Use meme from envirnonment
             meme_binary = 'meme'
@@ -105,7 +104,7 @@ class Pipeline(object):
         if not out_dir:
             out_dir = os.path.join(os.path.dirname(motif_file), 'fimo_out')
         self.fimo_strargs = xstr(self.fimo_strargs) + ' --motif {} -oc {}'.format(motif_num, os.path.abspath(out_dir))
-        fimo_binary = self.conf.get_binary_path('meme')
+        fimo_binary = self.get_binary_path('meme')
         if not fimo_binary or fimo_binary == '':
             # Use meme from envirnonment
             fimo_binary = 'fimo'
@@ -126,7 +125,7 @@ class Pipeline(object):
 
     def run_fasta_shuffler(self, fasta_in, fasta_out):
         """Run fasta-dinucleotide-shuffle to generate random fasta"""
-        shuffler_binary = self.conf.get_binary_path('meme')
+        shuffler_binary = self.get_binary_path('meme')
         if not shuffler_binary or shuffler_binary == '':
             # Use meme from envirnonment
             shuffler_binary = 'fasta-shuffle-letters'
@@ -141,7 +140,41 @@ class Pipeline(object):
         with open(os.path.abspath(fasta_out), 'w') as f:
             f.write(stdout)
 
-    def run_centrimo(self, fasta_in, meme_file):
+    def run_centrimo(self, fasta_in, meme_file, out_dir=None):
+        """Run centrimo
+
+        Parameters
+        ----------
+        fasta_in: string
+            Path to input fasta
+        meme_file: string
+            Path to MEME's motif file
+        out_dir: string
+            Output directory
+        Returns
+        -------
+        output: dict
+            A dictionary with 'stderr,stdout,cmd,exitcode,out_dir'
+
+        """
+        centrimo_binary = self.get_binary_path('meme').strip()
+        if not centrimo_binary or centrimo_binary=='':
+            centrimo_binary = 'centrimo'
+        else:
+            centrimo_binary += '/centrimo'
+        self.centrimo_location = centrimo_binary
+        if not out_dir:
+            out_dir = os.path.join(os.path.abspath(os.path.join(os.path.dirname(fasta_in), os.pardir)), 'centrimo_out')
+
+        cmd = '{} -oc {} {} {}'.format(self.centrimo_location, out_dir, os.path.abspath(fasta_in), os.path.abspath(meme_file))
+        stdout, stderr, exitcode = run_job(cmd=cmd,
+                                           cwd=os.path.dirname(out_dir))
+
+        output = {'out_dir': out_dir, 'stdout': stdout,
+                  'stderr': stderr, 'exitcode': exitcode,
+                  'cmd': cmd}
+        self.commands_run.append({'cmd': cmd, 'metadata': output})
+        return output
 
 
     def run_memechip(self, fasta_in, out_dir=None, strargs=None):
@@ -167,7 +200,7 @@ class Pipeline(object):
         self.memechip_strargs = strargs
         if not self.memechip_strargs:
             self.memechip_strargs = self.memechip_default_params
-        meme_binary = self.conf.get_binary_path('meme').strip()
+        meme_binary = self.get_binary_path('meme').strip()
         if not meme_binary or meme_binary == '':
             # Use meme from envirnonment
             meme_binary = 'meme-chip'
