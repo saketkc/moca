@@ -230,7 +230,7 @@ def create_logo_plot(matplot_dict, meme_dir, logo_path, motif_length):
     f = matplot_dict['figure']
     gs = matplot_dict['gridspec']
     logo_plot = plt.Subplot(f, gs)
-    logo = plt.imread(logo_path)
+    logo = plt.imread(os.path.join(os.path.abspath(meme_dir), logo_path))
     ##TODO Check this
     if motif_length>45:
         XSCALE_FACTOR = motif_length/1.9
@@ -290,17 +290,21 @@ def init_figure(meme_dir=None, X_values=None, motif=1, use_gerp=False, annotate=
             'right_margin': right,
             'total_px': total_px}
 
-def create_enrichment_plot(matplot_dict, motif_length, centrimo_txt, centrimo_stats):
+def create_enrichment_plot(matplot_dict, motif_number, centrimo_txt, centrimo_stats):
     f = matplot_dict['figure']
     gs_h = matplot_dict['gridspec_header']
     gs_b = matplot_dict['gridspec_body']
 
-    X_values, Y_values = read_centrimo_stats(centrimo_stats)
-    normalized_Y = Y_values/np.sum(Y_values)
+    all_stats = read_centrimo_stats(centrimo_stats)
+    motif_stats = all_stats['MEME']['MOTIF_{}'.format(motif_number)]
+    X_values = np.array(motif_stats['pos'])
+    print X_values
+    Y_values = np.array(motif_stats['count'])
+    normalized_Y = Y_values#/np.sum(Y_values)
 
     centrimo_dict = read_centrimo_txt(centrimo_txt)
-    enrichment_pval = centrimo_dict['adj_p-value']
-    enrichment = centrimo_dict['sites_in_bin']/centrimo_dict['total_sites']
+    enrichment_pval = float(centrimo_dict['adj_p-value'])
+    enrichment = float(centrimo_dict['sites_in_bin'])/float(centrimo_dict['total_sites'])
 
     enrichment_plot = plt.Subplot(f, gs_h, autoscale_on=True)
     enrichment_plot.set_frame_on(False)
@@ -319,8 +323,6 @@ def create_enrichment_plot(matplot_dict, motif_length, centrimo_txt, centrimo_st
     enrichment_plot = plt.Subplot(f, gs_b, autoscale_on=True)
 
     enrichment_plot.plot(X_values, normalized_Y, linewidth=LINEWIDTH)
-    enrichment_plot.tick_params(axis='y', which='major', pad=TICKPAD)
-    enrichment_plot.tick_params(axis='x', which='major', pad=TICKPAD)
     enrichment_plot.tick_params('both', length=TICKLENGTH, width=2, which='major')
     enrichment_plot.set_xlabel('$\mathrm{Distance}\ \mathrm{from} \ \mathrm{peak}$', fontsize=FONTSIZE, fontweight='bold')
     enrichment_plot.set_ylabel('$\mathrm{Probability}$', fontsize=FONTSIZE, fontweight='bold')
@@ -331,8 +333,8 @@ def create_enrichment_plot(matplot_dict, motif_length, centrimo_txt, centrimo_st
     enrichment_plot.axvline(x=-50, linewidth=3, color='green', linestyle='-.')
     enrichment_plot.axvline(x=50, linewidth=3, color='green', linestyle='-.')
 
-    enrichment_plot.axvline(x=-100, linewidth=3, color='red', linestyle='-.')
-    enrichment_plot.axvline(x=100, linewidth=3, color='red', linestyle='-.')
+    #enrichment_plot.axvline(x=-100, linewidth=3, color='red', linestyle='-.')
+    #enrichment_plot.axvline(x=100, linewidth=3, color='red', linestyle='-.')
     f.add_subplot(enrichment_plot)
 
 def create_annnotation_plot(matplot_dict, json_annotation):
@@ -579,8 +581,12 @@ def create_plot(meme_file,
             create_phylop_scatter({'figure':f, 'gridspec':gerp_subplot_gs}, motif_freq, sample_gerp_scores, control_gerp_scores, flank_length, num_occurrences, y_label='Gerp')
 
 
-        create_enrichment_plot({'figure':f, 'gridspec_header':histogram_header_subplot_gs,
-                                'gridspec_body': histogram_subplot_gs}, centrimo_txt, centrimo_stats )
+        create_enrichment_plot({'figure':f,
+                                'gridspec_header':histogram_header_subplot_gs,
+                                'gridspec_body': histogram_subplot_gs},
+                               motif_number,
+                               centrimo_txt,
+                               centrimo_stats)
 
         if 'rc' not in ln:
             out_file = os.path.join(fimo_dir,'motif{}Combined_plots.png'.format(motif_number))

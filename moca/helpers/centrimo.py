@@ -48,8 +48,23 @@ def read_centrimo_stats(centrimo_stats):
          A dict containing hits from centrimo.txt
 
     """
-    data = np.genfromtxt(os.path.abspath(centrimo_stats),
-                         unpack=True,
-                         skip_header=True)
-    return data[0,:], data[1,:]
+    motif_wise_site_stats = {'MEME': {}, 'DREME': {}}
+    with open(centrimo_stats) as f:
+        for line in f:
+            line = line.strip()
+            if line.startswith('DB'):
+                line_split = line.replace(' ', '\t').split('\t')
+                assert len(line_split) == 5
+                meme_dreme = line_split[-1]
+                assert meme_dreme in ['MEME', 'DREME']
+                key = ('_').join(line_split[2:4])
+                assert key not in motif_wise_site_stats[meme_dreme].keys()
+                motif_wise_site_stats[meme_dreme][key] = {'pos': [], 'count': []}
+            else:
+                line = line.replace(' ', '')
+                pos, count = line.split('\t')
+                motif_wise_site_stats[meme_dreme][key]['pos'].append(float(pos))
+                motif_wise_site_stats[meme_dreme][key]['count'].append(float(count))
+
+    return motif_wise_site_stats
 
