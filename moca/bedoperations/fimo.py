@@ -47,7 +47,7 @@ def fimo_to_sites(fimo_file):
         fimo_df['chrom'] = fimo_df['sequence name']
         fimo_df['chromStart'] = fimo_df['start']
         fimo_df['chromEnd'] = fimo_df['stop']
-        fimo_df[:, 'motifStartZeroBased'] = fimo_df.start-1
+        fimo_df.loc[:, 'motifStartZeroBased'] = fimo_df.start-1
         fimo_df['motifEndOneBased'] = fimo_df['stop']
 
 
