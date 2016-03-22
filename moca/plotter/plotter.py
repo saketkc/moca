@@ -16,11 +16,9 @@ import numpy as np
 import statsmodels.api as sm
 
 from moca.helpers import read_memefile
-from moca.helpers import MocaException
-
-from moca.helpers import get_motif_ic
 from moca.helpers import get_max_occuring_bases
-from moca.helpers import create_position_profile
+from moca.helpers import read_centrimo_txt
+from moca.helpers import read_centrimo_stats
 
 from moca.plotter import perform_t_test
 from moca.plotter import get_pearson_corr
@@ -219,7 +217,7 @@ def create_stemplot(matplot_dict, X_values, Y_values, motif_length, flank_length
     stem_plot.set_ylabel('$\mathrm{PhyloP}\ \mathrm{Score}$', fontsize=FONTSIZE)
     f.add_subplot(stem_plot)
 
-def create_logo_plot(matplot_dict, meme_dir, motif_number, motif_length):
+def create_logo_plot(matplot_dict, meme_dir, logo_path, motif_length):
     """Create stem plot for phylop/scores scoresi
 
     Parameters
@@ -232,7 +230,7 @@ def create_logo_plot(matplot_dict, meme_dir, motif_number, motif_length):
     f = matplot_dict['figure']
     gs = matplot_dict['gridspec']
     logo_plot = plt.Subplot(f, gs)
-    logo = plt.imread(os.path.join(meme_dir, 'logo{}.png'.format(motif_number)))
+    logo = plt.imread(logo_path)
     ##TODO Check this
     if motif_length>45:
         XSCALE_FACTOR = motif_length/1.9
@@ -255,8 +253,6 @@ def create_logo_plot(matplot_dict, meme_dir, motif_number, motif_length):
     f.add_subplot(logo_plot)
     return logo_plot
 
-
-def create_regression_plot(plot_type='gerp'):
     pass
 
 def _get_logo_path(meme_dir, motif, rc=False):
@@ -294,74 +290,62 @@ def init_figure(meme_dir=None, X_values=None, motif=1, use_gerp=False, annotate=
             'right_margin': right,
             'total_px': total_px}
 
-def enrichment_plot(matplot_dict, motif_length, peak_file, fimo_file):
+def create_enrichment_plot(matplot_dict, motif_length, centrimo_txt, centrimo_stats):
     f = matplot_dict['figure']
-    gs = matplot_dict['gridspec']
-    shareX = matplot_dict['shareX']
-    enrichment_plot = plt.Subplot(f, gs, autoscale_on=True)
+    gs_h = matplot_dict['gridspec_header']
+    gs_b = matplot_dict['gridspec_body']
+
+    X_values, Y_values = read_centrimo_stats(centrimo_stats)
+    normalized_Y = Y_values/np.sum(Y_values)
+
+    centrimo_dict = read_centrimo_txt(centrimo_txt)
+    enrichment_pval = centrimo_dict['adj_p-value']
+    enrichment = centrimo_dict['sites_in_bin']/centrimo_dict['total_sites']
+
+    enrichment_plot = plt.Subplot(f, gs_h, autoscale_on=True)
     enrichment_plot.set_frame_on(False)
     enrichment_plot.set_xticks([])
     enrichment_plot.set_yticks([])
-    all_distances = get_motif_distances(peak_file, fimo_file)
-    fimo_dir = os.path.dirname(fimo_file)
-    motifs_within_100 = filter(lambda x: x<=100 and x>=-100, all_distances)
-    motifs_within_100_200 = filter(lambda x: (x<200 and x>100) or (x>-200 and x<-100), all_distances)
-    if len(motifs_within_100_200)>0:
-        enrichment = len(motifs_within_100)/(len(motifs_within_100_200))#+len(motifs_within_100))
-    else:
-        enrichment = 1
-    enrichment_pval = 0
-    number_of_sites = len(motifs_within_100)+len(motifs_within_100_200) #fimo_sites_intersect(fimo_file)
-    probability = 200/(ENRICHMENT_SEQ_LENGTH-motif_length)
-    enrichment_pval=binom.sf(len(motifs_within_100), number_of_sites, probability)
+
     enrichment_pval = str('%.1g'%enrichment_pval)
     if 'e' in enrichment_pval:
         enrichment_pval+= '}'
         enrichment_pval= enrichment_pval.replace('e', '*10^{').replace('-0','-')
+
     textstr = r'\noindent$Enrichment={0:.2f}$\\~\\$(p={1})$'.format(enrichment, enrichment_pval)
     txtx = 0.1*len(textstr)/100.0
     enrichment_plot.text(txtx, TXT_YPOS, textstr, fontsize=LEGEND_FONTSIZE)
     f.add_subplot(enrichment_plot)
-    enrichment_plot = plt.Subplot(f, histogram_subplot_gs, autoscale_on=True)
-    enrichment_plot.hist(all_distances, histogram_nbins, color='white', alpha=0.8, range=[-200,200])
-    enrichment_plot.set_xticks([-200,-100,0,100,200])
-    max_yticks = 3
-    yloc = plt.MaxNLocator(max_yticks)
-    enrichment_plot.yaxis.set_major_locator(yloc)
-    ticks_and_labels = [-200,-100,0,100,200]
-    all_distances = np.asarray(all_distances)
-    enrichment_plot.set_xticklabels(['${}$'.format(x) for x in ticks_and_labels])
+    enrichment_plot = plt.Subplot(f, gs_b, autoscale_on=True)
+
+    enrichment_plot.plot(X_values, normalized_Y, linewidth=LINEWIDTH)
     enrichment_plot.tick_params(axis='y', which='major', pad=TICKPAD)
     enrichment_plot.tick_params(axis='x', which='major', pad=TICKPAD)
     enrichment_plot.tick_params('both', length=TICKLENGTH, width=2, which='major')
+    enrichment_plot.set_xlabel('$\mathrm{Distance}\ \mathrm{from} \ \mathrm{peak}$', fontsize=FONTSIZE, fontweight='bold')
+    enrichment_plot.set_ylabel('$\mathrm{Probability}$', fontsize=FONTSIZE, fontweight='bold')
     enrichment_plot.get_xaxis().tick_bottom()
     enrichment_plot.get_yaxis().tick_left()
     enrichment_plot.get_yaxis().set_tick_params(direction='out')
     enrichment_plot.get_xaxis().set_tick_params(direction='out')
+    enrichment_plot.axvline(x=-50, linewidth=3, color='green', linestyle='-.')
+    enrichment_plot.axvline(x=50, linewidth=3, color='green', linestyle='-.')
+
     enrichment_plot.axvline(x=-100, linewidth=3, color='red', linestyle='-.')
     enrichment_plot.axvline(x=100, linewidth=3, color='red', linestyle='-.')
     f.add_subplot(enrichment_plot)
 
-def create_annnotation_plot(matplot_dict, annotate):
+def create_annnotation_plot(matplot_dict, json_annotation):
     f = matplot_dict['figure']
-    gs = matplot_dict['gridspec']
-    shareX = matplot_dict['shareX']
-    filename = r'$'+annotate[0]+'$'
-    try:
-        a_motif = r'$'+annotate[1]+'$'
-    except IndexError:
-        a_motif = ''
-    try:
-        cell_line = r'$'+annotate[2]+'$'
-    except IndexError:
-        cell_line = ''
-    try:
-        assay = r'$'+annotate[3]+'$'
-    except IndexError:
-        assay = ''
-    keys = ['title', 'gene_name', 'dataset', 'assembly']
+    gs_h = matplot_dict['gridspec_header']
+    gs_b = matplot_dict['gridspec_body']
+
+    annotate_dict = None
+    with open(json_annotation) as f:
+        annotate_dict = json.load(f)
+    keys = ['title', 'gene_name', 'dataset', 'assembly', 'filename']
     data = [[r'$'+key.replace("_", " ").upper()+'$', r'$'+annotate_dict[key]+'$'] for key in keys]
-    ann_header = plt.Subplot(f, ann_header_subplot_gs, autoscale_on=True)
+    ann_header = plt.Subplot(f, gs_h, autoscale_on=True)
     ann_header.set_frame_on(False)
     ann_header.set_xticks([])
     ann_header.set_yticks([])
@@ -369,7 +353,7 @@ def create_annnotation_plot(matplot_dict, annotate):
     textstr = r'$Metadata$'
     txtx = 1.7*len(textstr)/100.0
     ann_header.text(txtx, TXT_YPOS, textstr, fontsize=LEGEND_FONTSIZE)
-    ann_plot = plt.Subplot(f, ann_subplot_gs, autoscale_on=True)
+    ann_plot = plt.Subplot(f, gs_b, autoscale_on=True)
     ann_plot.set_xticks([])
     ann_plot.set_yticks([])
     ann_plot.set_frame_on(False)
@@ -464,9 +448,9 @@ def create_phylop_scatter(matplot_dict, motif_freq, sample_phylop_scores, contro
 
 
     phylop_scatter_plot.scatter(motif_freq, sample_phylop_scores, color='g', s=[POINTSIZE for i in motif_freq])
-    phylop_scatter_plot.plot(motif_freq, sample_regression_line, 'g', motif_freq, fit_fn(motif_freq), color='g', linewidth=PHYLOP_BAR_LINEWIDTH)
+    phylop_scatter_plot.plot(motif_freq, sample_regression_line, 'g', motif_freq, fit_fn(motif_freq), color='g', linewidth=LINEWIDTH)
     phylop_scatter_plot.scatter(motif_freq, control_phylop_scores, color=GREYNESS, s=[POINTSIZE for i in motif_freq])
-    phylop_scatter_plot.plot(motif_freq, control_regression_line, color=GREYNESS, linewidth=PHYLOP_BAR_LINEWIDTH)
+    phylop_scatter_plot.plot(motif_freq, control_regression_line, color=GREYNESS, linewidth=LINEWIDTH)
 
     ticks_and_labels = np.linspace(1.02*min(motif_freq), 1.02*max(motif_freq), num = 5, endpoint=True)
     phylop_scatter_plot.set_xticks(ticks_and_labels)
@@ -494,6 +478,7 @@ def create_plot(meme_file,
                 fimo_file,
                 sample_phylop_file,
                 control_phylop_file,
+                centrimo_dir,
                 sample_gerp_file=None,
                 control_gerp_file=None,
                 annotate=None,
@@ -501,30 +486,21 @@ def create_plot(meme_file,
                 flank_length=5):
     meme_record = read_memefile(meme_file)
     record = meme_record['motif_records'][motif_number-1]
-    motif_lenth = record.length
     num_occurrences = getattr(record, 'num_occurrences', 'Unknown')
     meme_dir = os.path.abspath(os.path.dirname(meme_file))
     fimo_dir = os.path.abspath(os.path.dirname(fimo_file))
 
     use_gerp = False
-    annotate_dict = None
     print sample_gerp_file
     print control_gerp_file
 
     if annotate == "" or annotate == ' ':
         annotate = None
-    elif annotate:
-        with open(annotate) as f:
-            annotate_dict = json.load(f)
 
     if sample_gerp_file:
         use_gerp = True
 
-    #profile = create_position_profile(record, COUNT_TYPE)
     max_occur = get_max_occuring_bases(record, max_count=1, count_type=COUNT_TYPE)
-    ## motif_freq is tn array of scores of the max  occuring base at each position of the motif
-    #profile = position_wise_profile(getattr(record, COUNT_TYPE), record.length)
-    #max_occur = find_max_occurence(profile, max_count=1)
     motif_freq = []
     for position in max_occur:
         motif_freq.append(position[0][1])
@@ -543,7 +519,9 @@ def create_plot(meme_file,
     for j in range(1,len(motif)+2*flank_length):
         X.append( X[j-1]+MAGIC_NUM+1.9 )
 
-    motif_bits = get_motif_ic(meme_file, motif_number-1)
+    centrimo_dir = os.path.abspath(centrimo_dir)
+    centrimo_txt = os.path.join(centrimo_dir, 'centrimo.txt')
+    centrimo_stats = os.path.join(centrimo_dir, 'site_counts.txt')
 
     ##FIXME This is a big dirty hacl to get thegenerate plots for the Reverse complement logo too
     logo_name =['logo{}.png'.format(motif_number), 'logo_rc{}.png'.format(motif_number)]
@@ -559,7 +537,7 @@ def create_plot(meme_file,
         right_margin = matplot_dict['right_margin']
         total_px= matplot_dict['total_px']
 
-        logo_plot = create_logo_plot({'figure':f, 'gridspec': gs[0]}, meme_dir, motif_number, motif_length)
+        logo_plot = create_logo_plot({'figure':f, 'gridspec': gs[0]}, meme_dir, ln, motif_length)
 
 
         if use_gerp:
@@ -596,11 +574,13 @@ def create_plot(meme_file,
         create_phylop_legend_plot({'figure':f, 'gridspec':gs1[0,0]},  motif_freq, sample_phylop_scores, control_phylop_scores, flank_length)
         create_phylop_scatter({'figure':f, 'gridspec':gs1[1,0]}, motif_freq, sample_phylop_scores, control_phylop_scores, flank_length, num_occurrences, y_label='Phylop')
 
-        print(use_gerp)
         if use_gerp:
             create_phylop_legend_plot({'figure':f, 'gridspec':gerp_header_subplot_gs},  motif_freq, sample_gerp_scores, control_gerp_scores, flank_length)
             create_phylop_scatter({'figure':f, 'gridspec':gerp_subplot_gs}, motif_freq, sample_gerp_scores, control_gerp_scores, flank_length, num_occurrences, y_label='Gerp')
 
+
+        create_enrichment_plot({'figure':f, 'gridspec_header':histogram_header_subplot_gs,
+                                'gridspec_body': histogram_subplot_gs}, centrimo_txt, centrimo_stats )
 
         if 'rc' not in ln:
             out_file = os.path.join(fimo_dir,'motif{}Combined_plots.png'.format(motif_number))
@@ -610,17 +590,19 @@ def create_plot(meme_file,
             out_file = 'motif{}Combined_plots_rc.png'.format(motif_number)
 
         if annotate:
-            cretate_annnotation_plot()
+            create_annnotation_plot({'figure':f, 'gridspec_header':ann_header_subplot_gs,
+                                'gridspec_body': ann_subplot_gs}, annotate)
 
         f.savefig(out_file, figsize=figsize, dpi=DPI)
 
 if __name__ == '__main__':
-    meme_file, peak_file, fimo_file, sample_phylop_file, control_phylop_file, sample_gerp_file,  control_gerp_file= sys.argv[1:]
+    meme_file, peak_file, fimo_file, sample_phylop_file, control_phylop_file, centrimo_dir, sample_gerp_file,  control_gerp_file= sys.argv[1:]
     create_plot(meme_file,
                 peak_file,
                 fimo_file,
                 sample_phylop_file,
                 control_phylop_file,
+                centrimo_dir,
                 sample_gerp_file,
                 control_gerp_file,
                 annotate=None,

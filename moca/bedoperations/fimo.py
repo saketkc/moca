@@ -38,9 +38,18 @@ def fimo_to_sites(fimo_file):
     #Split chr-start:end to three columns
     #TODO the _shuf is to handle cases coming from shuffled fasta, this can be generalised and is currently a hack
     split_chr = lambda columnstr: pd.Series(s for s in columnstr.replace('_shuf', '').replace('-', ':').split(':'))
-    fimo_df[['chrom', 'chromStart', 'chromEnd']] = fimo_df['sequence name'].apply(split_chr)
-    fimo_df.loc[:, ['chromStart', 'chromEnd']] = fimo_df[['chromStart', 'chromEnd']].astype(int)
-    fimo_df.loc[:, 'motifStartZeroBased'] = fimo_df.chromStart+fimo_df.start-1
-    fimo_df.loc[:, 'motifEndOneBased'] = fimo_df.chromStart+fimo_df.stop
+    if fimo_df['sequence name'].str.contains(':|-').sum():
+        fimo_df[['chrom', 'chromStart', 'chromEnd']] = fimo_df['sequence name'].apply(split_chr)
+        fimo_df.loc[:, ['chromStart', 'chromEnd']] = fimo_df[['chromStart', 'chromEnd']].astype(int)
+        fimo_df.loc[:, 'motifStartZeroBased'] = fimo_df.chromStart+fimo_df.start-1
+        fimo_df.loc[:, 'motifEndOneBased'] = fimo_df.chromStart+fimo_df.stop
+    else:
+        fimo_df['chrom'] = fimo_df['sequence name']
+        fimo_df['chromStart'] = fimo_df['start']
+        fimo_df['chromEnd'] = fimo_df['end']
+        fimo_df[:, 'motifStartZeroBased'] = fimo_df.start-1
+        fimo_df['motifEndOneBased'] = fimo_df['end']
+
+
     fimo_df.to_csv(fimo_sites, index=False, sep='\t')
     return fimo_df

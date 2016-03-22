@@ -21,7 +21,7 @@ def get_motif_bg_freq(meme_file):
     frequencies_line = None
     with open(meme_file) as f:
         for line in f:
-            if line.strip() == 'Background letter frequencies (from dataset with add-one prior applied):':
+            if 'Background letter frequencies (from' in line.strip():
                 frequencies_line = f.next().strip()
 
     assert frequencies_line is not None

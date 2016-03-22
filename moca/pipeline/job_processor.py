@@ -6,6 +6,7 @@ from ..helpers import MocaException
 from ..helpers import ConfigurationParser
 from ..helpers import run_job
 from ..helpers import xstr
+from ..helpers import get_cpu_count
 
 class Pipeline(object):
     """Generic class to run pipelines
@@ -23,7 +24,8 @@ class Pipeline(object):
             #raise MocaException('Config file {} not found'.format(config_file))
             warnings.warn('No configuration file supplied. Defaults will be used.', UserWarning)
         self.conf = ConfigurationParser(config_file)
-        self.meme_default_params = '-dna -mod zoops -nmotifs 3 -minw 6 -maxw 30 -revcomp -nostatus -maxsize 1000000'
+        self.cpu_cores = get_cpu_count()
+        self.meme_default_params = '-dna -mod zoops -nmotifs 3 -minw 6 -maxw 30 -revcomp -nostatus -maxsize 1000000 -p {}'.format(self.cpu_cores)
         self.meme_strargs = None
         self.meme_location = 'meme'
         self.fimo_default_params = ''
@@ -32,7 +34,7 @@ class Pipeline(object):
         self.shuffler_location = 'fasta-shuffle-letters'
         self.centrimo_args = None
         self.centrimo_location = 'centrimo'
-        self.memechip_default_params = '-dna -meme-mod zoops -nmotifs 3 -meme-minw 6 -meme-maxw 30 -centrimo-flip -meme-maxsize 1000000'
+        self.memechip_default_params = '-dna -meme-mod zoops -meme-nmotifs 3 -meme-minw 6 -meme-maxw 30 -centrimo-flip -meme-maxsize 1000000 -meme-p {}'.format(self.cpu_cores)
         self.memechip_args = None
         self.memechip_location = 'meme-chip'
         self.commands_run = []
@@ -139,7 +141,7 @@ class Pipeline(object):
         with open(os.path.abspath(fasta_out), 'w') as f:
             f.write(stdout)
 
-    def run_memechip(self, fasta_in):
+    def run_memechip(self, fasta_in, out_dir=None, strargs=None):
         """Run meme-chip
         Run meme-chip on a given input fasta
 
@@ -156,24 +158,24 @@ class Pipeline(object):
 
         Returns
         -------
-        meme_out: string
-            Location of meme output
+        output: dict
+            A dictionary with 'stderr,stdout,cmd,exitcode,out_dir'
         """
-        self.meme_strargs = strargs
-        if not self.meme_strargs:
-            self.meme_strargs = self.meme_default_params
+        self.memechip_strargs = strargs
+        if not self.memechip_strargs:
+            self.memechip_strargs = self.memechip_default_params
         meme_binary = self.conf.get_binary_path('meme').strip()
         if not meme_binary or meme_binary == '':
             # Use meme from envirnonment
-            meme_binary = 'meme'
+            meme_binary = 'meme-chip'
         else:
             #  Use absolute path meme
-            meme_binary += '/meme'
+            meme_binary += '/meme-chip'
         self.meme_location = meme_binary
         if not out_dir:
-            out_dir = os.path.join(os.path.dirname(fasta_in), 'meme_out')
+            out_dir = os.path.join(os.path.dirname(fasta_in), 'memechip_out')
         out_dir = os.path.abspath(out_dir)
-        cmd = '{} {} -oc {} {}'.format(self.meme_location, self.meme_strargs,
+        cmd = '{} {} -oc {} {}'.format(self.meme_location, self.memechip_strargs,
                                        out_dir, os.path.abspath(fasta_in))
         stdout, stderr, exitcode = run_job(cmd=cmd,
                                            cwd=os.path.dirname(out_dir))
@@ -183,4 +185,17 @@ class Pipeline(object):
                   'cmd': cmd}
         self.commands_run.append({'cmd': cmd, 'metadata': output})
         return output
+
+    @classmethod
+    def get_meme_default_args(self):
+        return self.meme_default_args
+
+    @classmethod
+    def get_memechip_default_args(self):
+        return self.memechip_default_args
+
+    @classmethod
+    def get_fimo_default_args(self):
+        return self.fimo_default_args
+
 

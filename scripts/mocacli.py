@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 """MoCA CLI"""
-from __future__ import print_function
 import os
 import numpy as np
 import click
@@ -16,12 +15,11 @@ from moca.helpers.job_executor import safe_makedir
 from moca.plotter import create_plot
 from tqdm import tqdm
 from time import sleep
-from random import seed
-STEPS = 0
 bar = None
 
 def save_score(directory, phylop_wig, gerp_wig, flanking_sites):
     fimo_file = os.path.join(directory, 'fimo.txt')
+    print fimo_file
     fimo_sites = fimo_to_sites(fimo_file)
 
     subset = fimo_sites.loc[:, ['chrom', 'motifStartZeroBased', 'motifEndOneBased', 'strand']]
@@ -44,7 +42,7 @@ def save_score(directory, phylop_wig, gerp_wig, flanking_sites):
 def show_progress(msg):
     bar.set_description(msg)
     bar.update()
-    sleep(1)
+    sleep(0.5)
 
 @click.command()
 @click.option('--bedfile', help='Bed file input')
@@ -60,13 +58,15 @@ def cli(bedfile, genome_table, genome_fasta,
         flank_seq, flank_motif, configuration, phylop, gerp):
     """Run moca"""
     global bar
-    seed(1234123)
     root_dir = os.path.dirname(os.path.abspath(bedfile))
     msg_list = ['Extracting Fasta', 'Running meme', 'Reading phylop bigwig', 'Reading gerp bigwig']
     pipeline_msg = ['Generating random fasta', 'Running fimo random', 'Running fimo main', 'Process main scores', 'Process random scores']
     for i in range(0,3):
         msg_list.extend(pipeline_msg)
-        bar = tqdm(msg_list, bar_format='{desc}{percentage:3.0f}%|{bar}| {n_fmt}/{total_fmt} [{elapsed}]', smoothing=0, miniters=1, mininterval=0.01)
+        bar = tqdm(msg_list, bar_format='{desc}{percentage:3.0f}%|{bar}| {n_fmt}/{total_fmt} [{elapsed}]',
+                   smoothing=0,
+                   miniters=1,
+                   mininterval=0.01)
     moca_out_dir = os.path.join(root_dir, 'moca_output')
     safe_makedir(moca_out_dir)
     bedfile_fn, _ = filename_extension(bedfile)
@@ -78,11 +78,11 @@ def cli(bedfile, genome_table, genome_fasta,
     bed_df.extract_fasta(fasta_in=genome_fasta, fasta_out=query_fasta)
 
     moca_pipeline = pipeline.Pipeline(configuration)
-    meme_default_params = moca_pipeline.meme_default_params + ' -p 24'
-    meme_out_dir = os.path.join(moca_out_dir, 'meme_analysis')
+    memechip_out_dir = os.path.join(moca_out_dir, 'memechip_analysis')
+    meme_out_dir = os.path.join(memechip_out_dir, 'meme_out')
     show_progress('Running meme')
 
-    meme_run_out = moca_pipeline.run_meme(fasta_in=query_fasta, out_dir=meme_out_dir, strargs=meme_default_params)
+    meme_run_out = moca_pipeline.run_memechip(fasta_in=query_fasta, out_dir=memechip_out_dir)
 
     meme_file = os.path.join(meme_out_dir, 'meme.txt')
     meme_summary = read_memefile(meme_file)
@@ -94,18 +94,11 @@ def cli(bedfile, genome_table, genome_fasta,
     gerp_wig = wigoperations.WigReader(gerp)
 
     for motif in range(1, meme_summary['total_motifs']+1):
-        fimo_rand_dir = os.path.join(moca_out_dir, 'motif_{}_fimo_analysis_random'.format(motif))
-        fimo_main_dir = os.path.join(moca_out_dir, 'motif_{}_fimo_analysis_main'.format(motif))
+        fimo_rand_dir = os.path.join(memechip_out_dir, 'motif_{}_fimo_analysis_random'.format(motif))
+        fimo_main_dir = os.path.join(memechip_out_dir, 'fimo_out_{}'.format(motif))
         safe_makedir(fimo_rand_dir)
-        safe_makedir(fimo_main_dir)
         random_fasta = os.path.join(fimo_rand_dir, 'random_{}.fa'.format(motif))
         show_progress('Generating Random Fasta: {}'.format(motif))
-        ##TODO: This step takes 4 minutes!! This is the least efficient step!
-        #generate_random_fasta(genome_fasta,
-        #                      genome_table,
-        #                      fasta_metadata['num_seq'],
-        #                      fasta_metadata['len_seq'],
-        #                      random_fasta)
         moca_pipeline.run_fasta_shuffler(fasta_in=query_fasta, fasta_out=random_fasta)
 
         #Random
@@ -114,12 +107,6 @@ def cli(bedfile, genome_table, genome_fasta,
                                            motif_num=motif,
                                            sequence_file=random_fasta,
                                            out_dir=fimo_rand_dir)
-        #MainMotif
-        show_progress('Running Fimo Main')
-        fimo_main = moca_pipeline.run_fimo(motif_file=meme_file,
-                                           motif_num=motif,
-                                           sequence_file=query_fasta,
-                                           out_dir=fimo_main_dir)
 
         show_progress('Processing Scores Random')
         save_score(fimo_rand_dir, phylop_wig, gerp_wig, flank_motif)
