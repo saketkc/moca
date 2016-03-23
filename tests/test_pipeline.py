@@ -28,6 +28,7 @@ class TestPipeline(unittest.TestCase):
         if os.path.exists('tests/data/generated_out/meme_analysis'):
             shutil.rmtree('tests/data/generated_out/meme_analysis')
         output = self.pipeline.run_meme(fasta_in=self.meme_fasta, out_dir='tests/data/generated_out/meme_analysis')
+        print output
         #TODO Check if meme.txt is same and created
         #TODO This check is too stringent, specially if logos are being produced.
         #MEME installation leads to hard coded paths
