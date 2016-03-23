@@ -44,7 +44,7 @@ before_install:
 install:
   - python setup.py install --single-version-externally-managed --record=/tmp/record.txt
 
-script: nosetests -v --with-coverage
+script: nosetests -v --with-coverage; ls -lh /home/travis/build/saketkc/moca/tests/data/generated_out/meme_analysis
 
 after_script:
   - codecov
