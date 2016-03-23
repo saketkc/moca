@@ -116,6 +116,7 @@ class Bedfile(object):
             # Load bed fole into bedtools
             self.bed = BedTool(self.scorefile)
         self.bed = self.bed.slop(g=self.genome_table, b=flank_length)
+        return self.bed
 
     def determine_peaks(self):
         """Add extra columns representing peaks
