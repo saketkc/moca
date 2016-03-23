@@ -224,16 +224,13 @@ class Pipeline(ConfigurationParser):
         self.commands_run.append({'cmd': cmd, 'metadata': output})
         return output
 
-    @classmethod
-    def get_meme_default_args(self):
-        return self.meme_default_args
+    def get_meme_default_params(self):
+        return self.meme_default_params
 
-    @classmethod
-    def get_memechip_default_args(self):
-        return self.memechip_default_args
+    def get_memechip_default_params(self):
+        return self.memechip_default_params
 
-    @classmethod
-    def get_fimo_default_args(self):
-        return self.fimo_default_args
+    def get_fimo_default_params(self):
+        return self.fimo_default_params
 
 

@@ -9,6 +9,7 @@ import os
 import shutil
 import unittest
 from Bio import SeqIO
+from moca.helpers import get_cpu_count
 from moca.pipeline import Pipeline
 from moca.bedoperations import fimo_to_sites
 from moca.helpers import read_memefile
@@ -27,8 +28,10 @@ class TestPipeline(unittest.TestCase):
         """Test meme runner"""
         if os.path.exists('tests/data/generated_out/meme_analysis'):
             shutil.rmtree('tests/data/generated_out/meme_analysis')
-        output = self.pipeline.run_meme(fasta_in=self.meme_fasta, out_dir='tests/data/generated_out/meme_analysis')
-        print output
+        meme_args = self.pipeline.get_meme_default_params()
+        output = self.pipeline.run_meme(fasta_in=self.meme_fasta,
+                                        out_dir='tests/data/generated_out/meme_analysis',
+                                        strargs=meme_args.replace(' -p {}'.format(get_cpu_count()), ''))
         #TODO Check if meme.txt is same and created
         #TODO This check is too stringent, specially if logos are being produced.
         #MEME installation leads to hard coded paths
