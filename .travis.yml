@@ -43,9 +43,8 @@ before_install:
 
 install:
   - python setup.py install --single-version-externally-managed --record=/tmp/record.txt 
-  - ls -lh /home/travis/build/saketkc/moca/tests/data/generated_out/
 
-script: nosetests -v --with-coverage; ls -lh /home/travis/build/saketkc/moca/tests/data/generated_out/
+script: nosetests -v --with-coverage
 
 after_script:
   - codecov
