@@ -25,20 +25,19 @@ def download_peakfile(source_url, filename, destination_dir):
             out_file.write( in_file.read()  )
     del response
 
-def download_all_idr_tfs(root_dir):
+def download_idr_tfs(root_dir, metadata):
     """Download all tfs with idr called peaks"""
-    idr_peaks_data = get_idr_controlled_peaks()
-    for metadata in idr_peaks_data:
-        idr_records = fetch_idr_record(metadata)
-        for idr_record in idr_records:
-            dataset = idr_record['dataset']
-            peakfilename = idr_record['peakfilename'] + '.bed.gz'
-            dataset_dir = os.path.join(root_dir, dataset)
-            safe_makedir(dataset_dir)
-            source_url = __base_url__ + idr_record['href']
-            download_peakfile(source_url, peakfilename, dataset_dir)
-            break
-        break
+    idr_records = fetch_idr_record(metadata)
+    ## Theere is only one IDR per sample
+    assert len(idr_records) == 1
+    for idr_record in idr_records:
+        dataset = idr_record['dataset']
+        peakfilename = idr_record['peakfilename'] + '.bed.gz'
+        dataset_dir = os.path.join(root_dir, dataset)
+        safe_makedir(dataset_dir)
+        source_url = __base_url__ + idr_record['href']
+        download_peakfile(source_url, peakfilename, dataset_dir)
+        return {'assembly': idr_record['assembly'],'bedfile': os.path.join(dataset_dir, peakfilename.replace('.gz',''))}
 
 def save_metadata(metadata):
     """Save metadata to mongodb"""
@@ -85,8 +84,9 @@ def fetch_idr_record(metadata):
             dataset = dataset.replace('experiments','').replace('/','')
             href = f['href']
             title = f['title']
+            assembly = f['assembly']
             print dataset
-            idr_records.append({'href': href, 'metadata':f, 'parent_metadata': parent_metadata, 'dataset': dataset, 'peakfilename': title})
+            idr_records.append({'href': href, 'metadata':f, 'parent_metadata': parent_metadata, 'dataset': dataset, 'peakfilename': title, 'assembly': assembly})
     return idr_records
 
 def get_encode_peakfiles(encode_id):
