@@ -11,43 +11,72 @@ ALLOWED_OUTPUT_TYPES = ['optimal idr thresholded peaks', 'peaks']
 ALLOWED_FILETYPES = ['bed narrowPeak', 'bed broadPeak']
 
 def download_peakfile(source_url, filename, destination_dir):
+    """Download peakfile from encode"""
     response = requests.get(source_url, stream=True)
     with open(os.path.join(destination_dir, filename), 'wb') as f:
         shutil.copyfileobj(response.raw, f)
     del response
 
 def save_metadata(metadata):
+    """Save metadata to mongodb"""
     client = MongoClient()
     db = client.moca_encode_tf
     result = db.tf_metadata.insert_one(metadata)
     print result.inserted_id
 
 def get_experiment(experiment_id):
+    """Get and save metadata for an experiment"""
     req = requests.get("{}experiments/{}/?format=json".format(__base_url__, experiment_id))
-    response_json = req.json()
-    if response_json['status'] != 'error':
-        save_metadata(response_json)
+    metadata = req.json()
+    if metadata['status'] != 'error':
+        save_metadata(metadata)
     else:
         print 'Error fetching metadata for {}'.format(experiment_id)
 
-
 def get_idr_controlled_peaks():
+    """Return records that have atleast one idr called peak"""
     client = MongoClient()
     db = client.moca_encode_tf
     results = db.tf_metadata.find({'files.output_type': 'optimal idr thresholded peaks'})
-    return results
+    data = results[:]
+    client.close()
+    return data
+
+def fetch_idr_record(metadata):
+    files = metadata['files']
+    biosample_term_name = metadata['biosample_term_name']
+    assay_term_name = metadata['assay_term_name']
+    description = metadata['description']
+    gene_name = metadata['target']['label']
+    parent_metadata = {'biosample_term_name': biosample_term_name,
+                       'assay_term_name': assay_term_name,
+                       'description': description,
+                       'gene_name': gene_name}
+    idr_records = []
+    for f in files:
+        file_status = f['status']
+        file_type = f['file_type']
+        output_type = f['output_type']
+        if output_type == 'optimal idr thresholded peaks' and file_type in ALLOWED_FILETYPES and file_status == 'released':
+            dataset = f['dataset']
+            dataset = dataset.replace('experiments','').replace('/','')
+            href = f['href']
+            print dataset
+            idr_records.append({'href': href, 'metadata':f, 'parent_metadata': parent_metadata, 'dataset': dataset})
+    return idr_records
+
 
 def get_encode_peakfiles(encode_id):
     req = requests.get("{}experiments/{}/?format=json".format(__base_url__, encode_id))
-    response_json = req.json()
-    status = response_json['status']
+    metadata = req.json()
+    status = metadata['status']
     if status == 'error':
-        return response_json
-    files = response_json['files']
-    biosample_term_name = response_json['biosample_term_name']
-    assay_term_name = response_json['assay_term_name']
-    description = response_json['description']
-    gene_name = response_json['target']['label']
+        return metadata
+    files = metadata['files']
+    biosample_term_name = metadata['biosample_term_name']
+    assay_term_name = metadata['assay_term_name']
+    description = metadata['description']
+    gene_name = metadata['target']['label']
     files_to_download = []
     for f in files:
         file_type = f['file_type']
@@ -82,17 +111,16 @@ def get_encode_peakfiles(encode_id):
     return files_to_download
 
 def get_metadata_for_peakfile(dataset, peakfile):
-    #TODO this is repeated from last function and probaly is an inefficient way to implement this
     req = requests.get("{}experiments/{}/?format=json".format(__base_url__, dataset))
-    response_json = req.json()
-    status = response_json['status']
-    files = response_json['files']
-    biosample_term_name = response_json['biosample_term_name']
-    assay_term_name = response_json['assay_term_name']
-    description = response_json['description']
-    gene_name = response_json['target']['label']
+    metadata = req.json()
+    status = metadata['status']
+    files = metadata['files']
+    biosample_term_name = metadata['biosample_term_name']
+    assay_term_name = metadata['assay_term_name']
+    description = metadata['description']
+    gene_name = metadata['target']['label']
     if status == 'error':
-        return response_json
+        return metadata
     for f in files:
         title = f['title']
         file_status = f['status']
