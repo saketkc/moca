@@ -4,6 +4,10 @@ import os
 import requests
 import shutil
 from pymongo import MongoClient
+from moca.helpers import safe_makedir
+import StringIO
+import gzip
+
 
 __base_url__ = 'https://www.encodeproject.org/'
 
@@ -15,7 +19,26 @@ def download_peakfile(source_url, filename, destination_dir):
     response = requests.get(source_url, stream=True)
     with open(os.path.join(destination_dir, filename), 'wb') as f:
         shutil.copyfileobj(response.raw, f)
+
+    with gzip.open(os.path.join(destination_dir, filename), 'rb') as in_file:
+        with open(os.path.join(destination_dir, filename.replace('.gz','')), 'wb') as out_file:
+            out_file.write( in_file.read()  )
     del response
+
+def download_all_idr_tfs(root_dir):
+    """Download all tfs with idr called peaks"""
+    idr_peaks_data = get_idr_controlled_peaks()
+    for metadata in idr_peaks_data:
+        idr_records = fetch_idr_record(metadata)
+        for idr_record in idr_records:
+            dataset = idr_record['dataset']
+            peakfilename = idr_record['peakfilename'] + '.bed.gz'
+            dataset_dir = os.path.join(root_dir, dataset)
+            safe_makedir(dataset_dir)
+            source_url = __base_url__ + idr_record['href']
+            download_peakfile(source_url, peakfilename, dataset_dir)
+            break
+        break
 
 def save_metadata(metadata):
     """Save metadata to mongodb"""
@@ -61,10 +84,10 @@ def fetch_idr_record(metadata):
             dataset = f['dataset']
             dataset = dataset.replace('experiments','').replace('/','')
             href = f['href']
+            title = f['title']
             print dataset
-            idr_records.append({'href': href, 'metadata':f, 'parent_metadata': parent_metadata, 'dataset': dataset})
+            idr_records.append({'href': href, 'metadata':f, 'parent_metadata': parent_metadata, 'dataset': dataset, 'peakfilename': title})
     return idr_records
-
 
 def get_encode_peakfiles(encode_id):
     req = requests.get("{}experiments/{}/?format=json".format(__base_url__, encode_id))
