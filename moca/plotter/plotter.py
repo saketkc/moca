@@ -10,6 +10,8 @@ import matplotlib
 matplotlib.use('Agg')
 from pylab import setp
 import matplotlib.pyplot as plt
+import seaborn
+plt.style.use('seaborn-ticks')
 import matplotlib.gridspec as gridspec
 from matplotlib.font_manager import FontProperties
 import numpy as np
@@ -201,22 +203,10 @@ def create_stemplot(matplot_dict, X_values, Y_values, motif_length, flank_length
     stem_plot.set_xlabel('$\mathrm{Base}\ \mathrm{Position}$',
                          fontsize=FONTSIZE,
                          fontweight='bold')
-    stem_plot.set_xlim([1.2*MAGIC_NUM, X_values[-1]+LINEWIDTH*1.8])
-    stem_plot.set_ylim([min(np.min(Y_values), -0.01)-0.03, np.max(Y_values,0.01)])
-    stem_plot.get_xaxis().tick_bottom()
-    stem_plot.get_yaxis().tick_left()
     stem_plot.set_xticks(xticks)
     stem_plot.set_xticklabels(indices_str, fontsize=FONTSIZE)
-    stem_plot.spines['top'].set_visible(False)
-    stem_plot.spines['right'].set_visible(False)
-    stem_plot.yaxis.set_ticks_position('left')
-    stem_plot.xaxis.set_ticks_position('bottom')
-    stem_plot.spines['left'].set_position('zero')
-    stem_plot.get_yaxis().set_tick_params(direction='out')
-    stem_plot.get_xaxis().set_tick_params(direction='out')
-    stem_plot.tick_params(axis='y', which='major', pad=TICKPAD)
-    stem_plot.tick_params(axis='x', which='major', pad=TICKPAD)
-    stem_plot.tick_params('both', length=TICKLENGTH, width=2, which='major')
+    seaborn.despine(ax=stem_plot, offset=10, trim=True)
+
     stem_plot.set_ylabel('$\mathrm{PhyloP}\ \mathrm{Score}$', fontsize=FONTSIZE)
     f.add_subplot(stem_plot)
 
@@ -230,6 +220,7 @@ def create_logo_plot(matplot_dict, meme_dir, logo_path, motif_length):
         where 'gridspec' represents the grid specification  and shareX represents the axis to share X axis with.
 
     """
+    from mpl_toolkits.axes_grid1 import make_axes_locatable
     f = matplot_dict['figure']
     gs = matplot_dict['gridspec']
     logo_plot = plt.Subplot(f, gs)
@@ -255,8 +246,6 @@ def create_logo_plot(matplot_dict, meme_dir, logo_path, motif_length):
     logo_plot.set_axis_off()
     f.add_subplot(logo_plot)
     return logo_plot
-
-    pass
 
 def _get_logo_path(meme_dir, motif, rc=False):
     return os.path.join(meme_dir, 'logo_rc{}.png'.format(motif) if rc else 'logo{}.png'.format(motif))
@@ -302,7 +291,7 @@ def create_enrichment_plot(matplot_dict, motif_number, centrimo_txt, centrimo_st
     motif_stats = all_stats['MEME']['MOTIF_{}'.format(motif_number)]
     X_values = np.array(motif_stats['pos'])
     Y_values = np.array(motif_stats['count'])
-    normalized_Y = Y_values#/np.sum(Y_values)
+    normalized_Y = Y_values/np.sum(Y_values)
 
     centrimo_dict = read_centrimo_txt(centrimo_txt)
     enrichment_pval = float(centrimo_dict['adj_p-value'])
@@ -328,15 +317,15 @@ def create_enrichment_plot(matplot_dict, motif_number, centrimo_txt, centrimo_st
     enrichment_plot.tick_params('both', length=TICKLENGTH, width=2, which='major')
     enrichment_plot.set_xlabel('$\mathrm{Distance}\ \mathrm{from} \ \mathrm{peak}$', fontsize=FONTSIZE, fontweight='bold')
     enrichment_plot.set_ylabel('$\mathrm{Probability}$', fontsize=FONTSIZE, fontweight='bold')
-    enrichment_plot.get_xaxis().tick_bottom()
-    enrichment_plot.get_yaxis().tick_left()
-    enrichment_plot.get_yaxis().set_tick_params(direction='out')
-    enrichment_plot.get_xaxis().set_tick_params(direction='out')
     enrichment_plot.axvline(x=-50, linewidth=3, color='green', linestyle='-.')
     enrichment_plot.axvline(x=50, linewidth=3, color='green', linestyle='-.')
+    seaborn.despine(ax=enrichment_plot, offset=10, trim=True)
 
-    #enrichment_plot.axvline(x=-100, linewidth=3, color='red', linestyle='-.')
-    #enrichment_plot.axvline(x=100, linewidth=3, color='red', linestyle='-.')
+    enrichment_plot.axvline(x=-100, linewidth=3, color='red', linestyle='-.')
+    enrichment_plot.axvline(x=100, linewidth=3, color='red', linestyle='-.')
+    MAX_YTICKS = 3
+    yloc = plt.MaxNLocator(MAX_YTICKS)
+    enrichment_plot.yaxis.set_major_locator(yloc)
     f.add_subplot(enrichment_plot)
 
 def create_annnotation_plot(matplot_dict, json_annotation):
