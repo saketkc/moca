@@ -32,6 +32,33 @@ def get_motif_bg_freq(meme_file):
     bg_frequencies = {k:v for k,v in zip(keys, values)}
     return bg_frequencies
 
+def get_total_sequences(meme_file):
+    """Get total sequences
+    Parameters
+    ----------
+    meme_file: str
+        Location of MEME file
+
+    Returns
+    -------
+    num_seq: int
+        Number of sequences that meme was used on
+    """
+    seq_line = None
+    count = 0
+    with open(meme_file) as f:
+        for line in f:
+            if line.strip().startswith('TRAINING SET'):
+                star_line = f.next().strip()
+                datafile_line = f.next().strip()
+                alphabet_line = f.next().strip()
+                header_line = f.next().strip()
+                dashed_line = f.next().strip()
+                count = 0
+                while not f.next().strip().startswith('*********'):
+                    count+=1
+    return count
+
 #TODO Rename this!
 def read_memefile(meme_file):
     """Summariser for MEME file

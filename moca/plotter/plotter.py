@@ -6,11 +6,11 @@ from __future__ import division
 import json
 import os
 import sys
+import seaborn
 import matplotlib
 matplotlib.use('Agg')
 from pylab import setp
 import matplotlib.pyplot as plt
-import seaborn
 plt.style.use('seaborn-ticks')
 import matplotlib.gridspec as gridspec
 from matplotlib.font_manager import FontProperties
@@ -20,6 +20,7 @@ import statsmodels.api as sm
 from moca.helpers import read_memefile
 from moca.helpers import safe_makedir
 from moca.helpers import get_max_occuring_bases
+from moca.helpers import get_total_sequences
 from moca.helpers import read_centrimo_txt
 from moca.helpers import read_centrimo_stats
 
@@ -170,7 +171,7 @@ def create_stemplot(matplot_dict, X_values, Y_values, motif_length, flank_length
     else:
         X_center = X_values
         Y_center = Y_values
-
+    print X_center
     markerline, stemlines, baseline  = stem_plot.stem(X_center, Y_center,
                                                       markerfmt="g_",
                                                       linefmt="g-",
@@ -209,6 +210,7 @@ def create_stemplot(matplot_dict, X_values, Y_values, motif_length, flank_length
 
     stem_plot.set_ylabel('$\mathrm{PhyloP}\ \mathrm{Score}$', fontsize=FONTSIZE)
     f.add_subplot(stem_plot)
+    return X_flank_left, X_center, X_flank_right
 
 def create_logo_plot(matplot_dict, meme_dir, logo_path, motif_length):
     """Create stem plot for phylop/scores scoresi
@@ -220,7 +222,6 @@ def create_logo_plot(matplot_dict, meme_dir, logo_path, motif_length):
         where 'gridspec' represents the grid specification  and shareX represents the axis to share X axis with.
 
     """
-    from mpl_toolkits.axes_grid1 import make_axes_locatable
     f = matplot_dict['figure']
     gs = matplot_dict['gridspec']
     logo_plot = plt.Subplot(f, gs)
@@ -246,6 +247,17 @@ def create_logo_plot(matplot_dict, meme_dir, logo_path, motif_length):
     logo_plot.set_axis_off()
     f.add_subplot(logo_plot)
     return logo_plot
+
+def create_bar_plot(logo_plot,  X_right, height_px, total_sequences, all_meme_occurrences, motif_number):
+    start_point = len(all_meme_occurrences)
+    heights = [height_px/2.25*all_meme_occurrences[i]/total_sequences for i in range(0, start_point)]
+    bottoms = [height_px/2.25 for i in range(0, start_point)]
+    barlist = logo_plot.bar(X_right[-start_point:],
+                            heights,
+                            width=10,
+                            bottom=bottoms)
+    barlist[motif_number-1].set_color('r')
+
 
 def _get_logo_path(meme_dir, motif, rc=False):
     return os.path.join(meme_dir, 'logo_rc{}.png'.format(motif) if rc else 'logo{}.png'.format(motif))
@@ -280,6 +292,7 @@ def init_figure(meme_dir=None, X_values=None, motif=1, use_gerp=False, annotate=
             'gs': gs,
             'figsize': figsize,
             'right_margin': right,
+            'height_px': height_px,
             'total_px': total_px}
 
 def create_enrichment_plot(matplot_dict, motif_number, centrimo_txt, centrimo_stats):
@@ -478,8 +491,12 @@ def create_plot(meme_file,
                 motif_number=1,
                 flank_length=5):
     meme_record = read_memefile(meme_file)
+    total_sequences = get_total_sequences(meme_file)
     record = meme_record['motif_records'][motif_number-1]
     num_occurrences = getattr(record, 'num_occurrences', 'Unknown')
+    all_meme_occurrences = []
+    for motif_record in meme_record['motif_records']:
+        all_meme_occurrences.append(getattr(motif_record, 'num_occurrences', 'Unknown'))
     meme_dir = os.path.abspath(os.path.dirname(meme_file))
     fimo_dir = os.path.abspath(os.path.dirname(fimo_file))
     output_dir = os.path.join(meme_dir, 'moca_plots')
@@ -561,15 +578,15 @@ def create_plot(meme_file,
                 histogram_subplot_gs = gs1[1,1]
 
         gs1.update(bottom=0.14, right=0.95, left=1-right_margin*0.85, wspace=0.5)
-        create_stemplot({'figure': f,
-                         'gridspec': gs[1],
-                         'shareX': logo_plot},
-                        X,
-                        sample_phylop_scores,
-                        motif_length,
-                        flank_length=flank_length)
+        X_left, X_center, X_right = create_stemplot({'figure': f,
+                                                    'gridspec': gs[1],
+                                                    'shareX': logo_plot},
+                                                    X,
+                                                    sample_phylop_scores,
+                                                    motif_length,
+                                                    flank_length=flank_length)
 
-
+        create_bar_plot(logo_plot,  X_right, matplot_dict['height_px'], total_sequences, all_meme_occurrences, motif_number)
         create_phylop_legend_plot({'figure':f, 'gridspec':gs1[0,0]},  motif_freq, sample_phylop_scores, control_phylop_scores, flank_length)
         create_phylop_scatter({'figure':f, 'gridspec':gs1[1,0]}, motif_freq, sample_phylop_scores, control_phylop_scores, flank_length, num_occurrences, y_label='Phylop')
 
