@@ -171,7 +171,6 @@ def create_stemplot(matplot_dict, X_values, Y_values, motif_length, flank_length
     else:
         X_center = X_values
         Y_center = Y_values
-    print X_center
     markerline, stemlines, baseline  = stem_plot.stem(X_center, Y_center,
                                                       markerfmt="g_",
                                                       linefmt="g-",
@@ -250,12 +249,17 @@ def create_logo_plot(matplot_dict, meme_dir, logo_path, motif_length):
 
 def create_bar_plot(logo_plot,  X_right, height_px, total_sequences, all_meme_occurrences, motif_number):
     start_point = len(all_meme_occurrences)
-    heights = [height_px/2.25*all_meme_occurrences[i]/total_sequences for i in range(0, start_point)]
+    heights = [height_px/5*all_meme_occurrences[i]/total_sequences for i in range(0, start_point)]
     bottoms = [height_px/2.25 for i in range(0, start_point)]
     barlist = logo_plot.bar(X_right[-start_point:],
                             heights,
-                            width=10,
+                            width=20,
                             bottom=bottoms)
+    textstr = '{}\%'.format(all_meme_occurrences[motif_number-1]/total_sequences*100.0)
+    bar_height = height_px/2.25 + 1.2*height_px/5*all_meme_occurrences[motif_number-1]/total_sequences
+    print all_meme_occurrences
+    print total_sequences
+    logo_plot.text(X_right[-start_point], bar_height, textstr, fontsize=LEGEND_FONTSIZE)
     barlist[motif_number-1].set_color('r')
 
 
