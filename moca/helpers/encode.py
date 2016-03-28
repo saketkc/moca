@@ -59,7 +59,7 @@ def get_idr_controlled_peaks():
     """Return records that have atleast one idr called peak"""
     client = MongoClient()
     db = client.moca_encode_tf
-    results = db.tf_metadata.find({'files.output_type': 'optimal idr thresholded peaks'}, timeout=False)
+    results = db.tf_metadata.find({'files.output_type': 'optimal idr thresholded peaks'}, no_cursor_timeout=True)
     data = results[:]
     client.close()
     return data
