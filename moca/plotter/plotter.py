@@ -553,6 +553,7 @@ def create_plot(meme_file,
         right_margin = matplot_dict['right_margin']
         total_px= matplot_dict['total_px']
 
+        f.suptitle(os.path.split(peak_file)[1], fontsize=LEGEND_FONTSIZE)
         logo_plot = create_logo_plot({'figure':f, 'gridspec': gs[0]}, meme_dir, ln, motif_length)
 
 
