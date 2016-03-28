@@ -57,7 +57,7 @@ def get_total_sequences(meme_file):
                 count = 0
                 while not f.next().strip().startswith('*********'):
                     count+=1
-    return count
+    return count*2
 
 #TODO Rename this!
 def read_memefile(meme_file):

@@ -5,6 +5,7 @@ Generate conservation plots
 from __future__ import division
 import json
 import os
+import math
 import sys
 import seaborn
 import matplotlib
@@ -249,16 +250,19 @@ def create_logo_plot(matplot_dict, meme_dir, logo_path, motif_length):
 
 def create_bar_plot(logo_plot,  X_right, height_px, total_sequences, all_meme_occurrences, motif_number):
     start_point = len(all_meme_occurrences)
-    heights = [height_px/5*all_meme_occurrences[i]/total_sequences for i in range(0, start_point)]
-    bottoms = [height_px/2.25 for i in range(0, start_point)]
+    heights = np.array([height_px/5*all_meme_occurrences[i]/total_sequences for i in range(0, start_point)])
+    bottoms = np.array([height_px/2.25 for i in range(0, start_point)])
     barlist = logo_plot.bar(X_right[-start_point:],
                             heights,
                             width=20,
-                            bottom=bottoms)
-    textstr = '{}\%'.format(all_meme_occurrences[motif_number-1]/total_sequences*100.0)
+                            bottom=bottoms,
+                            fill=False,
+                            edgecolor='black')
+    textstr = '${}$\%'.format(all_meme_occurrences[motif_number-1]/total_sequences*100.0)
     bar_height = height_px/2.25 + 1.2*height_px/5*all_meme_occurrences[motif_number-1]/total_sequences
-    logo_plot.text(X_right[-start_point], bar_height, textstr, fontsize=LEGEND_FONTSIZE)
-    barlist[motif_number-1].set_color('r')
+    logo_plot.text(X_right[int(math.floor(-start_point/2))], np.max(heights+bottoms), textstr, fontsize=LEGEND_FONTSIZE)
+    barlist[motif_number-1].set_color('red')
+    barlist[motif_number-1].set_hatch('/')
 
 
 def _get_logo_path(meme_dir, motif, rc=False):

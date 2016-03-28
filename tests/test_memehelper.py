@@ -54,4 +54,4 @@ Entropy          1.2 *      **  *** *     * **
         assert bg_freq == {'A':0.202, 'C':0.298, 'G': 0.298, 'T': 0.202}
 
     def test_totalseq(self):
-        assert get_total_sequences(self.meme_file) == 5
+        assert get_total_sequences(self.meme_file) == 10
