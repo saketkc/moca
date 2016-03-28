@@ -257,8 +257,6 @@ def create_bar_plot(logo_plot,  X_right, height_px, total_sequences, all_meme_oc
                             bottom=bottoms)
     textstr = '{}\%'.format(all_meme_occurrences[motif_number-1]/total_sequences*100.0)
     bar_height = height_px/2.25 + 1.2*height_px/5*all_meme_occurrences[motif_number-1]/total_sequences
-    print all_meme_occurrences
-    print total_sequences
     logo_plot.text(X_right[-start_point], bar_height, textstr, fontsize=LEGEND_FONTSIZE)
     barlist[motif_number-1].set_color('r')
 
