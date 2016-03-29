@@ -17,6 +17,9 @@ import matplotlib.gridspec as gridspec
 from matplotlib.font_manager import FontProperties
 import numpy as np
 import statsmodels.api as sm
+from scipy.interpolate import spline
+from scipy.interpolate import UnivariateSpline
+
 
 from moca.helpers import read_memefile
 from moca.helpers import safe_makedir
@@ -312,6 +315,11 @@ def create_enrichment_plot(matplot_dict, motif_number, centrimo_txt, centrimo_st
     Y_values = np.array(motif_stats['count'])
     normalized_Y = Y_values/np.sum(Y_values)
 
+    x_smooth = np.linspace(X_values.min(), X_values.max(), 1000)
+    #y_smooth = spline(X_values, normalized_Y, x_smooth)
+    smoother = UnivariateSpline(X_values, Y_values)
+    y_smooth = smoother(x_smooth)
+
     centrimo_dict = read_centrimo_txt(centrimo_txt)
     enrichment_pval = float(centrimo_dict['adj_p-value'])
     enrichment = float(centrimo_dict['sites_in_bin'])/float(centrimo_dict['total_sites'])
@@ -332,7 +340,8 @@ def create_enrichment_plot(matplot_dict, motif_number, centrimo_txt, centrimo_st
     f.add_subplot(enrichment_plot)
     enrichment_plot = plt.Subplot(f, gs_b, autoscale_on=True)
 
-    enrichment_plot.plot(X_values, normalized_Y, linewidth=LINEWIDTH)
+    #enrichment_plot.plot(X_values, normalized_Y, linewidth=LINEWIDTH)
+    enrichment_plot.plot(x_smooth, y_smooth, linewidth=LINEWIDTH)
     enrichment_plot.tick_params('both', length=TICKLENGTH, width=2, which='major')
     enrichment_plot.set_xlabel('$\mathrm{Distance}\ \mathrm{from} \ \mathrm{peak}$', fontsize=FONTSIZE, fontweight='bold')
     enrichment_plot.set_ylabel('$\mathrm{Probability}$', fontsize=FONTSIZE, fontweight='bold')
