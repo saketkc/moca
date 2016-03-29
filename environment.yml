@@ -108,6 +108,7 @@ dependencies:
   - ipython-genutils==0.1.0
   - moca==0.1.0
   - pockets==0.3
+  - sphinx-bootstrap-theme==0.4.8
   - sphinx-rtd-theme==0.1.9
   - sphinxcontrib-napoleon==0.5.0
   - tqdm==3.8.0
