@@ -65,6 +65,16 @@ LEGEND_YMULTIPLIER = 1
 
 MAX_YTICKS = 3
 
+def format_pvalue(pval):
+    """Latex compatible representations
+
+    """
+    pval = str('%.1g' % pval)
+    if 'e' in pval:
+        pval+= '}'
+        pval = pval.replace('e', '*10^{').replace('-0','-')
+    return pval
+
 def remove_flanking_scores(all_scores, flank_length):
     """ Returns center scores, removing the flanking ones
 
@@ -90,7 +100,6 @@ def get_flanking_scores(all_scores, flank_length):
     """
     assert flank_length>0
     return np.concatenate((all_scores[:flank_length], all_scores[-flank_length:]))
-
 
 def setup_matplotlib():
     """Setup matplotlib
@@ -251,22 +260,25 @@ def create_logo_plot(matplot_dict, meme_dir, logo_path, motif_length):
     f.add_subplot(logo_plot)
     return logo_plot
 
-def create_bar_plot(logo_plot,  X_right, height_px, total_sequences, all_meme_occurrences, motif_number):
+def create_bar_plot(logo_plot,  X_right, height_px, total_sequences, all_meme_occurrences, motif_number, motif_evalue):
     start_point = len(all_meme_occurrences)
-    heights = np.array([height_px/5*all_meme_occurrences[i]/total_sequences for i in range(0, start_point)])
-    bottoms = np.array([height_px/2.25 for i in range(0, start_point)])
+    height_scale = 2.25
+    bottom_scale = 2.25
+    heights = np.array([height_px/height_scale*all_meme_occurrences[i]/total_sequences for i in range(0, start_point)])
+    bottoms = np.array([height_px/bottom_scale for i in range(0, start_point)])
     barlist = logo_plot.bar(X_right[-start_point:],
                             heights,
-                            width=20,
+                            width=25,
                             bottom=bottoms,
                             fill=False,
                             edgecolor='black')
-    textstr = '${}$\%'.format(all_meme_occurrences[motif_number-1]/total_sequences*100.0)
-    bar_height = height_px/2.25 + 1.2*height_px/5*all_meme_occurrences[motif_number-1]/total_sequences
-    logo_plot.text(X_right[int(math.floor(-start_point/2))], np.max(heights+bottoms), textstr, fontsize=LEGEND_FONTSIZE)
+    occurrence = all_meme_occurrences[motif_number-1]/total_sequences*100.0
+    textstr = r'\noindent$E-Value={}$\\~\\$Enrichment={}\%$'.format(format_pvalue(motif_evalue), occurrence)
+    index = int(math.floor(-start_point/2))
+    total_heights = heights+bottoms
+    logo_plot.text(X_right[index], 1.1*total_heights[index], textstr, fontsize=14)
     barlist[motif_number-1].set_color('red')
     barlist[motif_number-1].set_hatch('/')
-
 
 def _get_logo_path(meme_dir, motif, rc=False):
     return os.path.join(meme_dir, 'logo_rc{}.png'.format(motif) if rc else 'logo{}.png'.format(motif))
@@ -315,9 +327,9 @@ def create_enrichment_plot(matplot_dict, motif_number, centrimo_txt, centrimo_st
     Y_values = np.array(motif_stats['count'])
     normalized_Y = Y_values/np.sum(Y_values)
 
-    x_smooth = np.linspace(X_values.min(), X_values.max(), 1000)
+    x_smooth = np.linspace(X_values.min(), X_values.max(), 100)
     #y_smooth = spline(X_values, normalized_Y, x_smooth)
-    smoother = UnivariateSpline(X_values, Y_values)
+    smoother = UnivariateSpline(X_values, normalized_Y, s=0.0005)
     y_smooth = smoother(x_smooth)
 
     centrimo_dict = read_centrimo_txt(centrimo_txt)
@@ -333,10 +345,10 @@ def create_enrichment_plot(matplot_dict, motif_number, centrimo_txt, centrimo_st
     if 'e' in enrichment_pval:
         enrichment_pval+= '}'
         enrichment_pval= enrichment_pval.replace('e', '*10^{').replace('-0','-')
-
-    textstr = r'\noindent$Enrichment={0:.2f}$\\~\\$(p={1})$'.format(enrichment, enrichment_pval)
-    txtx = 0.1*len(textstr)/100.0
-    enrichment_plot.text(txtx, TXT_YPOS, textstr, fontsize=LEGEND_FONTSIZE)
+    text = '$Center-enrichment$'
+    textstr = r'\noindent {}=${:.2f}$\\~\\$(p={})$'.format(text, enrichment, enrichment_pval)
+    txtx = -0.05*len(textstr)/100.0
+    enrichment_plot.text(txtx, TXT_YPOS, textstr, fontsize=LEGEND_FONTSIZE-2)
     f.add_subplot(enrichment_plot)
     enrichment_plot = plt.Subplot(f, gs_b, autoscale_on=True)
 
@@ -410,14 +422,13 @@ def create_phylop_legend_plot(matplot_dict, motif_freq, sample_phylop_scores, co
         score_pval += '}'
         score_pval = score_pval.replace('e', '*10^{').replace('-0','-')
 
-    textstr = r'$R_{pearson}=%.2f(p=%s)$' '\n' r'$\Delta_{Phylop}=%.2f(p=%s)$' %(corr_r2, pearsonr_pval, delta_phylop, score_pval)
+    textstr = r'$r^2_{pearson}=%.2f(p=%s)$' '\n' r'$\Delta_{Phylop}=%.2f(p=%s)$' %(corr_r2, pearsonr_pval, delta_phylop, score_pval)
     txtx = 1-LEGEND_XMULTIPLIER*len(textstr)/100.0
     phlyop_plots_legend.set_frame_on(False)
     phlyop_plots_legend.set_xticks([])
     phlyop_plots_legend.set_yticks([])
     phlyop_plots_legend.text(txtx, TXT_YPOS, textstr, fontsize=LEGEND_FONTSIZE)
     f.add_subplot(phlyop_plots_legend)
-
 
 def perform_OLS(dependent_variable, independent_variable):
     """Perform Ordinary least square
@@ -493,7 +504,6 @@ def create_phylop_scatter(matplot_dict, motif_freq, sample_phylop_scores, contro
 
     f.add_subplot(phylop_scatter_plot)
 
-
 def create_plot(meme_file,
                 peak_file,
                 fimo_file,
@@ -538,6 +548,7 @@ def create_plot(meme_file,
 
     motif = record
     motif_length = motif.length
+    motif_evalue = motif.evalue
     meme_dir = os.path.abspath(os.path.dirname(meme_file))
     X = [40+15] ## this is by trial and error, the position for the first base logo
     ## Generate all other X coordinates
@@ -562,7 +573,7 @@ def create_plot(meme_file,
         right_margin = matplot_dict['right_margin']
         total_px= matplot_dict['total_px']
 
-        f.suptitle(os.path.split(peak_file)[1], fontsize=LEGEND_FONTSIZE)
+        f.suptitle(r'\textbf{\underline{'+'{}'.format(os.path.split(peak_file)[1])+'}}', fontsize=LEGEND_FONTSIZE)
         logo_plot = create_logo_plot({'figure':f, 'gridspec': gs[0]}, meme_dir, ln, motif_length)
 
 
@@ -602,7 +613,7 @@ def create_plot(meme_file,
                                                     motif_length,
                                                     flank_length=flank_length)
 
-        create_bar_plot(logo_plot,  X_right, matplot_dict['height_px'], total_sequences, all_meme_occurrences, motif_number)
+        create_bar_plot(logo_plot,  X_right, matplot_dict['height_px'], total_sequences, all_meme_occurrences, motif_number, motif_evalue)
         create_phylop_legend_plot({'figure':f, 'gridspec':gs1[0,0]},  motif_freq, sample_phylop_scores, control_phylop_scores, flank_length)
         create_phylop_scatter({'figure':f, 'gridspec':gs1[1,0]}, motif_freq, sample_phylop_scores, control_phylop_scores, flank_length, num_occurrences, y_label='Phylop')
 
