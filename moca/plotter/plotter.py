@@ -12,7 +12,7 @@ import matplotlib
 matplotlib.use('Agg')
 from pylab import setp
 import matplotlib.pyplot as plt
-plt.style.use('seaborn-ticks')
+plt.style.use('seaborn-paper')
 import matplotlib.gridspec as gridspec
 from matplotlib.font_manager import FontProperties
 import numpy as np
