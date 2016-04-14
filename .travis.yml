@@ -38,8 +38,6 @@ before_install:
  - conda env create -q -f environment.yml python=$TRAVIS_PYTHON_VERSION
 
  - source activate mocatest
- - export MEME_ETC_DIR="$MINICONDA/envs/mocatest/etc"
- - conda install meme -c saketkc
 
 install:
   - python setup.py install --single-version-externally-managed --record=/tmp/record.txt 

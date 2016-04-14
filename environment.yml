@@ -38,6 +38,7 @@ dependencies:
 - markupsafe=0.23=py27_0
 - matplotlib=1.5.1=np110py27_0
 - mccabe=0.3.1=py27_0
+- meme=4.11.1=py27pl5.22.0_0
 - mkl=11.3.1=0
 - mpc=1.0.1=0
 - mpfr=3.1.2=0
