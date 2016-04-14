@@ -39,6 +39,7 @@ before_install:
 
  - source activate mocatest
  - export MEME_ETC_DIR="$MINICONDA/envs/mocatest/etc"
+ - export MEME_BIN_DIR="$MINICONDA/envs/mocatest/bin"
 
 install:
   - python setup.py install --single-version-externally-managed --record=/tmp/record.txt 
