@@ -28,8 +28,8 @@ from moca.helpers import get_total_sequences
 from moca.helpers import read_centrimo_txt
 from moca.helpers import read_centrimo_stats
 
-from moca.plotter import perform_t_test
-from moca.plotter import get_pearson_corr
+from moca.helpers.seqstats import perform_t_test
+from moca.helpers.seqstats import get_pearson_corr
 
 from moca.helpers.seqstats import get_flanking_scores, remove_flanking_scores, format_pvalue
 
