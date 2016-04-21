@@ -31,6 +31,8 @@ from moca.helpers import read_centrimo_stats
 from moca.plotter import perform_t_test
 from moca.plotter import get_pearson_corr
 
+from moca.helpers.seqstats import get_flanking_scores, remove_flanking_scores, format_pvalue
+
 MAGIC_NUM=39.33333333
 COUNT_TYPE = 'counts'
 # Use 'pssm' or 'counts' to score:
@@ -65,41 +67,6 @@ LEGEND_YMULTIPLIER = 1
 
 MAX_YTICKS = 3
 
-def format_pvalue(pval):
-    """Latex compatible representations
-
-    """
-    pval = str('%.1g' % pval)
-    if 'e' in pval:
-        pval+= '}'
-        pval = pval.replace('e', '*10^{').replace('-0','-')
-    return pval
-
-def remove_flanking_scores(all_scores, flank_length):
-    """ Returns center scores, removing the flanking ones
-
-    Parameters
-    ----------
-    all_scores: array_like
-        An array containting all scores
-    flank_length: int
-        Number of flanking sites on each side
-    """
-    assert flank_length>0
-    return all_scores[flank_length:-flank_length]
-
-def get_flanking_scores(all_scores, flank_length):
-    """ Returns concatenated flanking scores, removing the center ones
-
-    Parameters
-    ----------
-    all_scores: array_like
-        An array containting all scores
-    flank_length: int
-        Number of flanking sites on each side
-    """
-    assert flank_length>0
-    return np.concatenate((all_scores[:flank_length], all_scores[-flank_length:]))
 
 def setup_matplotlib():
     """Setup matplotlib
