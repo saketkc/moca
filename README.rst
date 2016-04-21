@@ -41,27 +41,16 @@ Installation
     $ cd moca
     $ conda create env -f environment.yml python=2.7
     $ source activate mocatest
+    $ export MEME_ETC_DIR="/home/user/anaconda2/envs/mocatest/etc"
+    $ export MEME_BIN_DIR="/home/user/anaconda2/envs/mocatest/bin"
+    $ pip install .
     $ mocacli --bedfile tests/data/ENCFF002CDP.ctcf.bed --phylop /media/data1/genomes/hg19/phylop/hg19.100way.phyloP100way.bw --gerp /media/data1/genomes/hg19/gerp/All_hg19_RS.bw -gt /media/data1/genomes/hg19/fasta/hg19.sizes -gf /media/data1/genomes/hg19/fasta/hg19.fa --configuration tests/data/application.cfg
 
-
-Installation
--------------
-
-::
-
-    conda config --add channels bioconda
-    conda env create -q -f environment.yml python=2.7
-    export MEME_ETC_DIR="/home/user/anaconda2/envs/mocatest/etc"
-    export MEME_BIN_DIR="/home/user/anaconda2/envs/mocatest/bin"
-    source activate mocatest
-    cd moca
-    python setup.py install
 
 Usage
 -----
 
 ::
-
 
     $ mocacli [OPTIONS]
 
