@@ -42,9 +42,9 @@ class WigReader(object):
 
             chrom_length = chrom_lengths[chrom]
             if int(chromStart)> chrom_length:
-                raise MocaException('Chromsome start point exceeds chromosome length: {}>{}',format(chromStart, chrom_length))
+                raise MocaException('Chromsome start point exceeds chromosome length: {}>{}'.format(chromStart, chrom_length))
             elif int(chromEnd)> chrom_length:
-                raise MocaException('Chromsome end point exceeds chromosome length: {}>{}',format(chromEnd, chrom_length))
+                raise MocaException('Chromsome end point exceeds chromosome length: {}>{}'.format(chromEnd, chrom_length))
             score = self.wig.values(chrom, int(chromStart), int(chromEnd))
             if strand == '-':
                 score.reverse()

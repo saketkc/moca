@@ -36,7 +36,7 @@ class ConfigurationParser(object):
         return config
 
     def _check(self):
-        raise NotImplemented
+        raise NotImplementedError
 
     def get_all_sections(self):
         """Get all sections in config file
