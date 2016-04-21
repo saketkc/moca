@@ -14,6 +14,9 @@ MoCA
 .. image:: https://coveralls.io/repos/github/saketkc/moca/badge.svg?branch=master
         :target: https://coveralls.io/github/saketkc/moca?branch=master
 
+.. image:: https://landscape.io/github/saketkc/moca/master/landscape.svg?style=flat
+        :target: https://landscape.io/github/saketkc/moca/master
+
 .. image:: https://requires.io/github/saketkc/moca/requirements.svg?branch=master
         :target: https://requires.io/github/saketkc/moca/requirements/?branch=master
 
@@ -68,6 +71,47 @@ Run tests locally
 
      ----------------------------------------------------------------------
      Ran 14 tests in 2.506s
+    
+
+Installation
+-------------
+
+::
+
+    conda config --add channels bioconda
+    conda env create -q -f environment.yml python=2.7
+    export MEME_ETC_DIR="/home/user/anaconda2/envs/mocatest/etc"
+    export MEME_BIN_DIR="/home/user/anaconda2/envs/mocatest/bin"
+    source activate mocatest
+    cd moca
+    python setup.py install
+
+Usage
+-----
+
+::
+
+
+    $ mocacli [OPTIONS]
+
+      Run moca
+
+      Options:
+        -i, --bedfile TEXT            Bed file input  [required]
+        -o, --oc TEXT                 Output Directory
+        -c, --configuration TEXT      Configuration file  [required]
+        --flank-seq INTEGER           Flanking sequence length  [required]
+        --flank-motif INTEGER         Length of sequence flanking motif  [required]
+        -g, -gb, --genome-build TEXT  Key denoting genome build to use in
+                                      configuration file  [required]
+Example
+-------
+
+::
+
+    mocacli -i tests/data/ENCFF002CDP.ctcf.bed -c tests/data/application.cfg -g hg19
+
+.. image:: docs/_static/img/ENCFF002CEL.png
 
 
 
