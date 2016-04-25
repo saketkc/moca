@@ -16,7 +16,6 @@ plt.style.use('seaborn-ticks')
 import matplotlib.gridspec as gridspec
 from matplotlib.font_manager import FontProperties
 import numpy as np
-import statsmodels.api as sm
 from scipy.interpolate import spline
 from scipy.interpolate import UnivariateSpline
 
@@ -30,7 +29,7 @@ from moca.helpers import read_centrimo_stats
 
 from moca.helpers.seqstats import perform_t_test
 from moca.helpers.seqstats import get_pearson_corr
-
+from moca.helpers.seqstats import perform_OLS
 from moca.helpers.seqstats import get_flanking_scores, remove_flanking_scores, format_pvalue
 
 MAGIC_NUM=39.33333333
@@ -300,8 +299,14 @@ def create_enrichment_plot(matplot_dict, motif_number, centrimo_txt, centrimo_st
     y_smooth = smoother(x_smooth)
 
     centrimo_dict = read_centrimo_txt(centrimo_txt)
-    enrichment_pval = float(centrimo_dict['adj_p-value'])
-    enrichment = float(centrimo_dict['sites_in_bin'])/float(centrimo_dict['total_sites'])
+    try:
+        centrimo_motif_dict = centrimo_dict[motif_number-1]
+    except IndexError:
+        #TODO This should be logged somewhere
+        centrimo_motif_dict = centrimo_dict[0]
+
+    enrichment_pval = float(centrimo_motif_dict['adj_p-value'])
+    enrichment = float(centrimo_motif_dict['sites_in_bin'])/float(centrimo_motif_dict['total_sites'])
 
     enrichment_plot = plt.Subplot(f, gs_h, autoscale_on=True)
     enrichment_plot.set_frame_on(False)
@@ -397,35 +402,6 @@ def create_phylop_legend_plot(matplot_dict, motif_freq, sample_phylop_scores, co
     phlyop_plots_legend.text(txtx, TXT_YPOS, textstr, fontsize=LEGEND_FONTSIZE)
     f.add_subplot(phlyop_plots_legend)
 
-def perform_OLS(dependent_variable, independent_variable):
-    """Perform Ordinary least square
-
-    Parameters
-    ----------
-
-    dependent_variable: array_like
-        Array of dependet variable(Y)
-
-    independent_variable: array_like
-        Array of indepdent variable(X)
-
-    Returns
-    -------
-
-    regression_line: Array like
-        Regression line
-
-    """
-
-    regression_fit = sm.OLS(dependent_variable, sm.add_constant(independent_variable)).fit()
-    if (len(regression_fit.params)<2):
-        ## In cases of multicollinearity simply draw a straight line
-        regression_line = independent_variable
-    else:
-        regression_line = independent_variable*regression_fit.params[1]+regression_fit.params[0]
-
-    return {'regression_fit': regression_fit,
-            'regression_line': regression_line}
 
 def create_phylop_scatter(matplot_dict, motif_freq, sample_phylop_scores, control_phylop_scores, flank_length, num_occurrences, y_label):
 

@@ -1,7 +1,6 @@
 import os
 import re
 from moca.helpers import MocaException
-import numpy as np
 
 def read_centrimo_txt(centrimo_txt):
     """Read centrimo.txt for single motif
@@ -20,18 +19,21 @@ def read_centrimo_txt(centrimo_txt):
     with open(os.path.abspath(centrimo_txt)) as f:
         assert f.readline().strip() == '# WARNING: this file is not sorted!'
         second_line = f.readline().strip().replace('# ','')
-        third_line = f.readline().strip()
         second_line = re.sub( '\s+\t+', ' ', second_line)
-        third_line = re.sub( '\s+\t+', ' ', third_line)
-
+        values = []
+        should_read = True
+        while should_read:
+            value = f.readline().strip()
+            if value == '##':
+                break
+            value = re.sub('\s+\t+', ' ', value)
+            values.append(value)
         columns = second_line.split()
-        values = third_line.split()
-
-        if len(columns) != len(values):
+        if len(columns) != len(values[0].split()):
             raise MocaException('Error parsing centrimo file. \
                                 This is a bug and should be reported upstream')
-
-        return dict(zip(columns, values))
+        centrimo_dicts = [dict(zip(columns, val.split())) for val in values]
+        return centrimo_dicts
 
 
 def read_centrimo_stats(centrimo_stats):

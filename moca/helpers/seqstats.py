@@ -2,6 +2,8 @@
 from scipy import stats
 from scipy.stats.stats import pearsonr
 import numpy as np
+import statsmodels.api as sm
+from moca.helpers import read_centrimo_txt
 
 def format_pvalue(pval):
     """Latex compatible representations
@@ -88,14 +90,20 @@ def perform_t_test(a, b):
     return {'two_sided_pval': two_sided_pval, 'T': T,
             'delta': delta, 'one_sided_pval': one_sided_pval}
 
-def get_center_enrichment(centrimo_txt):
+def get_center_enrichment(centrimo_txt, motif_number=1):
     """Get center encihment and associated p values
     Hypothesis: There is uniform encihment
 
     """
     centrimo_dict = read_centrimo_txt(centrimo_txt)
-    enrichment_pval = float(centrimo_dict['adj_p-value'])
-    enrichment = float(centrimo_dict['sites_in_bin'])/float(centrimo_dict['total_sites'])
+    try:
+        centrimo_motif_dict = centrimo_dict[motif_number-1]
+    except IndexError:
+        #TODO This should be logged somewhere
+        centrimo_motif_dict = centrimo_dict[0]
+
+    enrichment_pval = float(centrimo_motif_dict['adj_p-value'])
+    enrichment = float(centrimo_motif_dict['sites_in_bin'])/float(centrimo_motif_dict['total_sites'])
     return {'enrichment': enrichment, 'enrichment_pval': enrichment_pval}
 
 
@@ -120,3 +128,32 @@ def get_motif_evalue(motif):
     """Get motif E-value"""
     return motif.evalue
 
+def perform_OLS(dependent_variable, independent_variable):
+    """Perform Ordinary least square
+
+    Parameters
+    ----------
+
+    dependent_variable: array_like
+        Array of dependet variable(Y)
+
+    independent_variable: array_like
+        Array of indepdent variable(X)
+
+    Returns
+    -------
+
+    regression_line: Array like
+        Regression line
+
+    """
+
+    regression_fit = sm.OLS(dependent_variable, sm.add_constant(independent_variable)).fit()
+    if (len(regression_fit.params)<2):
+        ## In cases of multicollinearity simply draw a straight line
+        regression_line = independent_variable
+    else:
+        regression_line = independent_variable*regression_fit.params[1]+regression_fit.params[0]
+
+    return {'regression_fit': regression_fit,
+            'regression_line': regression_line}
