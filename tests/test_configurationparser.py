@@ -12,7 +12,7 @@ class TestConfigParser(unittest.TestCase):
     """Test configurationparser"""
 
     def setUp(self):
-        self.config_file = 'application.cfg'
+        self.config_file = 'tests/data/application.cfg'
         self.parsed_config = ConfigurationParser(self.config_file)
 
     def test_sections(self):
@@ -20,6 +20,10 @@ class TestConfigParser(unittest.TestCase):
         sections = self.parsed_config.get_all_sections()
         assert 'binaries' in sections
 
+    def test_get_section(self):
+        """Test configuration sections"""
+        section_dict = self.parsed_config.get_section('mongo')
+        assert 'mongo_db' in section_dict.keys()
     def test_genomes(self):
         """Test configuration genomes"""
         genomes = self.parsed_config.get_all_genomes()

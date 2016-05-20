@@ -48,6 +48,22 @@ class ConfigurationParser(object):
         """
         return self.config_blob.sections()
 
+    def get_section(self, section_name):
+        """Get all keys inside a particular section
+
+        Parameters
+        ----------
+        section_name: str
+            Section Name
+
+        Returns
+        -------
+        section_dict: dict
+            Dict of all keys inside header
+        """
+        section_dict = dict(self.config_blob.items(section_name))
+        return section_dict
+
     def get_all_genomes(self):
         """Get all genome names as specified in config file
 
