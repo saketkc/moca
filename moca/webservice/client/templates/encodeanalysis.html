@@ -1,0 +1,77 @@
+{% extends "bootstrap.html" %}
+{% block content %} 
+
+    <div class="row vertical-align">
+        <div class="col-md-8  vertical-align"><h2>Analysed Encode Samples</h2></div>
+        <div class="col-md-4"><a href="#" title="Print" id="print" class="hide glyphicon glyphicon-print pull-right"></a></div>
+    </div>
+
+    <div class="row">
+        <br/>
+        <div id="spin"></div>
+    </div>
+
+
+    <div id="results">
+        <table id="table" data-search="true">
+        </table>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<script>
+var response_data = '{{ results|tojson }}';
+//var url = 'data:text/json;charset=utf8,' + encodeURIComponent(response_data);
+//window.open(url, '_blank');
+//window.focus();
+response_datastr = JSON.stringify(response_data);
+response_data = JSON.parse(response_data);
+data = response_data['data'];
+rows = data['rows'];
+columns = data['columns'];
+$(function () {
+    $('#table').dataTable({
+        aaData: rows,
+        aoColumns: columns
+    });
+
+});
+
+function detailFormatter(index, row){
+    var dataset_id = row['dataset_id'];
+    var peakfile_id = row['peakfile_id'];
+    var html = '';
+    var url = '/encodejob/'+dataset_id+'/'+peakfile_id;
+  $.ajax({
+    url: '/encodejob/'+dataset_id+'/'+peakfile_id,
+    dataType: 'json',
+    type: 'post',
+    async: false,
+    error: function(xhr_data) {
+       $("#spin").html("Errored");
+    },
+    success: function(xhr_data) {
+        var d = (xhr_data.data);
+        //console.log(d);
+        var motifs = (d.motifs);
+        //console.log(motifs);
+        var motif=1;
+        for (var key in motifs){
+            html+="<a href='"+ url + "' target='_blank'><b> Motif: "+motif+"</b><br/>"+"<img src='"+motifs[key]+"'/></a><br/>";
+            motif+=1;
+        }
+    }
+    }); 
+  return html;
+}
+function linkFormatter(value, row){
+    var dataset_id = row['dataset_id'];
+    var peakfile_id = row['peakfile_id'];
+    return "<a href='"+'/encodejob/'+dataset_id+'/'+peakfile_id+"' target='_blank'>"+peakfile_id+"</a>";
+}
+</script>
+{% endblock %}
