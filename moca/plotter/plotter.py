@@ -64,7 +64,7 @@ TXT_YPOS = 0.09
 LEGEND_XMULTIPLIER = 1.8
 LEGEND_YMULTIPLIER = 1
 
-MAX_YTICKS = 3
+MAX_YTICKS = 4
 
 
 def setup_matplotlib():
@@ -93,7 +93,7 @@ def setp_lines(stemlines, markerline, baseline):
     setp(baseline, 'linewidth', STEM_LINEWIDTH-0.5)
     setp(markerline, 'markeredgewidth', STEM_MARKER_EDGEWIDTH)
 
-def create_stemplot(matplot_dict, X_values, Y_values, motif_length, flank_length=0):
+def create_stemplot(matplot_dict, X_values, Y_values, motif_length, flank_length=0, phylop_legend_title='PhyloP'):
     """Create stem plot for phylop/scores scoresi
 
     Parameters
@@ -186,7 +186,7 @@ def create_stemplot(matplot_dict, X_values, Y_values, motif_length, flank_length
     stem_plot.set_xticklabels(indices_str, fontsize=FONTSIZE)
     seaborn.despine(ax=stem_plot, offset=10, trim=True)
 
-    stem_plot.set_ylabel('$\mathrm{PhyloP}\ \mathrm{Score}$', fontsize=FONTSIZE)
+    stem_plot.set_ylabel('$\mathrm{%s}\ \mathrm{Score}$'%(phylop_legend_title), fontsize=FONTSIZE)
     f.add_subplot(stem_plot)
     return X_flank_left, X_center, X_flank_right
 
@@ -229,20 +229,20 @@ def create_logo_plot(matplot_dict, meme_dir, logo_path, motif_length):
 def create_bar_plot(logo_plot,  X_right, height_px, total_sequences, all_meme_occurrences, motif_number, motif_evalue):
     start_point = len(all_meme_occurrences)
     height_scale = 2.25
-    bottom_scale = 2.25
+    bottom_scale = 3
     heights = np.array([height_px/height_scale*all_meme_occurrences[i]/total_sequences for i in range(0, start_point)])
     bottoms = np.array([height_px/bottom_scale for i in range(0, start_point)])
-    barlist = logo_plot.bar(X_right[-start_point:],
+    barlist = logo_plot.bar(np.array(X_right[-start_point:])-0.05*(np.array(X_right[-start_point:])),
                             heights,
-                            width=25,
+                            width=24,
                             bottom=bottoms,
                             fill=False,
                             edgecolor='black')
     occurrence = all_meme_occurrences[motif_number-1]/total_sequences*100.0
-    textstr = r'\noindent$E-Value={}$\\~\\$Enrichment={}\%$'.format(format_pvalue(motif_evalue), occurrence)
+    textstr = r'\noindent$\mathrm{E-Value}=%s$\\~\\$\mathrm{Enrichment}=%s$'%(format_pvalue(motif_evalue), '{}\%'.format(occurrence))
     index = int(math.floor(-start_point/2))
     total_heights = heights+bottoms
-    logo_plot.text(X_right[index], 1.1*total_heights[index], textstr, fontsize=14)
+    logo_plot.text(X_right[0], 1.05*total_heights[index], textstr, fontsize=14)
     barlist[motif_number-1].set_color('red')
     barlist[motif_number-1].set_hatch('/')
 
@@ -373,7 +373,7 @@ def create_annnotation_plot(matplot_dict, json_annotation):
     table.set_fontsize(LEGEND_FONTSIZE*8)
     f.add_subplot(ann_plot)
 
-def create_phylop_legend_plot(matplot_dict, motif_freq, sample_phylop_scores, control_phylop_scores, flank_length):
+def create_phylop_legend_plot(matplot_dict, motif_freq, sample_phylop_scores, control_phylop_scores, flank_length, phylop_legend_title='Phylop'):
     f = matplot_dict['figure']
     gs = matplot_dict['gridspec']
 
@@ -394,7 +394,7 @@ def create_phylop_legend_plot(matplot_dict, motif_freq, sample_phylop_scores, co
         score_pval += '}'
         score_pval = score_pval.replace('e', '*10^{').replace('-0','-')
 
-    textstr = r'$r^2_{pearson}=%.2f(p=%s)$' '\n' r'$\Delta_{Phylop}=%.2f(p=%s)$' %(corr_r2, pearsonr_pval, delta_phylop, score_pval)
+    textstr = r'$r^2_{pearson}=%.2f(p=%s)$' '\n' r'$\Delta_{%s}=%.2f(p=%s)$' %(corr_r2, pearsonr_pval, phylop_legend_title, delta_phylop, score_pval)
     txtx = 1-LEGEND_XMULTIPLIER*len(textstr)/100.0
     phlyop_plots_legend.set_frame_on(False)
     phlyop_plots_legend.set_xticks([])
@@ -458,7 +458,7 @@ def create_plot(meme_file,
                 motif_number=1,
                 flank_length=5,
                 out_file_prefix='moca',
-                phylop_legend_title='Phylop',
+                phylop_legend_title='PhyloP',
                 gerp_legend_title='Gerp'):
     meme_record = read_memefile(meme_file)
     total_sequences = get_total_sequences(meme_file)
@@ -556,15 +556,16 @@ def create_plot(meme_file,
                                                     X,
                                                     sample_phylop_scores,
                                                     motif_length,
-                                                    flank_length=flank_length)
+                                                    flank_length=flank_length,
+                                                    phylop_legend_title=phylop_legend_title)
 
         create_bar_plot(logo_plot,  X_right, matplot_dict['height_px'], total_sequences, all_meme_occurrences, motif_number, motif_evalue)
-        create_phylop_legend_plot({'figure':f, 'gridspec':gs1[0,0]},  motif_freq, sample_phylop_scores, control_phylop_scores, flank_length)
-        create_phylop_scatter({'figure':f, 'gridspec':gs1[1,0]}, motif_freq, sample_phylop_scores, control_phylop_scores, flank_length, num_occurrences, y_label='Phylop')
+        create_phylop_legend_plot({'figure':f, 'gridspec':gs1[0,0]},  motif_freq, sample_phylop_scores, control_phylop_scores, flank_length, phylop_legend_title=phylop_legend_title)
+        create_phylop_scatter({'figure':f, 'gridspec':gs1[1,0]}, motif_freq, sample_phylop_scores, control_phylop_scores, flank_length, num_occurrences, y_label=phylop_legend_title)
 
         if use_gerp:
-            create_phylop_legend_plot({'figure':f, 'gridspec':gerp_header_subplot_gs},  motif_freq, sample_gerp_scores, control_gerp_scores, flank_length)
-            create_phylop_scatter({'figure':f, 'gridspec':gerp_subplot_gs}, motif_freq, sample_gerp_scores, control_gerp_scores, flank_length, num_occurrences, y_label='Gerp')
+            create_phylop_legend_plot({'figure':f, 'gridspec':gerp_header_subplot_gs},  motif_freq, sample_gerp_scores, control_gerp_scores, flank_length, phylop_legend_title=gerp_legend_title)
+            create_phylop_scatter({'figure':f, 'gridspec':gerp_subplot_gs}, motif_freq, sample_gerp_scores, control_gerp_scores, flank_length, num_occurrences, y_label=gerp_legend_title)
 
 
         create_enrichment_plot({'figure': f,
