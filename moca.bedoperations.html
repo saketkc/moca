@@ -9,7 +9,7 @@
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bootswatch-3.3.4/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="MoCA 0.1.0 documentation" href="index.html" />
 <meta charset='utf-8'>
@@ -35,7 +35,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body>
+  <body role="document">
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -137,8 +137,8 @@
 <span id="moca-bedoperations-model-module"></span><h2>moca.bedoperations.model module<a class="headerlink" href="#module-moca.bedoperations.model" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="moca.bedoperations.model.Bedfile">
-<em class="property">class </em><tt class="descclassname">moca.bedoperations.model.</tt><tt class="descname">Bedfile</tt><big>(</big><em>filepath</em>, <em>genome_table</em>, <em>peaks_to_keep=500</em><big>)</big><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<em class="property">class </em><code class="descclassname">moca.bedoperations.model.</code><code class="descname">Bedfile</code><span class="sig-paren">(</span><em>filepath</em>, <em>genome_table</em>, <em>peaks_to_keep=500</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Class to crate a bed file object</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -154,13 +154,13 @@
 </table>
 <dl class="method">
 <dt id="moca.bedoperations.model.Bedfile.determine_peaks">
-<tt class="descname">determine_peaks</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.determine_peaks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.determine_peaks" title="Permalink to this definition">¶</a></dt>
+<code class="descname">determine_peaks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.determine_peaks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.determine_peaks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add extra columns representing peaks</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="moca.bedoperations.model.Bedfile.extract_fasta">
-<tt class="descname">extract_fasta</tt><big>(</big><em>fasta_in</em>, <em>fasta_out=None</em><big>)</big><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.extract_fasta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.extract_fasta" title="Permalink to this definition">¶</a></dt>
+<code class="descname">extract_fasta</code><span class="sig-paren">(</span><em>fasta_in</em>, <em>fasta_out=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.extract_fasta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.extract_fasta" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract fasta of bed regions</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -184,7 +184,7 @@
 
 <dl class="method">
 <dt id="moca.bedoperations.model.Bedfile.guess_bedformat">
-<tt class="descname">guess_bedformat</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.guess_bedformat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.guess_bedformat" title="Permalink to this definition">¶</a></dt>
+<code class="descname">guess_bedformat</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.guess_bedformat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.guess_bedformat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method to guess bed format</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -203,7 +203,7 @@
 
 <dl class="method">
 <dt id="moca.bedoperations.model.Bedfile.slop_bed">
-<tt class="descname">slop_bed</tt><big>(</big><em>flank_length=200</em><big>)</big><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.slop_bed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.slop_bed" title="Permalink to this definition">¶</a></dt>
+<code class="descname">slop_bed</code><span class="sig-paren">(</span><em>flank_length=200</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.slop_bed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.slop_bed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add flanking sequences to bed file</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -221,7 +221,7 @@
 
 <dl class="method">
 <dt id="moca.bedoperations.model.Bedfile.sort_by">
-<tt class="descname">sort_by</tt><big>(</big><em>columns=None</em>, <em>ascending=False</em><big>)</big><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.sort_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.sort_by" title="Permalink to this definition">¶</a></dt>
+<code class="descname">sort_by</code><span class="sig-paren">(</span><em>columns=None</em>, <em>ascending=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.sort_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.sort_by" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method to sort columns of bedfiles</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -245,7 +245,7 @@
 
 <dl class="method">
 <dt id="moca.bedoperations.model.Bedfile.write_to_scorefile">
-<tt class="descname">write_to_scorefile</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.write_to_scorefile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.write_to_scorefile" title="Permalink to this definition">¶</a></dt>
+<code class="descname">write_to_scorefile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.write_to_scorefile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.write_to_scorefile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write bed file as score file</p>
 </dd></dl>
 
@@ -270,7 +270,7 @@
     </p>
     <p>
         &copy; Copyright 2016, Saket Choudhary.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.<br/>
     </p>
   </div>
 </footer>

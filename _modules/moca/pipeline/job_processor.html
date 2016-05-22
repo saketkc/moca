@@ -9,7 +9,7 @@
     
     <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.4/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="MoCA 0.1.0 documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" />
@@ -36,7 +36,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body>
+  <body role="document">
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -118,16 +118,20 @@
     <div class="col-md-12 content">
       
   <h1>Source code for moca.pipeline.job_processor</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;Job Processor Module</span>
+<span></span><span class="sd">&quot;&quot;&quot;Job Processor Module</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">MocaException</span>
 <span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">ConfigurationParser</span>
 <span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">run_job</span>
 <span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">xstr</span>
+<span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">get_cpu_count</span>
+<span class="kn">from</span> <span class="nn">..helpers.filename</span> <span class="kn">import</span> <span class="n">touch</span>
 
-<div class="viewcode-block" id="Pipeline"><a class="viewcode-back" href="../../../moca.pipeline.html#moca.pipeline.job_processor.Pipeline">[docs]</a><span class="k">class</span> <span class="nc">Pipeline</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="kn">from</span> <span class="nn">..wigoperations</span> <span class="kn">import</span> <span class="n">WigReader</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="Pipeline"><a class="viewcode-back" href="../../../moca.pipeline.html#moca.pipeline.job_processor.Pipeline">[docs]</a><span class="k">class</span> <span class="nc">Pipeline</span><span class="p">(</span><span class="n">ConfigurationParser</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Generic class to run pipelines</span>
 
 <span class="sd">    Parameters</span>
@@ -136,19 +140,26 @@
 <span class="sd">        Optional file input to load all configurations</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_file</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">commands_run</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         <span class="c1">#TODO This can be removed if config_file is optional</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">xstr</span><span class="p">(</span><span class="n">config_file</span><span class="p">)):</span>
             <span class="c1">#TODO This should raise a warning and no xception</span>
             <span class="c1">#raise MocaException(&#39;Config file {} not found&#39;.format(config_file))</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No configuration file supplied. Defaults will be used.&#39;</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conf</span> <span class="o">=</span> <span class="n">ConfigurationParser</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">meme_default_params</span> <span class="o">=</span> <span class="s1">&#39;-maxw 20 -dna -revcomp -maxsize 1000000 -nmotifs 3&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cpu_cores</span> <span class="o">=</span> <span class="n">get_cpu_count</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meme_default_params</span> <span class="o">=</span> <span class="s1">&#39;-dna -mod zoops -nmotifs 3 -minw 6 -maxw 30 -revcomp -nostatus -maxsize 1000000 -p {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpu_cores</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">meme_strargs</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">meme_location</span> <span class="o">=</span> <span class="s1">&#39;meme&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fimo_default_params</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fimo_strargs</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fimo_location</span> <span class="o">=</span> <span class="s1">&#39;fimo&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shuffler_location</span> <span class="o">=</span> <span class="s1">&#39;fasta-shuffle-letters&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">centrimo_args</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">centrimo_location</span> <span class="o">=</span> <span class="s1">&#39;centrimo&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">memechip_default_params</span> <span class="o">=</span> <span class="s1">&#39;-dna -meme-mod zoops -meme-nmotifs 3 -meme-minw 6 -meme-maxw 30 -meme-maxsize 1000000 -meme-p {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpu_cores</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">memechip_args</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">memechip_location</span> <span class="o">=</span> <span class="s1">&#39;meme-chip&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">commands_run</span> <span class="o">=</span> <span class="p">[]</span>
 
 <div class="viewcode-block" id="Pipeline.run_meme"><a class="viewcode-back" href="../../../moca.pipeline.html#moca.pipeline.job_processor.Pipeline.run_meme">[docs]</a>    <span class="k">def</span> <span class="nf">run_meme</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fasta_in</span><span class="p">,</span> <span class="n">out_dir</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">strargs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -174,7 +185,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">meme_strargs</span> <span class="o">=</span> <span class="n">strargs</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">meme_strargs</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">meme_strargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meme_default_params</span>
-        <span class="n">meme_binary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get_binary_path</span><span class="p">(</span><span class="s1">&#39;meme&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">meme_binary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_binary_path</span><span class="p">(</span><span class="s1">&#39;meme&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">meme_binary</span> <span class="ow">or</span> <span class="n">meme_binary</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
             <span class="c1"># Use meme from envirnonment</span>
             <span class="n">meme_binary</span> <span class="o">=</span> <span class="s1">&#39;meme&#39;</span>
@@ -194,8 +205,8 @@
                   <span class="s1">&#39;stderr&#39;</span><span class="p">:</span> <span class="n">stderr</span><span class="p">,</span> <span class="s1">&#39;exitcode&#39;</span><span class="p">:</span> <span class="n">exitcode</span><span class="p">,</span>
                   <span class="s1">&#39;cmd&#39;</span><span class="p">:</span> <span class="n">cmd</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">commands_run</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;cmd&#39;</span><span class="p">:</span> <span class="n">cmd</span><span class="p">,</span> <span class="s1">&#39;metadata&#39;</span><span class="p">:</span> <span class="n">output</span><span class="p">})</span>
-        <span class="k">return</span> <span class="n">output</span>
-</div>
+        <span class="k">return</span> <span class="n">output</span></div>
+
 <div class="viewcode-block" id="Pipeline.run_fimo"><a class="viewcode-back" href="../../../moca.pipeline.html#moca.pipeline.job_processor.Pipeline.run_fimo">[docs]</a>    <span class="k">def</span> <span class="nf">run_fimo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">motif_file</span><span class="p">,</span> <span class="n">motif_num</span><span class="p">,</span> <span class="n">sequence_file</span><span class="p">,</span> <span class="n">out_dir</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">strargs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Run fimo to find out locations where motif occurs</span>
 
@@ -217,7 +228,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">out_dir</span><span class="p">:</span>
             <span class="n">out_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">motif_file</span><span class="p">),</span> <span class="s1">&#39;fimo_out&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fimo_strargs</span> <span class="o">=</span> <span class="n">xstr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fimo_strargs</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; --motif {} -oc {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">motif_num</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">out_dir</span><span class="p">))</span>
-        <span class="n">fimo_binary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get_binary_path</span><span class="p">(</span><span class="s1">&#39;meme&#39;</span><span class="p">)</span>
+        <span class="n">fimo_binary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_binary_path</span><span class="p">(</span><span class="s1">&#39;meme&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">fimo_binary</span> <span class="ow">or</span> <span class="n">fimo_binary</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
             <span class="c1"># Use meme from envirnonment</span>
             <span class="n">fimo_binary</span> <span class="o">=</span> <span class="s1">&#39;fimo&#39;</span>
@@ -234,7 +245,151 @@
                   <span class="s1">&#39;stderr&#39;</span><span class="p">:</span> <span class="n">stderr</span><span class="p">,</span> <span class="s1">&#39;exitcode&#39;</span><span class="p">:</span> <span class="n">exitcode</span><span class="p">,</span>
                   <span class="s1">&#39;cmd&#39;</span><span class="p">:</span> <span class="n">cmd</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">commands_run</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;cmd&#39;</span><span class="p">:</span> <span class="n">cmd</span><span class="p">,</span> <span class="s1">&#39;metadata&#39;</span><span class="p">:</span> <span class="n">output</span><span class="p">})</span>
-        <span class="k">return</span> <span class="n">output</span></div></div>
+        <span class="k">return</span> <span class="n">output</span></div>
+
+<div class="viewcode-block" id="Pipeline.run_fasta_shuffler"><a class="viewcode-back" href="../../../moca.pipeline.html#moca.pipeline.job_processor.Pipeline.run_fasta_shuffler">[docs]</a>    <span class="k">def</span> <span class="nf">run_fasta_shuffler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fasta_in</span><span class="p">,</span> <span class="n">fasta_out</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run fasta-dinucleotide-shuffle to generate random fasta&quot;&quot;&quot;</span>
+        <span class="n">shuffler_binary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_binary_path</span><span class="p">(</span><span class="s1">&#39;meme&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">shuffler_binary</span> <span class="ow">or</span> <span class="n">shuffler_binary</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="c1"># Use meme from envirnonment</span>
+            <span class="n">shuffler_binary</span> <span class="o">=</span> <span class="s1">&#39;fasta-shuffle-letters&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1">#  Use absolute path meme</span>
+            <span class="n">shuffler_binary</span> <span class="o">+=</span> <span class="s1">&#39;/fasta-shuffle-letters&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shuffler_location</span> <span class="o">=</span> <span class="n">shuffler_binary</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;{} -kmer 2 -dna {} &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shuffler_location</span><span class="p">,</span>
+                                             <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">fasta_in</span><span class="p">))</span>
+        <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">exitcode</span> <span class="o">=</span> <span class="n">run_job</span><span class="p">(</span><span class="n">cmd</span><span class="o">=</span><span class="n">cmd</span><span class="p">,</span>
+                                           <span class="n">cwd</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fasta_out</span><span class="p">))</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">fasta_out</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">stdout</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Pipeline.run_centrimo"><a class="viewcode-back" href="../../../moca.pipeline.html#moca.pipeline.job_processor.Pipeline.run_centrimo">[docs]</a>    <span class="k">def</span> <span class="nf">run_centrimo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fasta_in</span><span class="p">,</span> <span class="n">meme_file</span><span class="p">,</span> <span class="n">out_dir</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run centrimo</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fasta_in: string</span>
+<span class="sd">            Path to input fasta</span>
+<span class="sd">        meme_file: string</span>
+<span class="sd">            Path to MEME&#39;s motif file</span>
+<span class="sd">        out_dir: string</span>
+<span class="sd">            Output directory</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        output: dict</span>
+<span class="sd">            A dictionary with &#39;stderr,stdout,cmd,exitcode,out_dir&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">centrimo_binary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_binary_path</span><span class="p">(</span><span class="s1">&#39;meme&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">centrimo_binary</span> <span class="ow">or</span> <span class="n">centrimo_binary</span><span class="o">==</span><span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">centrimo_binary</span> <span class="o">=</span> <span class="s1">&#39;centrimo&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">centrimo_binary</span> <span class="o">+=</span> <span class="s1">&#39;/centrimo&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">centrimo_location</span> <span class="o">=</span> <span class="n">centrimo_binary</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">out_dir</span><span class="p">:</span>
+            <span class="n">out_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fasta_in</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">pardir</span><span class="p">)),</span> <span class="s1">&#39;centrimo_out&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">out_dir</span><span class="p">)</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;{} -oc {} {} {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">centrimo_location</span><span class="p">,</span> <span class="n">out_dir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">fasta_in</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">meme_file</span><span class="p">))</span>
+        <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">exitcode</span> <span class="o">=</span> <span class="n">run_job</span><span class="p">(</span><span class="n">cmd</span><span class="o">=</span><span class="n">cmd</span><span class="p">,</span>
+                                           <span class="n">cwd</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">out_dir</span><span class="p">))</span>
+
+        <span class="n">output</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;out_dir&#39;</span><span class="p">:</span> <span class="n">out_dir</span><span class="p">,</span> <span class="s1">&#39;stdout&#39;</span><span class="p">:</span> <span class="n">stdout</span><span class="p">,</span>
+                  <span class="s1">&#39;stderr&#39;</span><span class="p">:</span> <span class="n">stderr</span><span class="p">,</span> <span class="s1">&#39;exitcode&#39;</span><span class="p">:</span> <span class="n">exitcode</span><span class="p">,</span>
+                  <span class="s1">&#39;cmd&#39;</span><span class="p">:</span> <span class="n">cmd</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">commands_run</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;cmd&#39;</span><span class="p">:</span> <span class="n">cmd</span><span class="p">,</span> <span class="s1">&#39;metadata&#39;</span><span class="p">:</span> <span class="n">output</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">output</span></div>
+
+
+<div class="viewcode-block" id="Pipeline.run_memechip"><a class="viewcode-back" href="../../../moca.pipeline.html#moca.pipeline.job_processor.Pipeline.run_memechip">[docs]</a>    <span class="k">def</span> <span class="nf">run_memechip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fasta_in</span><span class="p">,</span> <span class="n">out_dir</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">strargs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run meme-chip</span>
+<span class="sd">        Run meme-chip on a given input fasta</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ---------</span>
+<span class="sd">        strargs: string</span>
+<span class="sd">            A concatenated string containing parameters as would be passed to standalone meme</span>
+<span class="sd">            Defualt parametes used: &#39;-dna -revcomp -maxsize 1000000 -nmotifs 3 -p 4&#39;</span>
+<span class="sd">            To modify: Pipeline.meme_default_params</span>
+<span class="sd">        fasta_in: string</span>
+<span class="sd">            Location of the fasta file</span>
+<span class="sd">        out_dir: string</span>
+<span class="sd">            Location to write all meme analysis output</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        output: dict</span>
+<span class="sd">            A dictionary with &#39;stderr,stdout,cmd,exitcode,out_dir&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">memechip_strargs</span> <span class="o">=</span> <span class="n">strargs</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">memechip_strargs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">memechip_strargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">memechip_default_params</span>
+        <span class="n">meme_binary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_binary_path</span><span class="p">(</span><span class="s1">&#39;meme&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">meme_binary</span> <span class="ow">or</span> <span class="n">meme_binary</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="c1"># Use meme from envirnonment</span>
+            <span class="n">meme_binary</span> <span class="o">=</span> <span class="s1">&#39;meme-chip&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1">#  Use absolute path meme</span>
+            <span class="n">meme_binary</span> <span class="o">+=</span> <span class="s1">&#39;/meme-chip&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meme_location</span> <span class="o">=</span> <span class="n">meme_binary</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">out_dir</span><span class="p">:</span>
+            <span class="n">out_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fasta_in</span><span class="p">),</span> <span class="s1">&#39;memechip_out&#39;</span><span class="p">)</span>
+        <span class="n">out_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">out_dir</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;{} {} -oc {} {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meme_location</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">memechip_strargs</span><span class="p">,</span>
+                                       <span class="n">out_dir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">fasta_in</span><span class="p">))</span>
+        <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">exitcode</span> <span class="o">=</span> <span class="n">run_job</span><span class="p">(</span><span class="n">cmd</span><span class="o">=</span><span class="n">cmd</span><span class="p">,</span>
+                                           <span class="n">cwd</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">out_dir</span><span class="p">))</span>
+
+        <span class="n">output</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;out_dir&#39;</span><span class="p">:</span> <span class="n">out_dir</span><span class="p">,</span> <span class="s1">&#39;stdout&#39;</span><span class="p">:</span> <span class="n">stdout</span><span class="p">,</span>
+                  <span class="s1">&#39;stderr&#39;</span><span class="p">:</span> <span class="n">stderr</span><span class="p">,</span> <span class="s1">&#39;exitcode&#39;</span><span class="p">:</span> <span class="n">exitcode</span><span class="p">,</span>
+                  <span class="s1">&#39;cmd&#39;</span><span class="p">:</span> <span class="n">cmd</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">commands_run</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;cmd&#39;</span><span class="p">:</span> <span class="n">cmd</span><span class="p">,</span> <span class="s1">&#39;metadata&#39;</span><span class="p">:</span> <span class="n">output</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">output</span></div>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Pipeline.save_conservation_scores"><a class="viewcode-back" href="../../../moca.pipeline.html#moca.pipeline.job_processor.Pipeline.save_conservation_scores">[docs]</a>    <span class="k">def</span> <span class="nf">save_conservation_scores</span><span class="p">(</span><span class="n">intervals</span><span class="p">,</span> <span class="n">wig_file</span><span class="p">,</span> <span class="n">out_directory</span><span class="p">,</span> <span class="n">out_prefix</span><span class="o">=</span><span class="s1">&#39;phylop&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Extract and save conservation scores</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        intervals: list</span>
+<span class="sd">            list of tuple</span>
+
+<span class="sd">        wig_file: string</span>
+<span class="sd">            Wig file location</span>
+
+<span class="sd">        out_directory: string</span>
+<span class="sd">            Out file directory</span>
+
+<span class="sd">        out_prefix: string</span>
+<span class="sd">            Out file prefix</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">wig</span> <span class="o">=</span> <span class="n">WigReader</span><span class="p">(</span><span class="n">wig_file</span><span class="p">)</span>
+        <span class="n">conservation_scores</span> <span class="o">=</span> <span class="n">wig</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">intervals</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">conservation_scores</span><span class="p">:</span>
+            <span class="n">conservation_scores_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">conservation_scores</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_directory</span><span class="p">,</span> <span class="s1">&#39;{}.raw.txt&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_prefix</span><span class="p">)),</span>
+                       <span class="n">conservation_scores</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%.4f</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_directory</span><span class="p">,</span> <span class="s1">&#39;{}.mean.txt&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_prefix</span><span class="p">)),</span>
+                       <span class="n">conservation_scores_mean</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%.4f</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">touch</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_directory</span><span class="p">,</span> <span class="s1">&#39;{}.mean.txt&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_prefix</span><span class="p">)))</span>
+            <span class="n">touch</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_directory</span><span class="p">,</span> <span class="s1">&#39;{}.raw.txt&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_prefix</span><span class="p">)))</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">get_meme_default_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meme_default_params</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">get_memechip_default_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">memechip_default_params</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">get_fimo_default_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fimo_default_params</span></div>
+
+
 </pre></div>
 
     </div>
@@ -249,7 +404,7 @@
     </p>
     <p>
         &copy; Copyright 2016, Saket Choudhary.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.<br/>
     </p>
   </div>
 </footer>

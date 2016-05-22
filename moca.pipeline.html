@@ -9,7 +9,7 @@
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bootswatch-3.3.4/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="MoCA 0.1.0 documentation" href="index.html" />
 <meta charset='utf-8'>
@@ -35,7 +35,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body>
+  <body role="document">
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -138,8 +138,8 @@
 <p>Job Processor Module</p>
 <dl class="class">
 <dt id="moca.pipeline.job_processor.Pipeline">
-<em class="property">class </em><tt class="descclassname">moca.pipeline.job_processor.</tt><tt class="descname">Pipeline</tt><big>(</big><em>config_file=None</em><big>)</big><a class="reference internal" href="_modules/moca/pipeline/job_processor.html#Pipeline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.pipeline.job_processor.Pipeline" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<em class="property">class </em><code class="descclassname">moca.pipeline.job_processor.</code><code class="descname">Pipeline</code><span class="sig-paren">(</span><em>config_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/pipeline/job_processor.html#Pipeline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.pipeline.job_processor.Pipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="moca.helpers.html#moca.helpers.configuration_parser.ConfigurationParser" title="moca.helpers.configuration_parser.ConfigurationParser"><code class="xref py py-class docutils literal"><span class="pre">moca.helpers.configuration_parser.ConfigurationParser</span></code></a></p>
 <p>Generic class to run pipelines</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -149,9 +149,55 @@
 </tr>
 </tbody>
 </table>
+<dl class="attribute">
+<dt id="moca.pipeline.job_processor.Pipeline.get_fimo_default_params">
+<code class="descname">get_fimo_default_params</code><a class="headerlink" href="#moca.pipeline.job_processor.Pipeline.get_fimo_default_params" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="moca.pipeline.job_processor.Pipeline.get_meme_default_params">
+<code class="descname">get_meme_default_params</code><a class="headerlink" href="#moca.pipeline.job_processor.Pipeline.get_meme_default_params" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="moca.pipeline.job_processor.Pipeline.get_memechip_default_params">
+<code class="descname">get_memechip_default_params</code><a class="headerlink" href="#moca.pipeline.job_processor.Pipeline.get_memechip_default_params" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="moca.pipeline.job_processor.Pipeline.run_centrimo">
+<code class="descname">run_centrimo</code><span class="sig-paren">(</span><em>fasta_in</em>, <em>meme_file</em>, <em>out_dir</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/pipeline/job_processor.html#Pipeline.run_centrimo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.pipeline.job_processor.Pipeline.run_centrimo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run centrimo</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fasta_in</strong> (<em>string</em>) &#8211; Path to input fasta</li>
+<li><strong>meme_file</strong> (<em>string</em>) &#8211; Path to MEME&#8217;s motif file</li>
+<li><strong>out_dir</strong> (<em>string</em>) &#8211; Output directory</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>output</strong> &#8211; A dictionary with &#8216;stderr,stdout,cmd,exitcode,out_dir&#8217;</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="moca.pipeline.job_processor.Pipeline.run_fasta_shuffler">
+<code class="descname">run_fasta_shuffler</code><span class="sig-paren">(</span><em>fasta_in</em>, <em>fasta_out</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/pipeline/job_processor.html#Pipeline.run_fasta_shuffler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.pipeline.job_processor.Pipeline.run_fasta_shuffler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run fasta-dinucleotide-shuffle to generate random fasta</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="moca.pipeline.job_processor.Pipeline.run_fimo">
-<tt class="descname">run_fimo</tt><big>(</big><em>motif_file</em>, <em>motif_num</em>, <em>sequence_file</em>, <em>out_dir=None</em>, <em>strargs=None</em><big>)</big><a class="reference internal" href="_modules/moca/pipeline/job_processor.html#Pipeline.run_fimo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.pipeline.job_processor.Pipeline.run_fimo" title="Permalink to this definition">¶</a></dt>
+<code class="descname">run_fimo</code><span class="sig-paren">(</span><em>motif_file</em>, <em>motif_num</em>, <em>sequence_file</em>, <em>out_dir=None</em>, <em>strargs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/pipeline/job_processor.html#Pipeline.run_fimo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.pipeline.job_processor.Pipeline.run_fimo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run fimo to find out locations where motif occurs</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -172,7 +218,7 @@
 
 <dl class="method">
 <dt id="moca.pipeline.job_processor.Pipeline.run_meme">
-<tt class="descname">run_meme</tt><big>(</big><em>fasta_in</em>, <em>out_dir=None</em>, <em>strargs=None</em><big>)</big><a class="reference internal" href="_modules/moca/pipeline/job_processor.html#Pipeline.run_meme"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.pipeline.job_processor.Pipeline.run_meme" title="Permalink to this definition">¶</a></dt>
+<code class="descname">run_meme</code><span class="sig-paren">(</span><em>fasta_in</em>, <em>out_dir=None</em>, <em>strargs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/pipeline/job_processor.html#Pipeline.run_meme"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.pipeline.job_processor.Pipeline.run_meme" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run meme
 Run meme on a given input fasta</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -198,6 +244,48 @@ To modify: Pipeline.meme_default_params</li>
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="moca.pipeline.job_processor.Pipeline.run_memechip">
+<code class="descname">run_memechip</code><span class="sig-paren">(</span><em>fasta_in</em>, <em>out_dir=None</em>, <em>strargs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/pipeline/job_processor.html#Pipeline.run_memechip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.pipeline.job_processor.Pipeline.run_memechip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run meme-chip
+Run meme-chip on a given input fasta</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>strargs</strong> (<em>string</em>) &#8211; A concatenated string containing parameters as would be passed to standalone meme
+Defualt parametes used: &#8216;-dna -revcomp -maxsize 1000000 -nmotifs 3 -p 4&#8217;
+To modify: Pipeline.meme_default_params</li>
+<li><strong>fasta_in</strong> (<em>string</em>) &#8211; Location of the fasta file</li>
+<li><strong>out_dir</strong> (<em>string</em>) &#8211; Location to write all meme analysis output</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>output</strong> &#8211; A dictionary with &#8216;stderr,stdout,cmd,exitcode,out_dir&#8217;</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="moca.pipeline.job_processor.Pipeline.save_conservation_scores">
+<em class="property">static </em><code class="descname">save_conservation_scores</code><span class="sig-paren">(</span><em>intervals</em>, <em>wig_file</em>, <em>out_directory</em>, <em>out_prefix='phylop'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/pipeline/job_processor.html#Pipeline.save_conservation_scores"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.pipeline.job_processor.Pipeline.save_conservation_scores" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract and save conservation scores
+:param intervals: list of tuple
+:type intervals: list
+:param wig_file: Wig file location
+:type wig_file: string
+:param out_directory: Out file directory
+:type out_directory: string
+:param out_prefix: Out file prefix
+:type out_prefix: string</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -220,7 +308,7 @@ To modify: Pipeline.meme_default_params</li>
     </p>
     <p>
         &copy; Copyright 2016, Saket Choudhary.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.<br/>
     </p>
   </div>
 </footer>

@@ -9,7 +9,7 @@
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bootswatch-3.3.4/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="MoCA 0.1.0 documentation" href="index.html" />
 <meta charset='utf-8'>
@@ -35,7 +35,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body>
+  <body role="document">
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -137,56 +137,95 @@
 <span id="moca-plotter-plotter-module"></span><h2>moca.plotter.plotter module<a class="headerlink" href="#module-moca.plotter.plotter" title="Permalink to this headline">¶</a></h2>
 <p>Generate conservation plots</p>
 <dl class="function">
+<dt id="moca.plotter.plotter.create_annnotation_plot">
+<code class="descclassname">moca.plotter.plotter.</code><code class="descname">create_annnotation_plot</code><span class="sig-paren">(</span><em>matplot_dict</em>, <em>json_annotation</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/plotter/plotter.html#create_annnotation_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.create_annnotation_plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="moca.plotter.plotter.create_bar_plot">
+<code class="descclassname">moca.plotter.plotter.</code><code class="descname">create_bar_plot</code><span class="sig-paren">(</span><em>logo_plot</em>, <em>X_right</em>, <em>height_px</em>, <em>total_sequences</em>, <em>all_meme_occurrences</em>, <em>motif_number</em>, <em>motif_evalue</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/plotter/plotter.html#create_bar_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.create_bar_plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="moca.plotter.plotter.create_enrichment_plot">
+<code class="descclassname">moca.plotter.plotter.</code><code class="descname">create_enrichment_plot</code><span class="sig-paren">(</span><em>matplot_dict</em>, <em>motif_number</em>, <em>centrimo_txt</em>, <em>centrimo_stats</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/plotter/plotter.html#create_enrichment_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.create_enrichment_plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="moca.plotter.plotter.create_logo_plot">
+<code class="descclassname">moca.plotter.plotter.</code><code class="descname">create_logo_plot</code><span class="sig-paren">(</span><em>matplot_dict</em>, <em>meme_dir</em>, <em>logo_path</em>, <em>motif_length</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/plotter/plotter.html#create_logo_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.create_logo_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create stem plot for phylop/scores scoresi</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>matplot_dict</strong> (<em>dict like</em>) &#8211; A dict like object with the following fields: {&#8216;figure&#8217;: plt.figure, &#8216;gridspec&#8217;: plt.gridspec, &#8216;shareX&#8217;: plt.axes}
+where &#8216;gridspec&#8217; represents the grid specification  and shareX represents the axis to share X axis with.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="moca.plotter.plotter.create_phylop_legend_plot">
+<code class="descclassname">moca.plotter.plotter.</code><code class="descname">create_phylop_legend_plot</code><span class="sig-paren">(</span><em>matplot_dict</em>, <em>motif_freq</em>, <em>sample_phylop_scores</em>, <em>control_phylop_scores</em>, <em>flank_length</em>, <em>phylop_legend_title='Phylop'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/plotter/plotter.html#create_phylop_legend_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.create_phylop_legend_plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="moca.plotter.plotter.create_phylop_scatter">
+<code class="descclassname">moca.plotter.plotter.</code><code class="descname">create_phylop_scatter</code><span class="sig-paren">(</span><em>matplot_dict</em>, <em>motif_freq</em>, <em>sample_phylop_scores</em>, <em>control_phylop_scores</em>, <em>flank_length</em>, <em>num_occurrences</em>, <em>y_label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/plotter/plotter.html#create_phylop_scatter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.create_phylop_scatter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="moca.plotter.plotter.create_plot">
-<tt class="descclassname">moca.plotter.plotter.</tt><tt class="descname">create_plot</tt><big>(</big><em>meme_file</em>, <em>motif_number</em>, <em>flanking_sites</em>, <em>sample_phylop_file</em>, <em>control_phylop_file</em>, <em>sample_gerp_file</em>, <em>control_gerp_file</em>, <em>peak_file</em>, <em>fimo_file</em>, <em>annotate</em><big>)</big><a class="reference internal" href="_modules/moca/plotter/plotter.html#create_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.create_plot" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">moca.plotter.plotter.</code><code class="descname">create_plot</code><span class="sig-paren">(</span><em>meme_file</em>, <em>peak_file</em>, <em>fimo_file</em>, <em>sample_phylop_file</em>, <em>control_phylop_file</em>, <em>centrimo_dir</em>, <em>sample_gerp_file=None</em>, <em>control_gerp_file=None</em>, <em>annotate=None</em>, <em>motif_number=1</em>, <em>flank_length=5</em>, <em>out_file_prefix='moca'</em>, <em>phylop_legend_title='PhyloP'</em>, <em>gerp_legend_title='Gerp'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/plotter/plotter.html#create_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.create_plot" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
-<dt id="moca.plotter.plotter.find_max_occurence">
-<tt class="descclassname">moca.plotter.plotter.</tt><tt class="descname">find_max_occurence</tt><big>(</big><em>profile</em>, <em>max_count=2</em><big>)</big><a class="reference internal" href="_modules/moca/plotter/plotter.html#find_max_occurence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.find_max_occurence" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return profile with base corresponding to max scores[CHECK!]</p>
+<dt id="moca.plotter.plotter.create_stemplot">
+<code class="descclassname">moca.plotter.plotter.</code><code class="descname">create_stemplot</code><span class="sig-paren">(</span><em>matplot_dict</em>, <em>X_values</em>, <em>Y_values</em>, <em>motif_length</em>, <em>flank_length=0</em>, <em>phylop_legend_title='PhyloP'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/plotter/plotter.html#create_stemplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.create_stemplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create stem plot for phylop/scores scoresi</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>matplot_dict</strong> (<em>dict like</em>) &#8211; A dict like object with the following fields: {&#8216;figure&#8217;: plt.figure, &#8216;gridspec&#8217;: plt.gridspec, &#8216;shareX&#8217;: plt.axes}
+where &#8216;gridspec&#8217; represents the grid specification  and shareX represents the axis to share X axis with.</li>
+<li><strong>figure</strong> (<em>plt.figure</em>) &#8211; matplotlib figure</li>
+<li><strong>X_values</strong> (<em>np.array</em>) &#8211; Array of X values</li>
+<li><strong>Y_values</strong> (<em>np.array</em>) &#8211; Array of Y-values</li>
+<li><strong>motif_length</strong> (<em>int</em>) &#8211; Motif length(redundant)</li>
+<li><strong>flank_length</strong> (<em>int</em>) &#8211; Number of flanking sites</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
-<dt id="moca.plotter.plotter.get_motif_distances">
-<tt class="descclassname">moca.plotter.plotter.</tt><tt class="descname">get_motif_distances</tt><big>(</big><em>peak_file</em>, <em>fimo_file</em><big>)</big><a class="reference internal" href="_modules/moca/plotter/plotter.html#get_motif_distances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.get_motif_distances" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get distance between motif center and peak position</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="moca.plotter.plotter.path_leaf">
-<tt class="descclassname">moca.plotter.plotter.</tt><tt class="descname">path_leaf</tt><big>(</big><em>path</em><big>)</big><a class="reference internal" href="_modules/moca/plotter/plotter.html#path_leaf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.path_leaf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the parent path, and the childname
-given an absolute path.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="moca.plotter.plotter.perform_t_test">
-<tt class="descclassname">moca.plotter.plotter.</tt><tt class="descname">perform_t_test</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="reference internal" href="_modules/moca/plotter/plotter.html#perform_t_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.perform_t_test" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="moca.plotter.plotter.position_wise_profile">
-<tt class="descclassname">moca.plotter.plotter.</tt><tt class="descname">position_wise_profile</tt><big>(</big><em>counts_dict</em>, <em>length</em><big>)</big><a class="reference internal" href="_modules/moca/plotter/plotter.html#position_wise_profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.position_wise_profile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert base to position wise profile</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="moca.plotter.plotter.read_fimo_file">
-<tt class="descclassname">moca.plotter.plotter.</tt><tt class="descname">read_fimo_file</tt><big>(</big><em>fimo_file</em><big>)</big><a class="reference internal" href="_modules/moca/plotter/plotter.html#read_fimo_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.read_fimo_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fimo file reader</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="moca.plotter.plotter.read_peaks">
-<tt class="descclassname">moca.plotter.plotter.</tt><tt class="descname">read_peaks</tt><big>(</big><em>peak_file</em><big>)</big><a class="reference internal" href="_modules/moca/plotter/plotter.html#read_peaks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.read_peaks" title="Permalink to this definition">¶</a></dt>
-<dd><p>Peak file reader</p>
+<dt id="moca.plotter.plotter.init_figure">
+<code class="descclassname">moca.plotter.plotter.</code><code class="descname">init_figure</code><span class="sig-paren">(</span><em>meme_dir=None</em>, <em>X_values=None</em>, <em>motif=1</em>, <em>use_gerp=False</em>, <em>annotate=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/plotter/plotter.html#init_figure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.init_figure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize plot based on logo size</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="moca.plotter.plotter.save_figure">
-<tt class="descclassname">moca.plotter.plotter.</tt><tt class="descname">save_figure</tt><big>(</big><em>fig</em>, <em>ax</em>, <em>name</em>, <em>form</em><big>)</big><a class="reference internal" href="_modules/moca/plotter/plotter.html#save_figure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.save_figure" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save a given subplot(ax)</p>
+<code class="descclassname">moca.plotter.plotter.</code><code class="descname">save_figure</code><span class="sig-paren">(</span><em>fig</em>, <em>ax</em>, <em>name</em>, <em>form</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/plotter/plotter.html#save_figure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.save_figure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save figure to file</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="moca.plotter.plotter.setp_lines">
+<code class="descclassname">moca.plotter.plotter.</code><code class="descname">setp_lines</code><span class="sig-paren">(</span><em>stemlines</em>, <em>markerline</em>, <em>baseline</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/plotter/plotter.html#setp_lines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.setp_lines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up format for stem plots</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="moca.plotter.plotter.setup_matplotlib">
+<code class="descclassname">moca.plotter.plotter.</code><code class="descname">setup_matplotlib</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/plotter/plotter.html#setup_matplotlib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.plotter.plotter.setup_matplotlib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup matplotlib</p>
 </dd></dl>
 
 </div>
@@ -208,7 +247,7 @@ given an absolute path.</p>
     </p>
     <p>
         &copy; Copyright 2016, Saket Choudhary.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.<br/>
     </p>
   </div>
 </footer>

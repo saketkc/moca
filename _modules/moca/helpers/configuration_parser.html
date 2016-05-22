@@ -9,7 +9,7 @@
     
     <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.4/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="MoCA 0.1.0 documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" />
@@ -36,7 +36,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body>
+  <body role="document">
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -118,7 +118,7 @@
     <div class="col-md-12 content">
       
   <h1>Source code for moca.helpers.configuration_parser</h1><div class="highlight"><pre>
-<span class="kn">import</span> <span class="nn">csv</span>
+<span></span><span class="kn">import</span> <span class="nn">csv</span>
 <span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">MocaException</span>
 <span class="kn">import</span> <span class="nn">ConfigParser</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -128,9 +128,9 @@
 
 <span class="sd">    Source: http://stackoverflow.com/a/377028/756986</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">X_OK</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">X_OK</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="ConfigurationParser"><a class="viewcode-back" href="../../../moca.helpers.html#moca.helpers.configuration_parser.ConfigurationParser">[docs]</a><span class="k">class</span> <span class="nc">ConfigurationParser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse config file</span>
@@ -156,7 +156,7 @@
         <span class="k">return</span> <span class="n">config</span>
 
     <span class="k">def</span> <span class="nf">_check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="bp">NotImplemented</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
 <div class="viewcode-block" id="ConfigurationParser.get_all_sections"><a class="viewcode-back" href="../../../moca.helpers.html#moca.helpers.configuration_parser.ConfigurationParser.get_all_sections">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_sections</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get all sections in config file</span>
@@ -166,8 +166,24 @@
 <span class="sd">        sections: list</span>
 <span class="sd">            List of all sections</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_blob</span><span class="o">.</span><span class="n">sections</span><span class="p">()</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_blob</span><span class="o">.</span><span class="n">sections</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ConfigurationParser.get_section"><a class="viewcode-back" href="../../../moca.helpers.html#moca.helpers.configuration_parser.ConfigurationParser.get_section">[docs]</a>    <span class="k">def</span> <span class="nf">get_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get all keys inside a particular section</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        section_name: str</span>
+<span class="sd">            Section Name</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        section_dict: dict</span>
+<span class="sd">            Dict of all keys inside header</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">section_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_blob</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">section_name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">section_dict</span></div>
+
 <div class="viewcode-block" id="ConfigurationParser.get_all_genomes"><a class="viewcode-back" href="../../../moca.helpers.html#moca.helpers.configuration_parser.ConfigurationParser.get_all_genomes">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_genomes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get all genome names as specified in config file</span>
 
@@ -179,8 +195,8 @@
         <span class="n">sections</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_sections</span><span class="p">()</span>
         <span class="n">genome_names</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;genome&#39;</span><span class="p">),</span> <span class="n">sections</span><span class="p">)</span>
         <span class="n">genome_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;genome:&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">),</span> <span class="n">genome_names</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">genome_names</span>
-</div>
+        <span class="k">return</span> <span class="n">genome_names</span></div>
+
 <div class="viewcode-block" id="ConfigurationParser.get_genome_data"><a class="viewcode-back" href="../../../moca.helpers.html#moca.helpers.configuration_parser.ConfigurationParser.get_genome_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_genome_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">genome_name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return all files associated with a genome in the  config file</span>
 
@@ -196,7 +212,8 @@
 <span class="sd">            Format: {&#39;genome_name&#39;: {&#39;&lt;wig_prefix&gt;&#39;: wig_prefix_path, &#39;genome_table&#39;: genome_table_path}}</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">genome_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_blob</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;genome:{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">genome_name</span><span class="p">)))</span>
-</div>
+        <span class="k">return</span> <span class="n">genome_dict</span></div>
+
 <div class="viewcode-block" id="ConfigurationParser.get_binary_path"><a class="viewcode-back" href="../../../moca.helpers.html#moca.helpers.configuration_parser.ConfigurationParser.get_binary_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_binary_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">binary_name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Returns absolute path to installed binaries</span>
 
@@ -221,8 +238,9 @@
                 <span class="k">pass</span>
                 <span class="c1">#TODO This should also raise warning</span>
                 <span class="c1">#raise MocaException(&#39;{}/meme is not executable&#39;.format(binary_path))</span>
-        <span class="k">return</span> <span class="n">binary_path</span>
-</pre></div></div></div>
+        <span class="k">return</span> <span class="n">binary_path</span></div></div>
+
+</pre></div>
 
     </div>
       
@@ -236,7 +254,7 @@
     </p>
     <p>
         &copy; Copyright 2016, Saket Choudhary.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.<br/>
     </p>
   </div>
 </footer>
