@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 """MoCA CLI"""
 import os
-import numpy as np
 import click
-from moca import bedoperations, wigoperations, pipeline
-from moca.bedoperations import fimo_to_sites
+import sys
+from moca import bedoperations, pipeline
+from moca.bedoperations.fimo import get_start_stop_intervals
 from moca.helpers import filename_extension
 from moca.helpers import read_memefile
 from moca.helpers.job_executor import safe_makedir
@@ -14,36 +13,6 @@ from moca.plotter import create_plot
 from tqdm import tqdm
 from time import sleep
 bar = None
-
-def touch(fp):
-    open(fp, 'a').close()
-
-def save_score(directory, phylop_wig, gerp_wig, flanking_sites):
-    fimo_file = os.path.join(directory, 'fimo.txt')
-    fimo_sites = fimo_to_sites(fimo_file)
-
-    subset = fimo_sites.loc[:, ['chrom', 'motifStartZeroBased', 'motifEndOneBased', 'strand']]
-    subset.loc[:, 'motifStartZeroBased'] = subset['motifStartZeroBased'] - flanking_sites
-    subset.loc[:, 'motifEndOneBased'] = subset['motifEndOneBased'] + flanking_sites
-    intervals = [tuple(x) for x in subset.to_records(index=False)]
-
-    scores_phylop = phylop_wig.query(intervals)
-    scores_gerp = gerp_wig.query(intervals)
-
-    if len(fimo_sites.index):
-        scores_phylop_mean = np.nanmean(scores_phylop, axis=0)
-        scores_gerp_mean = np.nanmean(scores_gerp, axis=0)
-
-        np.savetxt(os.path.join(directory, 'phylop.raw.txt'), scores_phylop, fmt='%.4f')
-        np.savetxt(os.path.join(directory, 'gerp.raw.txt'), scores_gerp, fmt='%.4f')
-
-        np.savetxt(os.path.join(directory, 'phylop.mean.txt'), scores_phylop_mean, fmt='%.4f')
-        np.savetxt(os.path.join(directory, 'gerp.mean.txt'), scores_gerp_mean, fmt='%.4f')
-    else:
-        touch(os.path.join(directory, 'phylop.raw.txt'))
-        touch(os.path.join(directory, 'gerp.raw.txt'))
-        touch(os.path.join(directory, 'phylop.mean.txt'))
-        touch(os.path.join(directory, 'gerp.mean.txt'))
 
 def show_progress(msg):
     bar.set_description(msg)
@@ -81,19 +50,19 @@ def cli(bedfile, oc, configuration, flank_seq, flank_motif, genome_build):
 
     moca_pipeline = pipeline.Pipeline(configuration)
     genome_data = moca_pipeline.get_genome_data(genome_build)
-    phylop = genome_data['phylop_wig']
-    gerp = genome_data['gerp_wig']
+    phylop_wigfile = genome_data['phylop_wig']
+    gerp_wigfile = genome_data['gerp_wig']
+    phastcons_wigfile = genome_data['phastcons_wig']
     genome_fasta = genome_data['fasta']
     genome_table = genome_data['genome_table']
 
     query_fasta = os.path.join(moca_out_dir, bedfile_fn + '_flank_{}.fasta'.format(flank_seq))
-    bed_df = bedoperations.Bedfile(bedfile, genome_table)
 
+    bed_df = bedoperations.Bedfile(bedfile, genome_table)
     bed_df.determine_peaks()
     bed_df.slop_bed(flank_length=flank_seq)
+
     show_progress('Extracting Fasta')
-
-
     bed_df.extract_fasta(fasta_in=genome_fasta, fasta_out=query_fasta)
 
     #memechip_out_dir = os.path.join(moca_out_dir, 'memechip_analysis')
@@ -106,11 +75,6 @@ def cli(bedfile, oc, configuration, flank_seq, flank_motif, genome_build):
 
     meme_file = os.path.join(meme_out_dir, 'meme.txt')
     meme_summary = read_memefile(meme_file)
-
-    show_progress('Reading Phylop bigwig')
-    phylop_wig = wigoperations.WigReader(phylop)
-    show_progress('Reading Gerp bigwig')
-    gerp_wig = wigoperations.WigReader(gerp)
 
     centrimo_main_dir = os.path.join(moca_out_dir, 'centrimo_out')
     centrimo_main = moca_pipeline.run_centrimo(meme_file=meme_file,
@@ -140,22 +104,56 @@ def cli(bedfile, oc, configuration, flank_seq, flank_motif, genome_build):
                                            out_dir=fimo_main_dir)
 
 
+        fimo_rand_file = os.path.join(fimo_rand_dir, 'fimo.txt')
+        fimo_main_file = os.path.join(fimo_main_dir, 'fimo.txt')
 
-        show_progress('Processing Scores Random')
-        save_score(fimo_rand_dir, phylop_wig, gerp_wig, flank_motif)
-        show_progress('Processing Scores Main')
-        save_score(fimo_main_dir, phylop_wig, gerp_wig, flank_motif)
-        create_plot(meme_file=meme_file,
-                    peak_file=os.path.join(root_dir, bedfile_fn + '.sorted'),
-                    fimo_file=os.path.join(fimo_main_dir, 'fimo.sites.txt'),
-                    sample_phylop_file=os.path.join(fimo_main_dir, 'phylop.mean.txt'),
-                    control_phylop_file=os.path.join(fimo_rand_dir, 'phylop.mean.txt'),
-                    centrimo_dir=centrimo_main_dir,
-                    sample_gerp_file=os.path.join(fimo_main_dir, 'gerp.mean.txt'),
-                    control_gerp_file=os.path.join(fimo_rand_dir, 'gerp.mean.txt'),
-                    annotate=False,
-                    motif_number=motif,
-                    flank_length=flank_motif
-                    )
+        main_intervals = get_start_stop_intervals(fimo_main_file, flank_length=flank_motif)
+        random_intervals = get_start_stop_intervals(fimo_rand_file, flank_length=flank_motif)
+
+        moca_pipeline.save_conservation_scores(main_intervals, phylop_wigfile, fimo_main_dir, out_prefix='phylop')
+        moca_pipeline.save_conservation_scores(random_intervals, phylop_wigfile, fimo_rand_dir, out_prefix='phylop')
+        moca_pipeline.save_conservation_scores(main_intervals, gerp_wigfile, fimo_main_dir, out_prefix='gerp')
+        moca_pipeline.save_conservation_scores(random_intervals, gerp_wigfile, fimo_rand_dir, out_prefix='gerp')
+        moca_pipeline.save_conservation_scores(main_intervals, phastcons_wigfile, fimo_main_dir, out_prefix='phastcons')
+        moca_pipeline.save_conservation_scores(random_intervals, phastcons_wigfile, fimo_rand_dir, out_prefix='phastcons')
+
+
+        try:
+            create_plot(meme_file=meme_file,
+                        peak_file=os.path.join(root_dir, bedfile_fn + '.sorted'),
+                        fimo_file=os.path.join(fimo_main_dir, 'fimo.sites.txt'),
+                        sample_phylop_file=os.path.join(fimo_main_dir, 'phylop.mean.txt'),
+                        control_phylop_file=os.path.join(fimo_rand_dir, 'phylop.mean.txt'),
+                        centrimo_dir=centrimo_main_dir,
+                        sample_gerp_file=os.path.join(fimo_main_dir, 'gerp.mean.txt'),
+                        control_gerp_file=os.path.join(fimo_rand_dir, 'gerp.mean.txt'),
+                        annotate=False,
+                        motif_number=motif,
+                        flank_length=flank_motif,
+                        out_file_prefix='moca_phylop',
+                        phylop_legend_title = 'PhyloP'
+                        )
+        except Exception as e:
+            sys.stderr.write('{}####\n\n Traceback: {}\n\n'.format(meme_file, e))
+            continue
+
+        try:
+            create_plot(meme_file=meme_file,
+                        peak_file=os.path.join(root_dir, bedfile_fn + '.sorted'),
+                        fimo_file=os.path.join(fimo_main_dir, 'fimo.sites.txt'),
+                        sample_phylop_file=os.path.join(fimo_main_dir, 'phastcons.mean.txt'),
+                        control_phylop_file=os.path.join(fimo_rand_dir, 'phastcons.mean.txt'),
+                        centrimo_dir=centrimo_main_dir,
+                        sample_gerp_file=os.path.join(fimo_main_dir, 'gerp.mean.txt'),
+                        control_gerp_file=os.path.join(fimo_rand_dir, 'gerp.mean.txt'),
+                        annotate=False,
+                        motif_number=motif,
+                        flank_length=flank_motif,
+                        out_file_prefix='moca_phastcons',
+                        phylop_legend_title = 'PhastCons'
+                        )
+        except Exception as e:
+            sys.stderr.write('{}####\n\n Traceback: {}\n\n'.format(meme_file, e))
+            continue
+
     bar.close()
-

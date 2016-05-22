@@ -9,7 +9,6 @@ from ..helpers import get_cpu_count
 from ..helpers.filename import touch
 
 from ..wigoperations import WigReader
-from ..bedoperations.fimo import get_start_stop_intervals
 import numpy as np
 
 class Pipeline(ConfigurationParser):
@@ -229,6 +228,7 @@ class Pipeline(ConfigurationParser):
         self.commands_run.append({'cmd': cmd, 'metadata': output})
         return output
 
+    @staticmethod
     def save_conservation_scores(intervals, wig_file, out_directory, out_prefix='phylop'):
         """Extract and save conservation scores
         Parameters

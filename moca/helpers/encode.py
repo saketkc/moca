@@ -7,7 +7,7 @@ from pymongo import MongoClient
 from ..helpers import safe_makedir
 import StringIO
 import gzip
-
+import json
 
 __base_url__ = 'https://www.encodeproject.org/'
 
@@ -44,7 +44,11 @@ def save_metadata(metadata):
     client = MongoClient()
     db = client.moca_encode_tf
     result = db.tf_metadata.insert_one(metadata)
-    print result.inserted_id
+
+def save_metadata_json(metadata, directory):
+    """Save metadata locally"""
+    with open('metadata.json', 'w') as outfile:
+        json.dump(metadata, outfile)
 
 def get_experiment(experiment_id):
     """Get and save metadata for an experiment"""

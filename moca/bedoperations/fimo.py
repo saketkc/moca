@@ -54,12 +54,15 @@ def fimo_to_sites(fimo_file):
     fimo_df.to_csv(fimo_sites, index=False, sep='\t')
     return fimo_df
 
-def get_start_stop_intervals(fimo_file):
+def get_start_stop_intervals(fimo_file, flank_length):
     """Return start,stop intervals of fimo hits
     Parameters
     ----------
     fimo_file: str
         Absolute path to fimo file
+
+    flank_length: int
+        Offset used for extracting flanking sequences(included in the interval)
 
     Returns
     -------
@@ -70,7 +73,7 @@ def get_start_stop_intervals(fimo_file):
 
     fimo_sites = fimo_to_sites(fimo_file)
     subset = fimo_sites.loc[:, ['chrom', 'motifStartZeroBased', 'motifEndOneBased', 'strand']]
-    subset.loc[:, 'motifStartZeroBased'] = subset['motifStartZeroBased'] - flanking_sites
-    subset.loc[:, 'motifEndOneBased'] = subset['motifEndOneBased'] + flanking_sites
+    subset.loc[:, 'motifStartZeroBased'] = subset['motifStartZeroBased'] - flank_length
+    subset.loc[:, 'motifEndOneBased'] = subset['motifEndOneBased'] + flank_length
     intervals = [tuple(x) for x in subset.to_records(index=False)]
     return intervals
