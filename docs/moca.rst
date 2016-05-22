@@ -10,6 +10,7 @@ Subpackages
     moca.helpers
     moca.pipeline
     moca.plotter
+    moca.webservice
     moca.wigoperations
 
 Submodules
