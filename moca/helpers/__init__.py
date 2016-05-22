@@ -7,6 +7,8 @@ from .job_executor import run_job
 from .job_executor import safe_makedir
 from .xstr import xstr
 from .filename import filename_extension
+from .filename import get_filename_without_ext
+from .filename import search_files
 from .meme import read_memefile
 from .meme import get_motif_ic
 from .meme import get_motif_bg_freq

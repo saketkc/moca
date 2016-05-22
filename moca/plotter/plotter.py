@@ -32,7 +32,7 @@ from moca.helpers.seqstats import get_pearson_corr
 from moca.helpers.seqstats import perform_OLS
 from moca.helpers.seqstats import get_flanking_scores, remove_flanking_scores, format_pvalue
 
-MAGIC_NUM=39.33333333
+MAGIC_NUM = 39.33333333
 COUNT_TYPE = 'counts'
 # Use 'pssm' or 'counts' to score:
 bases = ['A', 'T', 'G', 'C']
@@ -402,7 +402,6 @@ def create_phylop_legend_plot(matplot_dict, motif_freq, sample_phylop_scores, co
     phlyop_plots_legend.text(txtx, TXT_YPOS, textstr, fontsize=LEGEND_FONTSIZE)
     f.add_subplot(phlyop_plots_legend)
 
-
 def create_phylop_scatter(matplot_dict, motif_freq, sample_phylop_scores, control_phylop_scores, flank_length, num_occurrences, y_label):
 
     f = matplot_dict['figure']
@@ -457,7 +456,10 @@ def create_plot(meme_file,
                 control_gerp_file=None,
                 annotate=None,
                 motif_number=1,
-                flank_length=5):
+                flank_length=5,
+                out_file_prefix='moca',
+                phylop_legend_title='Phylop',
+                gerp_legend_title='Gerp'):
     meme_record = read_memefile(meme_file)
     total_sequences = get_total_sequences(meme_file)
     record = meme_record['motif_records'][motif_number-1]
@@ -565,21 +567,22 @@ def create_plot(meme_file,
             create_phylop_scatter({'figure':f, 'gridspec':gerp_subplot_gs}, motif_freq, sample_gerp_scores, control_gerp_scores, flank_length, num_occurrences, y_label='Gerp')
 
 
-        create_enrichment_plot({'figure':f,
-                                'gridspec_header':histogram_header_subplot_gs,
+        create_enrichment_plot({'figure': f,
+                                'gridspec_header': histogram_header_subplot_gs,
                                 'gridspec_body': histogram_subplot_gs},
                                motif_number,
                                centrimo_txt,
                                centrimo_stats)
 
         if 'rc' not in ln:
-            out_file = os.path.join(output_dir,'moca{}.png'.format(motif_number))
+            out_file = os.path.join(output_dir,'{}{}.png'.format(out_file_prefix, motif_number))
         else:
-            out_file = os.path.join(output_dir,'moca{}_rc.png'.format(motif_number))
+            out_file = os.path.join(output_dir,'{}{}_rc.png'.format(out_file_prefix, motif_number))
 
         if annotate:
-            create_annnotation_plot({'figure':f, 'gridspec_header':ann_header_subplot_gs,
-                                'gridspec_body': ann_subplot_gs}, annotate)
+            create_annnotation_plot({'figure': f,
+                                     'gridspec_header': ann_header_subplot_gs,
+                                     'gridspec_body': ann_subplot_gs}, annotate)
 
         f.savefig(out_file, figsize=figsize, dpi=DPI)
 

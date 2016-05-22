@@ -13,7 +13,28 @@
 
 
     <div id="results">
-        <table id="table" data-search="true">
+        <table id="table" data-search="true" cellpadding="0" cellspacing="0" border="0"
+            data-detail-view="true"
+            data-show-columns="true"
+            data-show-multi-sort="true" 
+            data-pagination="true"
+            data-detail-formatter="detailFormatter">
+            <thead>
+                <tr>
+                    <th data-field="encode_id" data-sortable="true">Encode ID</th>
+                    <th data-field="motif_number" data-sortable="true">Motif #</th>
+                    <th data-field="center_enrichment" data-sortable="true">Center Enrichment</th>
+                    <th data-field="delta_phylop_over_control" data-sortable="true">Delta Phylop</th>
+                    <th data-field="delta_phylop_pval" data-sortable="true">Delta Phylop pval</th>
+                    <th data-field="delta_gerp_over_control" data-sortable="true">Delta Gerp</th>
+                    <th data-field="delta_gerp_pval" data-sortable="true">Delta Gerp pval</th>
+                    <th data-field="r_phylop_sample" data-sortable="true">r Phylop</th>
+                    <th data-field="r_phylop_sample_pval" data-sortable="true">r Phylop pval</th>
+                    <th data-field="r_gerp_sample" data-sortable="true">r Gerp</th>
+                    <th data-field="r_gerp_sample_pval" data-sortable="true">r Gerp pval</th>
+                    <th data-field="motif_evalue" data-sortable="true">Motif evalue</th>
+                </tr>
+            </thead>
         </table>
     </div>
 
@@ -21,52 +42,29 @@
 
 {% block scripts %}
 {{ super() }}
-<link rel="stylesheet" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
-<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/css/bootstrap-table.css">
+<script src="/static/js/bootstrap-table.js"></script>
+<script src="/static/js/bootstrap-table-filter.js"></script>
+<script src="/static/js/bootstrap-table-multiple-sort.js"></script>
 <script>
 var response_data = '{{ results|tojson }}';
-//var url = 'data:text/json;charset=utf8,' + encodeURIComponent(response_data);
-//window.open(url, '_blank');
-//window.focus();
 response_datastr = JSON.stringify(response_data);
 response_data = JSON.parse(response_data);
 data = response_data['data'];
 rows = data['rows'];
 columns = data['columns'];
-$(function () {
-    $('#table').dataTable({
-        aaData: rows,
-        aoColumns: columns
-    });
+oTable = $('#table').bootstrapTable({
+            data: rows
+         });
 
-});
 
 function detailFormatter(index, row){
-    var dataset_id = row['dataset_id'];
-    var peakfile_id = row['peakfile_id'];
+    var dataset_id = row['encode_id'];
+    var motif_n = row['motif_number'];
     var html = '';
-    var url = '/encodejob/'+dataset_id+'/'+peakfile_id;
-  $.ajax({
-    url: '/encodejob/'+dataset_id+'/'+peakfile_id,
-    dataType: 'json',
-    type: 'post',
-    async: false,
-    error: function(xhr_data) {
-       $("#spin").html("Errored");
-    },
-    success: function(xhr_data) {
-        var d = (xhr_data.data);
-        //console.log(d);
-        var motifs = (d.motifs);
-        //console.log(motifs);
-        var motif=1;
-        for (var key in motifs){
-            html+="<a href='"+ url + "' target='_blank'><b> Motif: "+motif+"</b><br/>"+"<img src='"+motifs[key]+"'/></a><br/>";
-            motif+=1;
-        }
-    }
-    }); 
-  return html;
+    html+='<img src="data:image/png;base64,'+rows[index]['moca_plot']+'"';
+    return html;
 }
 function linkFormatter(value, row){
     var dataset_id = row['dataset_id'];

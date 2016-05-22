@@ -2,6 +2,24 @@ import numpy as np
 import cPickle
 from pymongo import MongoClient
 from bson.binary import Binary
+import base64
+
+def encode_image(image_path):
+    """Base64 encode image to store in mongodb
+
+    Parameters
+    ----------
+    image_path: str
+        Path to image file
+
+    Returns
+    -------
+    encoded_img: base64encode
+        base64 encoded image
+    """
+    with open(image_path, 'rb') as image_fh:
+        encoded_img = base64.b64encode(image_fh.read())
+    return encoded_img
 
 def pickle_numpy_array(np_array):
     """Create a pickle instance of numpy.array
