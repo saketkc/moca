@@ -63,7 +63,19 @@ function detailFormatter(index, row){
     var dataset_id = row['encode_id'];
     var motif_n = row['motif_number'];
     var html = '';
-    html+='<img src="data:image/png;base64,'+rows[index]['moca_plot']+'"';
+    var url = '/plot/'+dataset_id+'/'+motif_n;
+    $.ajax({
+        url: url,
+        dataType: 'json',
+        async: false,
+        error: function(xhr_data) {
+           $("#spin").html("Errored");
+        },
+        success: function(xhr_data) {
+            var d = (xhr_data.data.rows[0]);
+            html+='<img src="data:image/png;base64,'+d['moca_plot']+'"/>';
+        }
+    });
     return html;
 }
 function linkFormatter(value, row){
