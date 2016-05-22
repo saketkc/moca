@@ -73,7 +73,7 @@ function detailFormatter(index, row){
         },
         success: function(xhr_data) {
             var d = (xhr_data.data.rows[0]);
-            html+='<img src="data:image/png;base64,'+d['moca_plot']+'"/>';
+            html+='<img width="1140px;" src="data:image/png;base64,'+d['moca_plot']+'"/>';
         }
     });
     return html;
