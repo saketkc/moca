@@ -6,6 +6,11 @@ from ..helpers import ConfigurationParser
 from ..helpers import run_job
 from ..helpers import xstr
 from ..helpers import get_cpu_count
+from ..helpers.filename import touch
+
+from ..wigoperations import WigReader
+from ..bedoperations.fimo import get_start_stop_intervals
+import numpy as np
 
 class Pipeline(ConfigurationParser):
     """Generic class to run pipelines
@@ -224,12 +229,43 @@ class Pipeline(ConfigurationParser):
         self.commands_run.append({'cmd': cmd, 'metadata': output})
         return output
 
+    def save_conservation_scores(intervals, wig_file, out_directory, out_prefix='phylop'):
+        """Extract and save conservation scores
+        Parameters
+        ----------
+        intervals: list
+            list of tuple
+
+        wig_file: string
+            Wig file location
+
+        out_directory: string
+            Out file directory
+
+        out_prefix: string
+            Out file prefix
+        """
+        wig = WigReader(wig_file)
+        conservation_scores = wig.query(intervals)
+        if conservation_scores:
+            conservation_scores_mean = np.nanmean(conservation_scores, axis=0)
+            np.savetxt(os.path.join(out_directory, '{}.raw.txt'.format(out_prefix)),
+                       conservation_scores, fmt='%.4f')
+            np.savetxt(os.path.join(out_directory, '{}.mean.txt'.format(out_prefix)),
+                       conservation_scores_mean, fmt='%.4f')
+        else:
+            touch(os.path.join(out_directory, '{}.mean.txt'.format(out_prefix)))
+            touch(os.path.join(out_directory, '{}.raw.txt'.format(out_prefix)))
+
+    @property
     def get_meme_default_params(self):
         return self.meme_default_params
 
+    @property
     def get_memechip_default_params(self):
         return self.memechip_default_params
 
+    @property
     def get_fimo_default_params(self):
         return self.fimo_default_params
 

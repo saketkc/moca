@@ -28,7 +28,7 @@ class TestPipeline(unittest.TestCase):
         """Test meme runner"""
         if os.path.exists('tests/data/generated_out/meme_analysis'):
             shutil.rmtree('tests/data/generated_out/meme_analysis')
-        meme_args = self.pipeline.get_meme_default_params()
+        meme_args = self.pipeline.get_meme_default_params
         output = self.pipeline.run_meme(fasta_in=self.meme_fasta,
                                         out_dir='tests/data/generated_out/meme_analysis',
                                         strargs=meme_args.replace(' -p {}'.format(get_cpu_count()), ''))

@@ -4,7 +4,7 @@ import os
 import requests
 import shutil
 from pymongo import MongoClient
-from moca.helpers import safe_makedir
+from ..helpers import safe_makedir
 import StringIO
 import gzip
 

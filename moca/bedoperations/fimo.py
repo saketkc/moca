@@ -2,7 +2,7 @@
 
 import os
 import pandas as pd
-from moca.helpers import filename_extension
+from ..helpers import filename_extension
 
 
 def fimo_to_sites(fimo_file):
@@ -53,3 +53,24 @@ def fimo_to_sites(fimo_file):
 
     fimo_df.to_csv(fimo_sites, index=False, sep='\t')
     return fimo_df
+
+def get_start_stop_intervals(fimo_file):
+    """Return start,stop intervals of fimo hits
+    Parameters
+    ----------
+    fimo_file: str
+        Absolute path to fimo file
+
+    Returns
+    -------
+    intervals: list
+        List of tuples (start, stop) where start is 0-based and stop is 1-based
+
+    """
+
+    fimo_sites = fimo_to_sites(fimo_file)
+    subset = fimo_sites.loc[:, ['chrom', 'motifStartZeroBased', 'motifEndOneBased', 'strand']]
+    subset.loc[:, 'motifStartZeroBased'] = subset['motifStartZeroBased'] - flanking_sites
+    subset.loc[:, 'motifEndOneBased'] = subset['motifEndOneBased'] + flanking_sites
+    intervals = [tuple(x) for x in subset.to_records(index=False)]
+    return intervals

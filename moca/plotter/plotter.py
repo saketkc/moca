@@ -20,17 +20,17 @@ from scipy.interpolate import spline
 from scipy.interpolate import UnivariateSpline
 
 
-from moca.helpers import read_memefile
-from moca.helpers import safe_makedir
-from moca.helpers import get_max_occuring_bases
-from moca.helpers import get_total_sequences
-from moca.helpers import read_centrimo_txt
-from moca.helpers import read_centrimo_stats
+from ..helpers import read_memefile
+from ..helpers import safe_makedir
+from ..helpers import get_max_occuring_bases
+from ..helpers import get_total_sequences
+from ..helpers import read_centrimo_txt
+from ..helpers import read_centrimo_stats
 
-from moca.helpers.seqstats import perform_t_test
-from moca.helpers.seqstats import get_pearson_corr
-from moca.helpers.seqstats import perform_OLS
-from moca.helpers.seqstats import get_flanking_scores, remove_flanking_scores, format_pvalue
+from ..helpers.seqstats import perform_t_test
+from ..helpers.seqstats import get_pearson_corr
+from ..helpers.seqstats import perform_OLS
+from ..helpers.seqstats import get_flanking_scores, remove_flanking_scores, format_pvalue
 
 MAGIC_NUM = 39.33333333
 COUNT_TYPE = 'counts'

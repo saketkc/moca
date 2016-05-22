@@ -1,6 +1,6 @@
 import os
 import re
-from moca.helpers import MocaException
+from ..helpers import MocaException
 
 def read_centrimo_txt(centrimo_txt):
     """Read centrimo.txt for single motif

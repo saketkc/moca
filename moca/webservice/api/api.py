@@ -13,9 +13,21 @@ def api_response(data, success, message):
 
     }
 
-#TODO Fix this and the method below
 
-def db_connector(configuration_file):
+def db_connector(configuration_file, collection_config_key='mongo_encode_stats_collection'):
+    """Connects to MongoDB instance
+    Parameters
+    ----------
+    configuration_file: string
+        Path to configuration file
+
+    collection_config_key: string
+        Key used in config file for collection name under [mongo] section
+
+    Returns
+    -------
+    collection: mongodb collection
+    """
     config = ConfigurationParser(configuration_file)
     mongo_config = config.get_section('mongo')
     mongo_client = MongoClient('mongodb://{}:{}@{}/{}'.format(mongo_config['mongo_username'],
@@ -24,7 +36,7 @@ def db_connector(configuration_file):
                                                               mongo_config['mongo_dbname']),
                                     port=int(mongo_config['mongo_port']))
     db = mongo_client.moca_encode_tf
-    collection = db[mongo_config['mongo_collection']]
+    collection = db[mongo_config['mongo_encode_stats_collection']]
     return collection
 
 class Webservice(Resource):
@@ -87,6 +99,25 @@ class GetPlot(Resource):
                             success="success",
                             message="All records")
 
+class GetEncodeMetadata(Resource):
+    def __init__(self, configuration_file):
+        """Init: Currently only analyzing samples which have IDR peaks
+
+        Parameters
+        ----------
+        configuration_file: str
+            Path to configuration file
+        """
+        self.collection = db_connector(configuration_file, 'mongo_encode_metadata_collection')
+
+    def get(self, encode_id, bedfile_id):
+        data = list(self.collection.find({'files.dataset': encode_id}) )
+        ## TODO fix this
+        assert len(data) == 1
+        return api_response(data={'rows': data, 'columns': {}},
+                            success="success",
+                            message="All records")
+
 
 if __name__ == '__main__':
     if len(sys.argv)!=2:
@@ -94,8 +125,15 @@ if __name__ == '__main__':
         sys.exit(1)
     app = Flask(__name__)
     api = Api(app)
-    api.add_resource(Webservice, '/', resource_class_args = [sys.argv[1]])
-    api.add_resource(GetPlot, '/plot/<string:encode_id>/<int:motif_number>', resource_class_args = [sys.argv[1]])
+    api.add_resource(Webservice,
+                     '/',
+                     resource_class_args = [sys.argv[1]])
+    api.add_resource(GetPlot,
+                     '/plot/<string:encode_id>/<int:motif_number>',
+                     resource_class_args = [sys.argv[1]])
+    api.add_resource(GetEncodeMetadata,
+                     '/encodemetadata/<string:encode_id>/<string:peakfile_id>',
+                     resource_class_args = [sys.argv[1]])
     app.run(host='moca.usc.edu',
             debug=True,
             port=8889)

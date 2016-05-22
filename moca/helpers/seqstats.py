@@ -3,7 +3,7 @@ from scipy import stats
 from scipy.stats.stats import pearsonr
 import numpy as np
 import statsmodels.api as sm
-from moca.helpers import read_centrimo_txt
+from ..helpers import read_centrimo_txt
 
 def format_pvalue(pval):
     """Latex compatible representations
