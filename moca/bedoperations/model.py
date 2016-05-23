@@ -35,21 +35,26 @@ class Bedfile(object):
     genome_table: string
         Absolute path to geonme chromosome size file
     """
-    def __init__(self, filepath, genome_table, peaks_to_keep=500):
+    def __init__(self, filepath, genome_table):
         self.filepath = os.path.abspath(filepath)
         self.bed_format = None
         self.extracted_fasta = None
         self.bed = None
-        self.peaks_to_keep = peaks_to_keep
         if not os.path.isfile(self.filepath):
             raise MocaException('Bed file {} not found'.format(self.filepath))
         self._read()
         self.bed_format = self.guess_bedformat()
+        self.total_peaks = self._count_peaks()
+        self.train_peaks_count = None
+        self.test_peaks_count = None
         self.genome_table = os.path.abspath(genome_table)
         assert self.bed_format is not None
-        self.determine_peaks()
-        self._sort_bed()
-        self.write_to_scorefile()
+
+    def _count_peaks(self):
+        with open(self.filepath) as f:
+            for i, l in enumerate(f):
+                pass
+        return i + 1
 
     def _read(self):
         """ Read bedfile as a pandas dataframe
@@ -86,39 +91,69 @@ class Bedfile(object):
         """
         return self.sort_by(columns=['score', 'chrom', 'peakStartZeroBased'], ascending=[False, True, True])
 
-    def write_to_scorefile(self):
+    def split_train_test_bed(self, train_peaks_count=500,
+                             test_peaks_count=500,
+                             train_suffix='train',
+                             test_suffix='test'):
+        """Split bedfile into ranked training and testing sets
+
+        Training set consists of top `train_peaks_count` peaks
+        while testing set will consist of next `test_peaks_count` ranked
+        peaks
+
+        Parameters
+        ----------
+        train_peaks_count: int
+            Count of training peaks
+
+        test_peaks_count: int
+            Count of testing peaks
+
+        """
+        assert train_peaks_count < self.total_peaks
+        assert test_peaks_count < self.total_peaks
+        self._sort_bed()
+        self._determine_peaks()
+
+        self.train_bed_df = self.bed_df[:min(train_peaks_count, self.total_peaks_count)]
+        self.test_bed_df = self.bed_df[min(test_peaks_count, self.total_peaks_count):]
+
+        self.write_to_scorefile(self.train_bed_df, outfile='.train')
+        self.write_to_scorefile(self.test_bed_df, outfile='.test')
+
+    def write_to_scorefile(self, bed_df, outfile_suffix='sorted'):
         """Write bed file as score file
 
         """
         filename, file_extension = os.path.splitext(self.filepath)
-        filename += '.sorted'
-        self.scorefile = filename
-        self.bed_df[:self.peaks_to_keep].to_csv(self.scorefile, header=False,
-                sep='\t',
-                index=False,
-                columns=['chrom', 'peakStartZeroBased', 'peakEndOneBased', 'name', 'score'])
+        filename += '.{}'.format(outfile_suffix)
+        bed_df.to_csv(filename, header=False,
+                      sep='\t',
+                      index=False,
+                      columns=['chrom', 'peakStartZeroBased',
+                               'peakEndOneBased', 'name', 'score'])
 
 
-    def slop_bed(self, flank_length=200):
+    def slop_bed(self, inbed, flank_length=50):
         """Add flanking sequences to bed file
 
         Parameters
         ----------
+        inbed: object
+            Bedtool Object
         flank_length: int
             the bed region is expanded in both direction by flank_length number of bases
 
         Returns
         -------
-        slop_bed: dataframe
+        slopped_bed: dataframe
             Slopped bed data object
         """
-        if self.bed is None:
-            # Load bed fole into bedtools
-            self.bed = BedTool(self.scorefile)
-        self.bed = self.bed.slop(g=self.genome_table, b=flank_length)
-        return self.bed
+        inbed = BedTool(bed)
+        slopped_bed = inbed.slop(g=self.genome_table, b=flank_length)
+        return slopped_bed
 
-    def determine_peaks(self):
+    def _determine_peaks(self):
         """Add extra columns representing peaks
 
         Parameters

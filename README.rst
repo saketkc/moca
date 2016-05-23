@@ -71,7 +71,7 @@ Example
 
     mocacli -i tests/data/ENCFF002CDP.ctcf.bed -c tests/data/application.cfg -g hg19
 
-.. image:: docs/_static/img/ENCFF002CEL.png
+.. image:: http://www.saket-choudhary.me/moca/_static/img/ENCFF002CEL.png
 
 
 

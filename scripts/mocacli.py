@@ -23,7 +23,7 @@ def show_progress(msg):
 @click.option('--bedfile', '-i', help='Bed file input', required=True)
 @click.option('--oc', '-o', help='Output Directory')
 @click.option('--configuration', '-c', help='Configuration file', required=True)
-@click.option('--flank-seq', default=100, help='Flanking sequence length', required=True)
+@click.option('--flank-seq', default=50, help='Flanking sequence length', required=True)
 @click.option('--flank-motif', default=5, help='Length of sequence flanking motif', required=True)
 @click.option('--genome-build', '-g', '-gb',  help='Key denoting genome build to use in configuration file', required=True)
 
@@ -59,7 +59,8 @@ def cli(bedfile, oc, configuration, flank_seq, flank_motif, genome_build):
     query_fasta = os.path.join(moca_out_dir, bedfile_fn + '_flank_{}.fasta'.format(flank_seq))
 
     bed_df = bedoperations.Bedfile(bedfile, genome_table)
-    bed_df.determine_peaks()
+    bed_df_train, bed_df_test = bed_df.get_train_test_peaks(train_peaks=500, test_peaks=500)
+
     bed_df.slop_bed(flank_length=flank_seq)
 
     show_progress('Extracting Fasta')
