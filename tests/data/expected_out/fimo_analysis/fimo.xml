@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Begin document body -->
-<fimo version="4.11.1" release="Fri Jan 15 12:51:59 2016 -0800">
+<fimo version="4.10.2" release="Thu Sep 03 15:00:54 2015 -0700">
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation=  xmlns:fimo="http://noble.gs.washington.edu/schema/fimo"
 >
@@ -21,27 +21,11 @@
 <setting name="verbosity">2</setting>
 <setting name="selected motif">1</setting>
 </settings>
-<sequence-data num-sequences="0" num-residues="0" />
-<alphabet name="DNA" like="dna">
-<letter id="A" symbol="A" complement="T" name="Adenine" colour="CC0000"/>
-<letter id="C" symbol="C" complement="G" name="Cytosine" colour="0000CC"/>
-<letter id="G" symbol="G" complement="C" name="Guanine" colour="FFB300"/>
-<letter id="T" symbol="T" aliases="U" complement="A" name="Thymine" colour="008000"/>
-<letter id="N" symbol="N" aliases="X." equals="ACGT" name="Any base"/>
-<letter id="V" symbol="V" equals="ACG" name="Not T"/>
-<letter id="H" symbol="H" equals="ACT" name="Not G"/>
-<letter id="D" symbol="D" equals="AGT" name="Not C"/>
-<letter id="B" symbol="B" equals="CGT" name="Not A"/>
-<letter id="M" symbol="M" equals="AC" name="Amino"/>
-<letter id="R" symbol="R" equals="AG" name="Purine"/>
-<letter id="W" symbol="W" equals="AT" name="Weak"/>
-<letter id="S" symbol="S" equals="CG" name="Strong"/>
-<letter id="Y" symbol="Y" equals="CT" name="Pyrimidine"/>
-<letter id="K" symbol="K" equals="GT" name="Keto"/>
-</alphabet>
-<motif name="1" width="20" best-possible-match="GCTAAACCCTCCTGTCTGCT"/>
-<motif name="2" width="10" best-possible-match="TTTCTCAATG"/>
-<motif name="3" width="13" best-possible-match="AAGGCAAACCCTA"/>
+<sequence-data num-sequences="10" num-residues="410" />
+<alphabet>nucleotide</alphabet>
+<motif name="1" width="25" best-possible-match="CAGAACGCTACTGCCAACCCTACCT"/>
+<motif name="2" width="6" best-possible-match="TCTGCT"/>
+<motif name="3" width="6" best-possible-match="CATTTT"/>
 <background source="non-redundant database">
 <value letter="A">0.275</value>
 <value letter="C">0.225</value>

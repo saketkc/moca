@@ -49,6 +49,8 @@ class Bedfile(object):
         self.test_peaks_count = None
         self.genome_table = os.path.abspath(genome_table)
         assert self.bed_format is not None
+        self._determine_peaks()
+        self._sort_bed()
 
     def _count_peaks(self):
         with open(self.filepath) as f:
@@ -112,35 +114,38 @@ class Bedfile(object):
         """
         assert train_peaks_count < self.total_peaks
         assert test_peaks_count < self.total_peaks
-        self._sort_bed()
         self._determine_peaks()
+        self._sort_bed()
 
-        self.train_bed_df = self.bed_df[:min(train_peaks_count, self.total_peaks_count)]
-        self.test_bed_df = self.bed_df[min(test_peaks_count, self.total_peaks_count):]
+        self.train_bed_df = self.bed_df[:min(int(train_peaks_count), self.total_peaks)]
+        self.test_bed_df = self.bed_df[min(int(test_peaks_count), self.total_peaks):]
 
-        self.write_to_scorefile(self.train_bed_df, outfile='.train')
-        self.write_to_scorefile(self.test_bed_df, outfile='.test')
+        self.train_bed_file = self.write_to_scorefile(self.train_bed_df, out_suffix='train')
+        self.test_bed_file = self.write_to_scorefile(self.test_bed_df, out_suffix='test')
 
-    def write_to_scorefile(self, bed_df, outfile_suffix='sorted'):
+        return self.train_bed_file, self.test_bed_file
+
+    def write_to_scorefile(self, bed_df, out_suffix='sorted'):
         """Write bed file as score file
 
         """
         filename, file_extension = os.path.splitext(self.filepath)
-        filename += '.{}'.format(outfile_suffix)
+        filename += '.{}'.format(out_suffix)
         bed_df.to_csv(filename, header=False,
                       sep='\t',
                       index=False,
                       columns=['chrom', 'peakStartZeroBased',
                                'peakEndOneBased', 'name', 'score'])
+        return filename
 
 
-    def slop_bed(self, inbed, flank_length=50):
+    def slop_bed(self, bed_in, flank_length=50):
         """Add flanking sequences to bed file
 
         Parameters
         ----------
-        inbed: object
-            Bedtool Object
+        bed_in: string
+            Path to input bed file
         flank_length: int
             the bed region is expanded in both direction by flank_length number of bases
 
@@ -149,9 +154,12 @@ class Bedfile(object):
         slopped_bed: dataframe
             Slopped bed data object
         """
-        inbed = BedTool(bed)
+        inbed = BedTool(bed_in)
         slopped_bed = inbed.slop(g=self.genome_table, b=flank_length)
-        return slopped_bed
+        filename, extension = os.path.splitext(bed_in)
+        filename += '_slop_{}'.format(flank_length) + extension
+        slopped_bed.saveas(filename)
+        return filename
 
     def _determine_peaks(self):
         """Add extra columns representing peaks
@@ -187,11 +195,13 @@ class Bedfile(object):
         else:
             raise MocaException('Format should be one of {}'.format(__BED_TYPES__.values()))
 
-    def extract_fasta(self, fasta_in, fasta_out=None):
+    def extract_fasta(self, bed_in, fasta_in, fasta_out=None):
         """Extract fasta of bed regions
 
         Parameters
         ----------
+        bed_in: string
+            Path to input bed
         fasta_in: string
             Absolute path to location of reference fasta file
 
@@ -203,15 +213,11 @@ class Bedfile(object):
         fasta: string
             Fasta sequence combined
         """
-        #if self.bed is None:
-            # Load bed fole into bedtools
-            #self.bed = BedTool(self.scorefile)
-        self.downsampled_bed = self.bed.at(range(0,self.peaks_to_keep))
-        self.extracted_fasta = self.downsampled_bed.sequence(fi=os.path.abspath(fasta_in))
-        self.temp_fasta = self.extracted_fasta.seqfn
-        make_uppercase_fasta(self.temp_fasta, os.path.abspath(fasta_out))
-        os.remove(self.temp_fasta)
-        return self.extracted_fasta
+        bed = BedTool(bed_in)
+        extracted_fasta = bed.sequence(fi=os.path.abspath(fasta_in))
+        temp_fasta = extracted_fasta.seqfn
+        make_uppercase_fasta(temp_fasta, os.path.abspath(fasta_out))
+        os.remove(temp_fasta)
 
     def sort_by(self, columns=None, ascending=False):
         """Method to sort columns of bedfiles
@@ -233,3 +239,7 @@ class Bedfile(object):
 
     def __str__(self):
         return repr(self.bed_df)
+
+    @property
+    def get_total_peaks(self):
+        return self.total_peaks

@@ -28,7 +28,7 @@ class Pipeline(ConfigurationParser):
             #raise MocaException('Config file {} not found'.format(config_file))
             warnings.warn('No configuration file supplied. Defaults will be used.', UserWarning)
         self.cpu_cores = get_cpu_count()
-        self.meme_default_params = '-dna -mod zoops -nmotifs 3 -minw 6 -maxw 30 -revcomp -nostatus -maxsize 1000000 -p {}'.format(self.cpu_cores)
+        self.meme_default_params = '-dna -mod zoops -nmotifs 5 -minw 6 -maxw 30 -revcomp -nostatus -maxsize 1000000 -p {}'.format(self.cpu_cores)
         self.meme_strargs = None
         self.meme_location = 'meme'
         self.fimo_default_params = ''
@@ -37,7 +37,7 @@ class Pipeline(ConfigurationParser):
         self.shuffler_location = 'fasta-shuffle-letters'
         self.centrimo_args = None
         self.centrimo_location = 'centrimo'
-        self.memechip_default_params = '-dna -meme-mod zoops -meme-nmotifs 3 -meme-minw 6 -meme-maxw 30 -meme-maxsize 1000000 -meme-p {}'.format(self.cpu_cores)
+        self.memechip_default_params = '-dna -meme-mod zoops -meme-nmotifs 5 -meme-minw 6 -meme-maxw 30 -meme-maxsize 1000000 -meme-p {}'.format(self.cpu_cores)
         self.memechip_args = None
         self.memechip_location = 'meme-chip'
         self.commands_run = []
@@ -50,7 +50,7 @@ class Pipeline(ConfigurationParser):
         ---------
         strargs: string
             A concatenated string containing parameters as would be passed to standalone meme
-            Defualt parametes used: '-dna -revcomp -maxsize 1000000 -nmotifs 3 -p 4'
+            Defualt parametes used: '-dna -revcomp -maxsize 1000000 -nmotifs 5 -p 4'
             To modify: Pipeline.meme_default_params
         fasta_in: string
             Location of the fasta file
@@ -143,6 +143,11 @@ class Pipeline(ConfigurationParser):
                                            cwd=os.path.dirname(fasta_out))
         with open(os.path.abspath(fasta_out), 'w') as f:
             f.write(stdout)
+        output = {'stdout': stdout,
+                  'stderr': stderr,
+                  'exitcode': exitcode,
+                  'cmd': cmd}
+        return output
 
     def run_centrimo(self, fasta_in, meme_file, out_dir):
         """Run centrimo
@@ -191,7 +196,7 @@ class Pipeline(ConfigurationParser):
         ---------
         strargs: string
             A concatenated string containing parameters as would be passed to standalone meme
-            Defualt parametes used: '-dna -revcomp -maxsize 1000000 -nmotifs 3 -p 4'
+            Defualt parametes used: '-dna -revcomp -maxsize 1000000 -nmotifs 5 -p 4'
             To modify: Pipeline.meme_default_params
         fasta_in: string
             Location of the fasta file
