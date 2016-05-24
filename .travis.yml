@@ -40,7 +40,7 @@ before_install:
  - source activate mocatest
 
  - bash travis/install_meme.sh
- - export PATH="$PATH:$HOME/meme/bin"
+ - export PATH="$PATH:$HOME/meme_bin/bin"
 
 install:
   - python setup.py install --single-version-externally-managed --record=/tmp/record.txt 
