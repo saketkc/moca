@@ -25,7 +25,6 @@ dependencies:
 - entrypoints=0.2.1=py27_0
 - enum34=1.1.6=py27_0
 - expat=2.1.0=1
-- flake8=2.5.1=py27_0
 - fontconfig=2.11.1=2
 - freetype=2.6.3=0
 - functools32=3.2.3.2=py27_1

@@ -1,8 +1,11 @@
 language: python
 
-env:
-  - "2.6"
+python:
   - "2.7"
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "3.5-dev" # 3.5 development branch
 
 sudo: false
 
