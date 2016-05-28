@@ -2,6 +2,7 @@
 from __future__ import print_function
 from __future__ import division
 from __future__ import absolute_import
+from builtins import zip
 import os
 from Bio import SeqIO
 import pandas
@@ -21,10 +22,10 @@ def get_fasta_metadata(in_fasta):
         A dict of containing the following fields: {'len_seq': length, 'num_seq': num}
     """
     record_dict = SeqIO.to_dict(SeqIO.parse(open(in_fasta), 'fasta'))
-    length = len(record_dict[record_dict.keys()[0]])
-    for key in record_dict.keys():
+    length = len(record_dict[list(record_dict.keys())[0]])
+    for key in list(record_dict.keys()):
         assert length == len(record_dict[key])
-    fasta_metadata = {'num_seq': len(record_dict.keys()), 'len_seq': length}
+    fasta_metadata = {'num_seq': len(list(record_dict.keys())), 'len_seq': length}
     return fasta_metadata
 
 
@@ -77,7 +78,7 @@ def generate_random_fasta(genome,
     chr_keys = gt_map.index.tolist()
     ## Avoid scaffolds and enforce the last chracter of chromsome key being numeric
     ## TODO This is not  foolproofi. though I can't think of cases it will fail, but it is also not random in true sense
-    chr_keys_filtered = filter(lambda chrom: '_' not in chrom and chrom[-1].isdigit(), chr_keys)
+    chr_keys_filtered = [chrom for chrom in chr_keys if '_' not in chrom and chrom[-1].isdigit()]
     chr_selected = np.random.choice(chr_keys_filtered, num_seq)
 
     chr_selected_length = gt_map.ix[chr_selected].values.flatten()

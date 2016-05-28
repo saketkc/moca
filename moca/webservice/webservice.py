@@ -11,7 +11,7 @@ def get_startup_params(config_file):
 
 def run_server(configuration_file):
     settings = get_startup_params(configuration_file)
-    settings = dict((k.upper(), v) for k, v in settings.iteritems())
+    settings = dict((k.upper(), v) for k, v in settings.items())
     print(settings)
     settings['DOMAIN'] = {'encode_tf_stats': {}}# {'datasource': {'source': 'moca_encode_tf'}}}
     settings['ALLOW_UNKNOWN'] = True

@@ -12,8 +12,8 @@ app = Flask(__name__)
 def init_params(configuration_file):
     config = ConfigurationParser(configuration_file)
     server_config = config.get_section('server')
-    server_config = dict( (key.upper(), value) for key, value in server_config.iteritems())
-    for key, value in server_config.iteritems():
+    server_config = dict( (key.upper(), value) for key, value in server_config.items())
+    for key, value in server_config.items():
         try:
             # For integer
             app.config[key] = int(value)

@@ -1,6 +1,7 @@
 from __future__ import print_function
 from __future__ import division
 from __future__ import absolute_import
+from builtins import object
 import os
 from ..helpers import MocaException
 from ..helpers import make_uppercase_fasta
@@ -196,7 +197,7 @@ class Bedfile(object):
             self.bed_df['peakStartZeroBased'] = self.bed_df['peak_position'].astype(int)
             self.bed_df['peakEndOneBased'] = self.bed_df['peak_position'].astype(int)+1
         else:
-            raise MocaException('Format should be one of {}'.format(__BED_TYPES__.values()))
+            raise MocaException('Format should be one of {}'.format(list(__BED_TYPES__.values())))
 
     def extract_fasta(self, bed_in, fasta_in, fasta_out=None):
         """Extract fasta of bed regions

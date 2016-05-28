@@ -1,6 +1,9 @@
 from __future__ import print_function
 from __future__ import division
 from __future__ import absolute_import
+from builtins import map
+from builtins import zip
+from builtins import range
 import os
 import operator
 from math import log
@@ -120,7 +123,7 @@ def get_max_occuring_bases(record, max_count, count_type='counts'):
     profile = create_position_profile(record, count_type)
     sorted_profile = []
     for i, p in enumerate(profile):
-        sorted_p = sorted(p.items(), key=operator.itemgetter(1))
+        sorted_p = sorted(list(p.items()), key=operator.itemgetter(1))
         sorted_profile.append(sorted_p[-max_count:])
     return sorted_profile
 
@@ -128,7 +131,7 @@ def position_wise_profile(counts_dict, length):
     """
     Convert base to position wise profile
     """
-    profile = map(dict, zip(*[[(k, v) for v in value] for k, value in counts_dict.items()]))
+    profile = list(map(dict, list(zip(*[[(k, v) for v in value] for k, value in list(counts_dict.items())]))))
     return profile
 
 def find_max_occurence(profile, max_count=2):
@@ -137,7 +140,7 @@ def find_max_occurence(profile, max_count=2):
     """
     sorted_profile = []
     for p in profile:
-        sorted_profile.append(sorted(p.items(), key=lambda x:x[1]))
+        sorted_profile.append(sorted(list(p.items()), key=lambda x:x[1]))
     for i,p in enumerate(sorted_profile):
         sorted_profile[i] = p[-max_count:]
     return sorted_profile

@@ -3,12 +3,14 @@
 from __future__ import print_function
 from __future__ import division
 from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
 import os
 import requests
 import shutil
 from pymongo import MongoClient
 from ..helpers import safe_makedir
-import StringIO
+import io
 import gzip
 import json
 

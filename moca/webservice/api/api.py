@@ -1,6 +1,7 @@
 from __future__ import print_function
 from __future__ import division
 from __future__ import absolute_import
+from builtins import str
 import sys
 from pymongo import MongoClient
 from flask import Flask
@@ -71,9 +72,9 @@ class Webservice(Resource):
         """Get all records from collection"""
         data = list(self.collection.find({}, dict((k,1) for k in self.columns_to_return)))
         for d in data:
-            d.update((k, "NaN") for k, v in d.iteritems() if str(v).lower()=='nan')
-            d.update((k, float('%.2e' % v)) for k,v in d.iteritems() if 'pval' in k and type(v)==float)
-            d.update((k, round(v,3)) for k,v in d.iteritems() if 'pval' not in k and type(v)==float)
+            d.update((k, "NaN") for k, v in d.items() if str(v).lower()=='nan')
+            d.update((k, float('%.2e' % v)) for k,v in d.items() if 'pval' in k and type(v)==float)
+            d.update((k, round(v,3)) for k,v in d.items() if 'pval' not in k and type(v)==float)
             del d['_id']
         aoColumns = []
         for key in self.columns_to_return:

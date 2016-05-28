@@ -3,6 +3,7 @@
 from __future__ import print_function
 from __future__ import division
 from __future__ import absolute_import
+from builtins import object
 import warnings
 import numpy as np
 import pyBigWig
@@ -39,7 +40,7 @@ class WigReader(object):
         scores = []
         chrom_lengths = self._get_chromosomes()
         for chrom, chromStart, chromEnd, strand in intervals:
-            if chrom not in chrom_lengths.keys():
+            if chrom not in list(chrom_lengths.keys()):
                 warnings.warn('Chromosome {} does not appear in the bigwig'.format(chrom), UserWarning)
                 continue
 

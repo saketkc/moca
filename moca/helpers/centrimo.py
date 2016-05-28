@@ -1,6 +1,7 @@
 from __future__ import print_function
 from __future__ import division
 from __future__ import absolute_import
+from builtins import zip
 import os
 import re
 from ..helpers import MocaException
@@ -35,7 +36,7 @@ def read_centrimo_txt(centrimo_txt):
         if len(columns) != len(values[0].split()):
             raise MocaException('Error parsing centrimo file. \
                                 This is a bug and should be reported upstream')
-        centrimo_dicts = [dict(zip(columns, val.split())) for val in values]
+        centrimo_dicts = [dict(list(zip(columns, val.split()))) for val in values]
         return centrimo_dicts
 
 
@@ -63,7 +64,7 @@ def read_centrimo_stats(centrimo_stats):
                 meme_dreme = line_split[-1]
                 assert meme_dreme in ['MEME', 'DREME']
                 key = ('_').join(line_split[2:4])
-                assert key not in motif_wise_site_stats[meme_dreme].keys()
+                assert key not in list(motif_wise_site_stats[meme_dreme].keys())
                 motif_wise_site_stats[meme_dreme][key] = {'pos': [], 'count': []}
             else:
                 line = line.replace(' ', '')

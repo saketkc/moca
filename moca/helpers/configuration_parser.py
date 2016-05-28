@@ -1,9 +1,12 @@
 from __future__ import print_function
 from __future__ import division
 from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 import csv
 from ..helpers import MocaException
-import ConfigParser
+import configparser
 import os
 
 def is_executable(fpath):
@@ -34,7 +37,7 @@ class ConfigurationParser(object):
 
     def _read(self):
         #self._check()
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         config.read(self.config_file)
         return config
 
@@ -76,8 +79,8 @@ class ConfigurationParser(object):
             List of all genome names
         """
         sections = self.get_all_sections()
-        genome_names = filter(lambda x: x.startswith('genome'), sections)
-        genome_names = list(map(lambda x: x.replace('genome:',''), genome_names))
+        genome_names = [x for x in sections if x.startswith('genome')]
+        genome_names = list([x.replace('genome:','') for x in genome_names])
         return genome_names
 
     def get_genome_data(self, genome_name):

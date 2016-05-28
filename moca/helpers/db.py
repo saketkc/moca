@@ -1,8 +1,10 @@
 from __future__ import print_function
 from __future__ import division
 from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
 import numpy as np
-import cPickle
+import pickle
 from pymongo import MongoClient
 from bson.binary import Binary
 import base64
@@ -37,7 +39,7 @@ def pickle_numpy_array(np_array):
     pickle_field: pickled instance
         Pickled instance
     """
-    return cPickle.dumps(np_array)
+    return pickle.dumps(np_array)
 
 def unpickle_numpy_array(pickle_field):
     """Unpickle a pickled instance of numpy.array
@@ -52,7 +54,7 @@ def unpickle_numpy_array(pickle_field):
     np_array: np.array
         numpy array
     """
-    return cPickle.loads(pickle_field)
+    return pickle.loads(pickle_field)
 
 def create_binary_pickle(np_array):
     """Create binary version of pickled array
