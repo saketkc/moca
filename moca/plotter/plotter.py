@@ -2,10 +2,18 @@
 """
 Generate conservation plots
 """
+from __future__ import absolute_import
 from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+import six
+from builtins import zip
+from builtins import str
+from builtins import range
 import matplotlib
 matplotlib.use('Agg')
 import click
+click.disable_unicode_literals_warning = True
 import json
 import os
 import math
@@ -19,19 +27,19 @@ import numpy as np
 from scipy.interpolate import UnivariateSpline
 
 
-from ..helpers import read_memefile
-from ..helpers import safe_makedir
-from ..helpers import get_max_occuring_bases
-from ..helpers import get_total_sequences
-from ..helpers import read_centrimo_txt
-from ..helpers import read_centrimo_stats
-from ..helpers import MocaException
+from moca.helpers import read_memefile
+from moca.helpers import safe_makedir
+from moca.helpers import get_max_occuring_bases
+from moca.helpers import get_total_sequences
+from moca.helpers import read_centrimo_txt
+from moca.helpers import read_centrimo_stats
+from moca.helpers import MocaException
 
 
-from ..helpers.seqstats import perform_t_test
-from ..helpers.seqstats import get_pearson_corr
-from ..helpers.seqstats import perform_OLS
-from ..helpers.seqstats import get_flanking_scores, remove_flanking_scores, format_pvalue
+from moca.helpers.seqstats import perform_t_test
+from moca.helpers.seqstats import get_pearson_corr
+from moca.helpers.seqstats import perform_OLS
+from moca.helpers.seqstats import get_flanking_scores, remove_flanking_scores, format_pvalue
 
 MAGIC_NUM = 39.33333333
 COUNT_TYPE = 'counts'
@@ -363,7 +371,7 @@ def create_annnotation_plot(matplot_dict, json_annotation):
     table = ann_plot.table(cellText=data,loc='center')
     table.scale(1,2)
     fontproperties=FontProperties(size=LEGEND_FONTSIZE*8)#, family='serif' )
-    for key, cell in table.get_celld().items():
+    for key, cell in list(table.get_celld().items()):
         row, col = key
         if row > 0 and col > 0:
             cell.set_text_props(fontproperties=fontproperties)
@@ -568,7 +576,8 @@ def create_plot(meme_file,
             right_margin = matplot_dict['right_margin']
             #total_px= matplot_dict['total_px']
 
-            f.suptitle(r'\textbf{\underline{'+'{}'.format(plot_title)+'}}', fontsize=LEGEND_FONTSIZE)
+            title = r'\textbf{\\underline{'+'{}'.format(plot_title)+'}}'
+            f.suptitle(title, fontsize=LEGEND_FONTSIZE)
             logo_plot = create_logo_plot({'figure':f, 'gridspec': gs[0]}, meme_dir, logo_filename, motif_length)
 
             subgrid = gridspec.GridSpec(2, subplot_ncols, height_ratios=[1,4], width_ratios=[1]*subplot_ncols)

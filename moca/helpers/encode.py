@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
 import os
 import requests
 import shutil
@@ -57,7 +60,7 @@ def get_experiment(experiment_id):
     if metadata['status'] != 'error':
         save_metadata(metadata)
     else:
-        print 'Error fetching metadata for {}'.format(experiment_id)
+        print('Error fetching metadata for {}'.format(experiment_id))
 
 def get_idr_controlled_peaks():
     """Return records that have atleast one idr called peak"""
@@ -89,7 +92,7 @@ def fetch_idr_record(metadata):
             href = f['href']
             title = f['title']
             assembly = f['assembly']
-            print dataset
+            print(dataset)
             idr_records.append({'href': href, 'metadata':f, 'parent_metadata': parent_metadata, 'dataset': dataset, 'peakfilename': title, 'assembly': assembly})
     return idr_records
 
@@ -188,6 +191,6 @@ def search_encode_tfs():
     all_tfs =  set(all_tfs)
     all_experiments = [sample['@id'].strip().replace('/','').replace('experiments', '') for sample in all_samples]
     for experiment in all_experiments:
-        print experiment
+        print(experiment)
         get_experiment(experiment)
 

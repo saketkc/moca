@@ -1,4 +1,7 @@
 """Functions to perform stats on data"""
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
 from scipy import stats
 from scipy.stats.stats import pearsonr
 import numpy as np

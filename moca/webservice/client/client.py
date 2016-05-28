@@ -1,3 +1,6 @@
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from moca.helpers import ConfigurationParser
 from celery import Celery

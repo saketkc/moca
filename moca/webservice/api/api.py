@@ -1,3 +1,6 @@
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
 import sys
 from pymongo import MongoClient
 from flask import Flask
@@ -121,7 +124,7 @@ class GetEncodeMetadata(Resource):
 
 if __name__ == '__main__':
     if len(sys.argv)!=2:
-        print  'Run: python api.py <configuration.cfg>'
+        print('Run: python api.py <configuration.cfg>')
         sys.exit(1)
     app = Flask(__name__)
     api = Api(app)

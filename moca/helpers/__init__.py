@@ -1,3 +1,6 @@
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
 from .exceptions import MocaException
 from .configuration_parser import ConfigurationParser
 from .cpu_count import get_cpu_count
