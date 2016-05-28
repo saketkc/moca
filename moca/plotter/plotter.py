@@ -10,38 +10,38 @@ import six
 from builtins import zip
 from builtins import str
 from builtins import range
+import click
+import json
+import math
 import matplotlib
 matplotlib.use('Agg')
-import click
-click.disable_unicode_literals_warning = True
-import json
 import os
-import math
+import numpy as np
 import seaborn
-from pylab import setp
 import matplotlib.pyplot as plt
 plt.style.use('seaborn-ticks')
 import matplotlib.gridspec as gridspec
 from matplotlib.font_manager import FontProperties
-import numpy as np
+from pylab import setp
+from scipy.stats import gaussian_kde
 from scipy.interpolate import UnivariateSpline
+click.disable_unicode_literals_warning = True
 
-
-from moca.helpers import read_memefile
-from moca.helpers import safe_makedir
 from moca.helpers import get_max_occuring_bases
 from moca.helpers import get_total_sequences
-from moca.helpers import read_centrimo_txt
-from moca.helpers import read_centrimo_stats
 from moca.helpers import MocaException
-
-
-from moca.helpers.seqstats import perform_t_test
+from moca.helpers import read_centrimo_stats
+from moca.helpers import read_centrimo_txt
+from moca.helpers import read_memefile
+from moca.helpers import safe_makedir
+from moca.helpers.seqstats import format_pvalue
+from moca.helpers.seqstats import get_flanking_scores
 from moca.helpers.seqstats import get_pearson_corr
 from moca.helpers.seqstats import perform_OLS
-from moca.helpers.seqstats import get_flanking_scores, remove_flanking_scores, format_pvalue
+from moca.helpers.seqstats import perform_t_test
+from moca.helpers.seqstats import remove_flanking_scores
 
-MAGIC_NUM = 39.33333333
+OFFSET = 39.33333333
 COUNT_TYPE = 'counts'
 # Use 'pssm' or 'counts' to score:
 bases = ['A', 'T', 'G', 'C']
@@ -51,7 +51,6 @@ LINEWIDTH = 3
 PHYLOP_BAR_LINEWIDTH = 5
 HIST_NBINS = 20
 
-
 FONTSIZE = 20
 LEGEND_FONTSIZE = 26
 POINTSIZE = 20
@@ -60,7 +59,7 @@ DPI = 300
 TICKPAD = 20
 TICKLENGTH= 10
 
-GREYNESS = '0.65'
+GREYNESS = '0.55'
 STEM_MARKER_SIZE = 13
 STEM_MARKER_EDGEWIDTH = 3.5
 STEM_FLANKING_COLOR = 'y'
@@ -75,7 +74,6 @@ LEGEND_YMULTIPLIER = 1
 
 MAX_YTICKS = 4
 
-
 def setup_matplotlib():
     """Setup matplotlib
     """
@@ -86,6 +84,7 @@ def setup_matplotlib():
     plt.rcParams['xtick.labelsize'] = FONTSIZE
     plt.rcParams['ytick.labelsize'] = FONTSIZE
     plt.rcParams['text.latex.preamble'] = [r'\boldmath']
+    plt.rcParams['legend.loc'] = 'best'
 
 def save_figure(fig, ax, name, form):
     """Save figure to file
@@ -232,7 +231,7 @@ def create_logo_plot(matplot_dict, meme_dir, logo_path, motif_length):
         XSCALE_FACTOR = 4.5
         z=3
 
-    logo_plot.imshow(logo, extent=[40+15+z*(MAGIC_NUM+1.9),logo.shape[1]+15+XSCALE_FACTOR*(MAGIC_NUM+1.9),0,logo.shape[0]])
+    logo_plot.imshow(logo, extent=[40+15+z*(OFFSET+1.9),logo.shape[1]+15+XSCALE_FACTOR*(OFFSET+1.9),0,logo.shape[0]])
     logo_plot.set_axis_off()
     f.add_subplot(logo_plot)
     return logo_plot
@@ -255,7 +254,8 @@ def create_bar_plot(logo_plot,  X_right, height_px,
     textstr = r'\noindent$\mathrm{E-Value}=%s$\\~\\$\mathrm{Enrichment}=%s$'%(format_pvalue(motif_evalue), '{}\%'.format(occurrence))
     index = int(math.floor(-start_point/2))
     total_heights = heights+bottoms
-    logo_plot.text(X_right[0], 1.05*total_heights[index], textstr, fontsize=14)
+    max_height = np.max(total_heights)
+    logo_plot.text(X_right[0], bottoms[0]/2.5, textstr, fontsize=14)
     barlist[motif_number-1].set_color('red')
     barlist[motif_number-1].set_hatch('/')
 
@@ -268,7 +268,7 @@ def init_figure(meme_dir=None, X_values=None,
     """Initialize plot based on logo size"""
     logo = plt.imread(_get_logo_path(meme_dir, motif))
     height_px = logo.shape[0] # Should be 212
-
+    #subplot_ncols+=1
     total_px = X_values[-1]+2*subplot_ncols*height_px+140
     right = (2*subplot_ncols*height_px+10+140-0.2*height_px)/total_px
 
@@ -298,9 +298,14 @@ def create_enrichment_plot(matplot_dict, motif_number, centrimo_txt, centrimo_st
     Y_values = np.array(motif_stats['count'])
     normalized_Y = Y_values/np.sum(Y_values)
 
+    density = gaussian_kde(Y_values)
     x_smooth = np.linspace(X_values.min(), X_values.max(), 100)
     #y_smooth = spline(X_values, normalized_Y, x_smooth)
     smoother = UnivariateSpline(X_values, normalized_Y, s=0.0005)
+    #density.covariance_factor = lambda : .05
+    #density._compute_covariance()
+
+
     y_smooth = smoother(x_smooth)
 
     centrimo_dict = read_centrimo_txt(centrimo_txt)
@@ -330,10 +335,10 @@ def create_enrichment_plot(matplot_dict, motif_number, centrimo_txt, centrimo_st
     enrichment_plot = plt.Subplot(f, gs_b, autoscale_on=True)
 
     #enrichment_plot.plot(X_values, normalized_Y, linewidth=LINEWIDTH)
-    enrichment_plot.plot(x_smooth, y_smooth, linewidth=LINEWIDTH)
+    enrichment_plot.plot(x_smooth, density(x_smooth), linewidth=LINEWIDTH)
     enrichment_plot.tick_params('both', length=TICKLENGTH, width=2, which='major')
     enrichment_plot.set_xlabel('$\mathrm{Distance}\ \mathrm{from} \ \mathrm{peak}$', fontsize=FONTSIZE, fontweight='bold')
-    enrichment_plot.set_ylabel('$\mathrm{Probability}$', fontsize=FONTSIZE, fontweight='bold')
+    enrichment_plot.set_ylabel('$\mathrm{Density}$', fontsize=FONTSIZE, fontweight='bold')
     enrichment_plot.axvline(x=-50, linewidth=3, color='green', linestyle='-.')
     enrichment_plot.axvline(x=50, linewidth=3, color='green', linestyle='-.')
     enrichment_plot.axvline(x=0, linewidth=3, color='green', linestyle='-.')
@@ -432,19 +437,29 @@ def create_scatter_plot(matplot_dict, motif_freq,
     sample_regression_line = sample_ols['regression_line']
     control_regression_line = control_ols['regression_line']
 
-    scatter_plot.scatter(motif_freq, sample_scores, color='g', s=[POINTSIZE for i in motif_freq])
-    scatter_plot.plot(motif_freq, sample_regression_line, 'g', motif_freq, fit_fn(motif_freq), color='g', linewidth=LINEWIDTH)
-    scatter_plot.scatter(motif_freq, control_scores, color=GREYNESS, s=[POINTSIZE for i in motif_freq])
-    scatter_plot.plot(motif_freq, control_regression_line, color=GREYNESS, linewidth=LINEWIDTH)
+    s1 = scatter_plot.scatter(motif_freq, sample_scores, color='g',
+                              s=[POINTSIZE for i in motif_freq],
+                              marker='x', label=r'$\mathrm{Sample}$')
+    scatter_plot.plot(motif_freq, sample_regression_line, 'g',
+                      motif_freq, fit_fn(motif_freq),
+                      color='g', linewidth=LINEWIDTH)
+    s2 = scatter_plot.scatter(motif_freq, control_scores,
+                              color=GREYNESS, s=[POINTSIZE for i in motif_freq],
+                              marker='o', label=r'$\mathrm{Control}$')
+    scatter_plot.plot(motif_freq, control_regression_line,
+                      color=GREYNESS, linewidth=LINEWIDTH)
+    scatter_plot.legend(fontsize=14)
 
-    ticks_and_labels = np.linspace(1.02*min(motif_freq), 1.02*max(motif_freq), num = 5, endpoint=True)
+    ticks_and_labels = np.linspace(1.02*min(motif_freq), 1.02*max(motif_freq), num = 3, endpoint=True)
     scatter_plot.set_xticks(ticks_and_labels)
+
     ticks_and_labels = ["$%.2f$"%(x/(1.02*num_occurrences)) for x in ticks_and_labels]
-    scatter_plot.set_xticklabels(ticks_and_labels)
+    scatter_plot.set_xticklabels(ticks_and_labels)#, rotation=45)
 
     yloc = plt.MaxNLocator(MAX_YTICKS)
     scatter_plot.yaxis.set_major_locator(yloc)
-    scatter_plot.set_xlabel('$\mathrm{Base}\ \mathrm{Frequency}$', fontsize=FONTSIZE, fontweight='bold')
+    scatter_plot.set_xlabel(r'$\mathrm{Most}\ \mathrm{frequent} \ \mathrm{base}\ \mathrm{Frequency}$',
+                            fontsize=FONTSIZE, fontweight='bold')
     scatter_plot.get_xaxis().tick_bottom()
     scatter_plot.get_yaxis().tick_left()
     scatter_plot.set_ylabel('$\mathrm{%s}\ \mathrm{Score}$'%(y_label), fontsize=FONTSIZE, fontweight='bold')
@@ -461,13 +476,13 @@ def create_scatter_plot(matplot_dict, motif_freq,
 @click.option('--meme_file', '-i', help='MEME file', required=True)
 @click.option('--peak_file', '-p', help='BED file', required=True)
 @click.option('--fimo_file', '-f', help='Fimo file', required=True)
-@click.option('--output_dir', '-oc', help='Output directory')
+@click.option('-oc', '--output_directory', '--out_dir', '--output_dir', help='Output directory')
 @click.option('--centrimo_dir', help='Centrimo directory')
-@click.option('--motif_number', '-m', help='1-based motif number', required=True)
-@click.option('--flank_length', help='Flanking sites', required=True)
-@click.option('--sample_score_files', help='List of sample score files', multiple=True)
-@click.option('--control_score_files', help='List of control score files', multiple=True)
-@click.option('--reg_plot_titles', help='List of regression plot titles', multiple=True)
+@click.option('--motif_number', '-m', help='1-based motif number', type=int, required=True)
+@click.option('--flank_length', help='Flanking sites', type=int, required=True)
+@click.option('--sample_score_files', help='List of sample score files', nargs=3)
+@click.option('--control_score_files', help='List of control score files', nargs=3)
+@click.option('--reg_plot_titles', help='List of regression plot titles', nargs=3)
 @click.option('--annotate', help='Annotation dict')
 
 def create_plot(meme_file,
@@ -511,7 +526,7 @@ def create_plot(meme_file,
 
     meme_dir = os.path.abspath(os.path.dirname(meme_file))
     if not output_dir:
-        output_dir = os.path.join(os.path.abspath(meme_dir, '..'), 'moca_plots')
+        output_dir = os.path.join(os.path.join(meme_dir, '..'), 'moca_plots')
     safe_makedir(output_dir)
 
     subplot_ncols = 1
@@ -547,7 +562,7 @@ def create_plot(meme_file,
     X_values = [40+15] ## this is by trial and error, the position for the first base logo
     ## Generate all other X coordinates
     for j in range(1,len(motif)+2*flank_length):
-        X_values.append( X_values[j-1]+MAGIC_NUM+1.9 )
+        X_values.append( X_values[j-1]+OFFSET+1.9 )
 
     if centrimo_dir:
         subplot_ncols +=1
@@ -555,15 +570,14 @@ def create_plot(meme_file,
         centrimo_txt = os.path.join(centrimo_dir, 'centrimo.txt')
         centrimo_stats = os.path.join(centrimo_dir, 'site_counts.txt')
 
-    plot_title = os.path.split(peak_file)[1] + ' # {}'.format(motif_number)
+    plot_title = os.path.split(peak_file)[1] + r' \# {}'.format(motif_number)
     ##FIXME This is a big dirty hacl to get thegenerate plots for the Reverse complement logo too
     logo_name =['logo{}.png'.format(motif_number), 'logo_rc{}.png'.format(motif_number)]
-
     for sample_score, control_score, subplot_legend_title in zip(sample_conservation_scores,
                                                   control_conservation_scores,
                                                   reg_plot_titles):
         for logo_filename in logo_name:
-
+            print(logo_filename)
             setup_matplotlib()
             if 'rc'in logo_filename:
                 sample_score = sample_score[::-1]
@@ -576,12 +590,12 @@ def create_plot(meme_file,
             right_margin = matplot_dict['right_margin']
             #total_px= matplot_dict['total_px']
 
-            title = r'\textbf{\\underline{'+'{}'.format(plot_title)+'}}'
+            title = r'\textbf{' + '\\underline{'+'{}'.format(plot_title)+'}}'
             f.suptitle(title, fontsize=LEGEND_FONTSIZE)
             logo_plot = create_logo_plot({'figure':f, 'gridspec': gs[0]}, meme_dir, logo_filename, motif_length)
 
-            subgrid = gridspec.GridSpec(2, subplot_ncols, height_ratios=[1,4], width_ratios=[1]*subplot_ncols)
-            subgrid.update(bottom=0.14, right=0.95, left=1-right_margin*0.85, wspace=0.5)
+            subgrid = gridspec.GridSpec(2, subplot_ncols, height_ratios=[1,2], width_ratios=[1]*subplot_ncols)
+            subgrid.update(bottom=0.14, right=0.9, left=1-right_margin*0.85, wspace=0.58)
             X_left, X_center, X_right = create_stemplot({'figure': f,
                                                         'gridspec': gs[1],
                                                         'shareX': logo_plot},
@@ -600,9 +614,9 @@ def create_plot(meme_file,
                                 sample_score, control_score,
                                 flank_length, num_occurrences, y_label=subplot_legend_title)
 
-            if centrimo_stats:
+            if centrimo_dir:
                 create_enrichment_plot({'figure': f,
-                                        'gridspec_header': subgrid[1,0],
+                                        'gridspec_header': subgrid[0,1],
                                         'gridspec_body': subgrid[1,1]},
                                         motif_number,
                                         centrimo_txt,
@@ -615,11 +629,13 @@ def create_plot(meme_file,
 
             if annotate:
                 create_annnotation_plot({'figure': f,
-                                        'gridspec_header': subgrid[-1,0],
-                                        'gridspec_body': subgrid[-1,1]},
+                                        'gridspec_header': subgrid[0,-1],
+                                        'gridspec_body': subgrid[1,-1]},
                                         annotate)
 
             f.savefig(out_file, figsize=figsize, dpi=DPI)
+            break
+        break
 
 if __name__ == '__main__':
     create_plot()

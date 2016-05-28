@@ -136,7 +136,7 @@ def cli(bedfile, oc, configuration, flank_seq, flank_motif, genome_build):
                         sample_score_files=sample_score_files,
                         control_score_files=control_score_files,
                         reg_plot_titles=plot_titles,
-                        annotate=None):
+                        annotate=None)
         except Exception as e:
             sys.stderr.write('{}####\n\n Traceback: {}\n\n'.format(meme_file, e))
             continue

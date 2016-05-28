@@ -3,29 +3,14 @@ language: python
 env:
   - "2.6"
   - "2.7"
-  - "3.2"
-  - "3.3"
-  - "3.4"
-  - "3.5"
 
 sudo: false
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - gcc-4.8
-      - g++-4.8
-      - libstdc++-4.8-dev
-      - ghostscript
 cache:
   directories:
     - $HOME/miniconda
-    - $HOME/data
 
 before_install:
- - mkdir -p "$HOME/data"
  - export MINICONDA=$HOME/miniconda
  - export PATH="$MINICONDA/bin:$PATH"
  - hash -r
@@ -38,7 +23,7 @@ before_install:
  - conda remove --name mocatest --all
  - conda config --add channels bioconda
  - conda config --add channels r
- - conda install gcc perl
+ - conda config --add channels conda-forge
  - conda env create -q -f environment.yml python=$TRAVIS_PYTHON_VERSION
 
  - source activate mocatest
