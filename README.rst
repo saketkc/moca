@@ -74,6 +74,10 @@ Example
 .. image:: http://www.saket-choudhary.me/moca/_static/img/ENCFF002CEL.png
 
 
+Workflow
+--------
+
+.. image:: https://raw.githubusercontent.com/saketkc/moca_web/master/docs/abstract/workflow.png
 
 Tests
 -----
