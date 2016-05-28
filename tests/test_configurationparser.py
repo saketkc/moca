@@ -23,7 +23,7 @@ class TestConfigParser(unittest.TestCase):
     def test_get_section(self):
         """Test configuration sections"""
         section_dict = self.parsed_config.get_section('mongo')
-        assert 'mongo_db' in section_dict.keys()
+        assert 'mongo_host' in section_dict.keys()
     def test_genomes(self):
         """Test configuration genomes"""
         genomes = self.parsed_config.get_all_genomes()
