@@ -1,0 +1,1589 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<!-- Document definition -->
+<!-- http://zlab.bu.edu/~phaverty/SupplementalData/CisML/cisml.dtd -->
+<!DOCTYPE cis-element-search[
+<!ELEMENT cis-element-search (program-name, parameters, (pattern | multi-pattern-scan)*)>
+<!ELEMENT program-name (#PCDATA)>
+<!ELEMENT parameters (
+  pattern-file, 
+  sequence-file, 
+  background-seq-file?,
+  pattern-pvalue-cutoff?,
+  sequence-pvalue-cutoff?,
+  site-pvalue-cutoff?,
+  sequence-filtering,
+  ANY*
+ )>
+<!ELEMENT command-line (#PCDATA)>
+<!ELEMENT pattern-file (#PCDATA)>
+<!ELEMENT sequence-file (#PCDATA)>
+<!ELEMENT background-seq-file (#PCDATA)>
+<!ELEMENT pattern-pvalue-cutoff (#PCDATA)>
+<!ELEMENT sequence-pvalue-cutoff (#PCDATA)>
+<!ELEMENT site-pvalue-cutoff (#PCDATA)>
+<!ELEMENT sequence-filtering EMPTY>
+<!ELEMENT multi-pattern-scan (pattern+, ANY*)>
+<!ELEMENT pattern (scanned-sequence+, ANY*)>
+<!ELEMENT scanned-sequence (matched-element*, ANY*)>
+<!ELEMENT matched-element (sequence)>
+<!ELEMENT sequence (#PCDATA)>
+<!ATTLIST cis-element-search
+xmlns:xsi CDATA #IMPLIED
+xmlns:mem CDATA #IMPLIED
+xsi:schemaLocation CDATA #IMPLIED
+>
+<!ATTLIST sequence-filtering
+on-off CDATA #REQUIRED
+type CDATA #IMPLIED
+>
+<!ATTLIST multi-pattern-scan
+score CDATA #IMPLIED
+pvalue CDATA #IMPLIED
+>
+<!ATTLIST pattern
+accession CDATA #REQUIRED
+name CDATA #REQUIRED
+pvalue CDATA #IMPLIED
+score CDATA #IMPLIED
+db CDATA #IMPLIED
+lsid CDATA #IMPLIED
+>
+<!ATTLIST scanned-sequence
+accession CDATA #REQUIRED
+name CDATA #REQUIRED
+score CDATA #IMPLIED
+pvalue CDATA #IMPLIED
+length CDATA #IMPLIED
+db CDATA #IMPLIED
+lsid CDATA #IMPLIED
+>
+<!ATTLIST matched-element
+start CDATA #REQUIRED
+stop CDATA #REQUIRED
+score CDATA #IMPLIED
+pvalue CDATA #IMPLIED
+clusterid CDATA #IMPLIED
+>
+
+]>
+<cis-element-search
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://zlab.bu.edu/schema/cisml cisml.xsd"
+  xmlns="http://zlab.bu.edu/schema/cisml"
+  xmlns:mem="http://noble.gs.washington.edu/meme"
+>
+<program-name>fimo</program-name>
+<parameters>
+<pattern-file>/media/data1/encode_analysis/ENCSR000AKB/moca_output/meme_out/meme.txt</pattern-file>
+<sequence-file>/media/data1/encode_analysis/ENCSR000AKB/moca_output/meme_out/fimo_random_1/random_1.fa</sequence-file>
+<site-pvalue-cutoff>0.0001</site-pvalue-cutoff>
+<sequence-filtering on-off="off"/>
+</parameters>
+<pattern accession="1" name="1">
+<scanned-sequence accession="chr1:968385-968586_shuf" name="chr1:968385-968586_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:999259-999460_shuf" name="chr1:999259-999460_shuf">
+<matched-element start="145" stop="159" score="9.5" pvalue="6.22e-05">
+<sequence>GCCAGGCGGGGGGGC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:1227316-1227517_shuf" name="chr1:1227316-1227517_shuf">
+<matched-element start="80" stop="66" score="8.54545" pvalue="9.53e-05">
+<sequence>GCCACACGGGGCAGG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:1307541-1307742_shuf" name="chr1:1307541-1307742_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:1376398-1376599_shuf" name="chr1:1376398-1376599_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:1837761-1837962_shuf" name="chr1:1837761-1837962_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:2126683-2126884_shuf" name="chr1:2126683-2126884_shuf">
+<matched-element start="10" stop="24" score="10.3788" pvalue="4.13e-05">
+<sequence>GCCAGGGGGGGGGGG</sequence>
+<mem:qvalue>0.117</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:2313279-2313480_shuf" name="chr1:2313279-2313480_shuf">
+<matched-element start="166" stop="180" score="9.13636" pvalue="7.33e-05">
+<sequence>AGCAGCAGGGGAAGC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:2345876-2346077_shuf" name="chr1:2345876-2346077_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:2479537-2479738_shuf" name="chr1:2479537-2479738_shuf">
+<matched-element start="106" stop="120" score="8.98485" pvalue="7.86e-05">
+<sequence>GCTGCCAGGCGGCAG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:3369772-3369973_shuf" name="chr1:3369772-3369973_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:3407842-3408043_shuf" name="chr1:3407842-3408043_shuf">
+<matched-element start="97" stop="83" score="9.36364" pvalue="6.61e-05">
+<sequence>GCCGCCAGGGCGCTG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:3481877-3482078_shuf" name="chr1:3481877-3482078_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:3535660-3535861_shuf" name="chr1:3535660-3535861_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:3641057-3641258_shuf" name="chr1:3641057-3641258_shuf">
+<matched-element start="115" stop="101" score="11.7424" pvalue="2.12e-05">
+<sequence>GCCCTAAGGGGGCAG</sequence>
+<mem:qvalue>0.104</mem:qvalue>
+</matched-element>
+<matched-element start="170" stop="156" score="10.2121" pvalue="4.47e-05">
+<sequence>ACTACCAGGGGTCAG</sequence>
+<mem:qvalue>0.117</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:4712711-4712912_shuf" name="chr1:4712711-4712912_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:5570011-5570212_shuf" name="chr1:5570011-5570212_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:5574683-5574884_shuf" name="chr1:5574683-5574884_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:5805939-5806140_shuf" name="chr1:5805939-5806140_shuf">
+<matched-element start="149" stop="163" score="14.9242" pvalue="3.66e-06">
+<sequence>GCCACCAGAGGGCTT</sequence>
+<mem:qvalue>0.0625</mem:qvalue>
+</matched-element>
+<matched-element start="68" stop="82" score="11.4697" pvalue="2.43e-05">
+<sequence>TCCTCAAGGGGCCAC</sequence>
+<mem:qvalue>0.104</mem:qvalue>
+</matched-element>
+<matched-element start="32" stop="18" score="10.3333" pvalue="4.21e-05">
+<sequence>GTCGGCAGGGGGGGC</sequence>
+<mem:qvalue>0.117</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:6265316-6265517_shuf" name="chr1:6265316-6265517_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:6306836-6307037_shuf" name="chr1:6306836-6307037_shuf">
+<matched-element start="162" stop="176" score="13" pvalue="1.1e-05">
+<sequence>TCCCCCAGGGGGAAG</sequence>
+<mem:qvalue>0.0883</mem:qvalue>
+</matched-element>
+<matched-element start="196" stop="182" score="11.697" pvalue="2.17e-05">
+<sequence>ACCAGCCGAGGGCTC</sequence>
+<mem:qvalue>0.104</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:6403584-6403785_shuf" name="chr1:6403584-6403785_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:6483589-6483790_shuf" name="chr1:6483589-6483790_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:6498164-6498365_shuf" name="chr1:6498164-6498365_shuf">
+<matched-element start="86" stop="100" score="11.197" pvalue="2.79e-05">
+<sequence>GCATCAAGAGGGCGG</sequence>
+<mem:qvalue>0.111</mem:qvalue>
+</matched-element>
+<matched-element start="104" stop="118" score="10.1818" pvalue="4.54e-05">
+<sequence>ACCTCCAGCTGGCAC</sequence>
+<mem:qvalue>0.117</mem:qvalue>
+</matched-element>
+<matched-element start="116" stop="102" score="9.15152" pvalue="7.28e-05">
+<sequence>GCCAGCTGGAGGTGG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:6535643-6535844_shuf" name="chr1:6535643-6535844_shuf">
+<matched-element start="153" stop="139" score="10.9394" pvalue="3.15e-05">
+<sequence>GCCATTGGGGGGTGC</sequence>
+<mem:qvalue>0.111</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:6546603-6546804_shuf" name="chr1:6546603-6546804_shuf">
+<matched-element start="22" stop="36" score="9.74242" pvalue="5.56e-05">
+<sequence>TCCCCAAGAGGGCTC</sequence>
+<mem:qvalue>0.128</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:6550005-6550206_shuf" name="chr1:6550005-6550206_shuf">
+<matched-element start="73" stop="59" score="9.25758" pvalue="6.93e-05">
+<sequence>CCTGGCAGAGGGCGC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:6614570-6614771_shuf" name="chr1:6614570-6614771_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:6761873-6762074_shuf" name="chr1:6761873-6762074_shuf">
+<matched-element start="83" stop="97" score="8.71212" pvalue="8.84e-05">
+<sequence>CCCGGCGGGTGGTGG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+<matched-element start="86" stop="100" score="8.51515" pvalue="9.66e-05">
+<sequence>GGCGGGTGGTGGCGC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:6787620-6787821_shuf" name="chr1:6787620-6787821_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:7130527-7130728_shuf" name="chr1:7130527-7130728_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:7707382-7707583_shuf" name="chr1:7707382-7707583_shuf">
+<matched-element start="144" stop="130" score="9.0303" pvalue="7.7e-05">
+<sequence>CCCCGCAGGGGGGGC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:7727661-7727862_shuf" name="chr1:7727661-7727862_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:8042446-8042647_shuf" name="chr1:8042446-8042647_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:8374441-8374642_shuf" name="chr1:8374441-8374642_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:8621192-8621393_shuf" name="chr1:8621192-8621393_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:8909040-8909241_shuf" name="chr1:8909040-8909241_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:9048187-9048388_shuf" name="chr1:9048187-9048388_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:9065261-9065462_shuf" name="chr1:9065261-9065462_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:9161718-9161919_shuf" name="chr1:9161718-9161919_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:9170892-9171093_shuf" name="chr1:9170892-9171093_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:9202386-9202587_shuf" name="chr1:9202386-9202587_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:9241428-9241629_shuf" name="chr1:9241428-9241629_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:9256591-9256792_shuf" name="chr1:9256591-9256792_shuf">
+<matched-element start="200" stop="186" score="10.6061" pvalue="3.71e-05">
+<sequence>GGCAACAGAGGGCTC</sequence>
+<mem:qvalue>0.117</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:9349131-9349332_shuf" name="chr1:9349131-9349332_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:9515927-9516128_shuf" name="chr1:9515927-9516128_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:9551208-9551409_shuf" name="chr1:9551208-9551409_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:9555369-9555570_shuf" name="chr1:9555369-9555570_shuf">
+<matched-element start="165" stop="179" score="12.3182" pvalue="1.57e-05">
+<sequence>ACCCGCAGAGGGAGG</sequence>
+<mem:qvalue>0.0956</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:9675728-9675929_shuf" name="chr1:9675728-9675929_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:9687089-9687290_shuf" name="chr1:9687089-9687290_shuf">
+<matched-element start="113" stop="127" score="9.13636" pvalue="7.33e-05">
+<sequence>CGCTCCAGGTGGAGC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:9785162-9785363_shuf" name="chr1:9785162-9785363_shuf">
+<matched-element start="16" stop="30" score="15.7273" pvalue="2.26e-06">
+<sequence>GCCGGCAGAGGGTGG</sequence>
+<mem:qvalue>0.0625</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:9844678-9844879_shuf" name="chr1:9844678-9844879_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:9927623-9927824_shuf" name="chr1:9927623-9927824_shuf">
+<matched-element start="104" stop="118" score="15.0152" pvalue="3.47e-06">
+<sequence>GACAGGAGAGGGCAG</sequence>
+<mem:qvalue>0.0625</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:9935001-9935202_shuf" name="chr1:9935001-9935202_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:10010447-10010648_shuf" name="chr1:10010447-10010648_shuf">
+<matched-element start="165" stop="151" score="9.45455" pvalue="6.35e-05">
+<sequence>TTCACGAGGTGGTGC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:10092615-10092816_shuf" name="chr1:10092615-10092816_shuf">
+<matched-element start="126" stop="140" score="8.81818" pvalue="8.44e-05">
+<sequence>GCCAAGATGGGGCAC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:10270308-10270509_shuf" name="chr1:10270308-10270509_shuf">
+<matched-element start="79" stop="93" score="12.197" pvalue="1.68e-05">
+<sequence>GCCGCCTGAGGGCTC</sequence>
+<mem:qvalue>0.0976</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:10398208-10398409_shuf" name="chr1:10398208-10398409_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:10490325-10490526_shuf" name="chr1:10490325-10490526_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:10554821-10555022_shuf" name="chr1:10554821-10555022_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:10567555-10567756_shuf" name="chr1:10567555-10567756_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:11002107-11002308_shuf" name="chr1:11002107-11002308_shuf">
+<matched-element start="31" stop="45" score="8.68182" pvalue="8.96e-05">
+<sequence>GACAGTTGAGGGCCC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:11021148-11021349_shuf" name="chr1:11021148-11021349_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:11097724-11097925_shuf" name="chr1:11097724-11097925_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:11397667-11397868_shuf" name="chr1:11397667-11397868_shuf">
+<matched-element start="149" stop="163" score="12.6818" pvalue="1.3e-05">
+<sequence>GGCTCCTGGGGGCGC</sequence>
+<mem:qvalue>0.0883</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:11702565-11702766_shuf" name="chr1:11702565-11702766_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:11779924-11780125_shuf" name="chr1:11779924-11780125_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:11845287-11845488_shuf" name="chr1:11845287-11845488_shuf">
+<matched-element start="136" stop="150" score="13.0152" pvalue="1.09e-05">
+<sequence>CCCGCTCGGGGGCGC</sequence>
+<mem:qvalue>0.0883</mem:qvalue>
+</matched-element>
+<matched-element start="61" stop="75" score="10.4091" pvalue="4.07e-05">
+<sequence>GCCAGTGGAGGGAGT</sequence>
+<mem:qvalue>0.117</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:11898793-11898994_shuf" name="chr1:11898793-11898994_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:11954076-11954277_shuf" name="chr1:11954076-11954277_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:12178755-12178956_shuf" name="chr1:12178755-12178956_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:12184916-12185117_shuf" name="chr1:12184916-12185117_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:12269000-12269201_shuf" name="chr1:12269000-12269201_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:12289904-12290105_shuf" name="chr1:12289904-12290105_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:12679945-12680146_shuf" name="chr1:12679945-12680146_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:12719081-12719282_shuf" name="chr1:12719081-12719282_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:13992238-13992439_shuf" name="chr1:13992238-13992439_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:14140197-14140398_shuf" name="chr1:14140197-14140398_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:14286973-14287174_shuf" name="chr1:14286973-14287174_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:15241922-15242123_shuf" name="chr1:15241922-15242123_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:15354071-15354272_shuf" name="chr1:15354071-15354272_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:15373113-15373314_shuf" name="chr1:15373113-15373314_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:15426967-15427168_shuf" name="chr1:15426967-15427168_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:15455096-15455297_shuf" name="chr1:15455096-15455297_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:15631309-15631510_shuf" name="chr1:15631309-15631510_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:15650105-15650306_shuf" name="chr1:15650105-15650306_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:15757715-15757916_shuf" name="chr1:15757715-15757916_shuf">
+<matched-element start="159" stop="173" score="10.803" pvalue="3.37e-05">
+<sequence>CCCCGCAGGGGGTGG</sequence>
+<mem:qvalue>0.115</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:16067949-16068150_shuf" name="chr1:16067949-16068150_shuf">
+<matched-element start="51" stop="37" score="8.68182" pvalue="8.96e-05">
+<sequence>CCCACATGAGGGTGG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:16118597-16118798_shuf" name="chr1:16118597-16118798_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:16142094-16142295_shuf" name="chr1:16142094-16142295_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:16335589-16335790_shuf" name="chr1:16335589-16335790_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:16359423-16359624_shuf" name="chr1:16359423-16359624_shuf">
+<matched-element start="67" stop="53" score="10.0909" pvalue="4.74e-05">
+<sequence>CCCACAGGGTGTCGC</sequence>
+<mem:qvalue>0.118</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:16382669-16382870_shuf" name="chr1:16382669-16382870_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:16405442-16405643_shuf" name="chr1:16405442-16405643_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:16408892-16409093_shuf" name="chr1:16408892-16409093_shuf">
+<matched-element start="95" stop="109" score="12.1212" pvalue="1.75e-05">
+<sequence>GCCACTGGGTGGGGG</sequence>
+<mem:qvalue>0.098</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:16514329-16514530_shuf" name="chr1:16514329-16514530_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:16570966-16571167_shuf" name="chr1:16570966-16571167_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:16767024-16767225_shuf" name="chr1:16767024-16767225_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:16947606-16947807_shuf" name="chr1:16947606-16947807_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:16951481-16951682_shuf" name="chr1:16951481-16951682_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:16971174-16971375_shuf" name="chr1:16971174-16971375_shuf">
+<matched-element start="24" stop="10" score="9.57576" pvalue="6.02e-05">
+<sequence>GCCGTTCGAGGGCAG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+<matched-element start="142" stop="128" score="8.92424" pvalue="8.06e-05">
+<sequence>GGCTTGAGGGGGCGG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:17029726-17029927_shuf" name="chr1:17029726-17029927_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:17036338-17036539_shuf" name="chr1:17036338-17036539_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:17278223-17278424_shuf" name="chr1:17278223-17278424_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:17452312-17452513_shuf" name="chr1:17452312-17452513_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:17563635-17563836_shuf" name="chr1:17563635-17563836_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:17662689-17662890_shuf" name="chr1:17662689-17662890_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:17746401-17746602_shuf" name="chr1:17746401-17746602_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:17820832-17821033_shuf" name="chr1:17820832-17821033_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:17828890-17829091_shuf" name="chr1:17828890-17829091_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:18427069-18427270_shuf" name="chr1:18427069-18427270_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:18626282-18626483_shuf" name="chr1:18626282-18626483_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:18923974-18924175_shuf" name="chr1:18923974-18924175_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:19147356-19147557_shuf" name="chr1:19147356-19147557_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:19201799-19202000_shuf" name="chr1:19201799-19202000_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:19210680-19210881_shuf" name="chr1:19210680-19210881_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:19239628-19239829_shuf" name="chr1:19239628-19239829_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:19567829-19568030_shuf" name="chr1:19567829-19568030_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:19668053-19668254_shuf" name="chr1:19668053-19668254_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:19717889-19718090_shuf" name="chr1:19717889-19718090_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:19908837-19909038_shuf" name="chr1:19908837-19909038_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:19980264-19980465_shuf" name="chr1:19980264-19980465_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:20031112-20031313_shuf" name="chr1:20031112-20031313_shuf">
+<matched-element start="36" stop="22" score="9.31818" pvalue="6.74e-05">
+<sequence>ACTTGCAGGTGGCAG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:20042178-20042379_shuf" name="chr1:20042178-20042379_shuf">
+<matched-element start="178" stop="192" score="8.48485" pvalue="9.79e-05">
+<sequence>ACCTGCAGATGTTGC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:20088775-20088976_shuf" name="chr1:20088775-20088976_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:20208659-20208860_shuf" name="chr1:20208659-20208860_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:20244575-20244776_shuf" name="chr1:20244575-20244776_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:20427477-20427678_shuf" name="chr1:20427477-20427678_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:20478922-20479123_shuf" name="chr1:20478922-20479123_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:20521769-20521970_shuf" name="chr1:20521769-20521970_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:20703463-20703664_shuf" name="chr1:20703463-20703664_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:20820367-20820568_shuf" name="chr1:20820367-20820568_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:20848882-20849083_shuf" name="chr1:20848882-20849083_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:20959777-20959978_shuf" name="chr1:20959777-20959978_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:21543421-21543622_shuf" name="chr1:21543421-21543622_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:21581777-21581978_shuf" name="chr1:21581777-21581978_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:21596789-21596990_shuf" name="chr1:21596789-21596990_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:21695064-21695265_shuf" name="chr1:21695064-21695265_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:22290550-22290751_shuf" name="chr1:22290550-22290751_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:22432211-22432412_shuf" name="chr1:22432211-22432412_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:22458472-22458673_shuf" name="chr1:22458472-22458673_shuf">
+<matched-element start="109" stop="123" score="14.2424" pvalue="5.51e-06">
+<sequence>GCCTCGGGGGGGCAG</sequence>
+<mem:qvalue>0.069</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:22602427-22602628_shuf" name="chr1:22602427-22602628_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:22743162-22743363_shuf" name="chr1:22743162-22743363_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:22968611-22968812_shuf" name="chr1:22968611-22968812_shuf">
+<matched-element start="117" stop="131" score="13.3485" pvalue="9.04e-06">
+<sequence>CCCGGCAGGGGGCCC</sequence>
+<mem:qvalue>0.0846</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:23290775-23290976_shuf" name="chr1:23290775-23290976_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:23302989-23303190_shuf" name="chr1:23302989-23303190_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:23425298-23425499_shuf" name="chr1:23425298-23425499_shuf">
+<matched-element start="97" stop="111" score="11.4848" pvalue="2.41e-05">
+<sequence>TCCAACAGAGGACGG</sequence>
+<mem:qvalue>0.104</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:23730526-23730727_shuf" name="chr1:23730526-23730727_shuf">
+<matched-element start="145" stop="159" score="10.0152" pvalue="4.91e-05">
+<sequence>TCCACTAGAGAGCAG</sequence>
+<mem:qvalue>0.118</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:23823632-23823833_shuf" name="chr1:23823632-23823833_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:23866397-23866598_shuf" name="chr1:23866397-23866598_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:23871270-23871471_shuf" name="chr1:23871270-23871471_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:23961549-23961750_shuf" name="chr1:23961549-23961750_shuf">
+<matched-element start="101" stop="87" score="15.4091" pvalue="2.74e-06">
+<sequence>TCCAGTAGGGGTCAC</sequence>
+<mem:qvalue>0.0625</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:23964010-23964211_shuf" name="chr1:23964010-23964211_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:23984268-23984469_shuf" name="chr1:23984268-23984469_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:24098699-24098900_shuf" name="chr1:24098699-24098900_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:24136273-24136474_shuf" name="chr1:24136273-24136474_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:24137346-24137547_shuf" name="chr1:24137346-24137547_shuf">
+<matched-element start="112" stop="126" score="8.54545" pvalue="9.53e-05">
+<sequence>GCAGGCAGGAGGCAG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:24194849-24195050_shuf" name="chr1:24194849-24195050_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:24243390-24243591_shuf" name="chr1:24243390-24243591_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:24397404-24397605_shuf" name="chr1:24397404-24397605_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:24477032-24477233_shuf" name="chr1:24477032-24477233_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:24525841-24526042_shuf" name="chr1:24525841-24526042_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:24528425-24528626_shuf" name="chr1:24528425-24528626_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:24717860-24718061_shuf" name="chr1:24717860-24718061_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:24741976-24742177_shuf" name="chr1:24741976-24742177_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:25015110-25015311_shuf" name="chr1:25015110-25015311_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:25174475-25174676_shuf" name="chr1:25174475-25174676_shuf">
+<matched-element start="153" stop="167" score="10.0152" pvalue="4.91e-05">
+<sequence>GCCGGGGGGGGGCCG</sequence>
+<mem:qvalue>0.118</mem:qvalue>
+</matched-element>
+<matched-element start="154" stop="140" score="8.81818" pvalue="8.44e-05">
+<sequence>GCCAGCTGAGGGTTG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+<matched-element start="51" stop="65" score="8.63636" pvalue="9.15e-05">
+<sequence>ACCACCAGGTGCTGA</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:25224686-25224887_shuf" name="chr1:25224686-25224887_shuf">
+<matched-element start="44" stop="30" score="9.60606" pvalue="5.93e-05">
+<sequence>ACCAGGAGAGGCAGC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:25363746-25363947_shuf" name="chr1:25363746-25363947_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:25428010-25428211_shuf" name="chr1:25428010-25428211_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:26137427-26137628_shuf" name="chr1:26137427-26137628_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:26221971-26222172_shuf" name="chr1:26221971-26222172_shuf">
+<matched-element start="44" stop="30" score="10.0303" pvalue="4.88e-05">
+<sequence>ACCCCCAGAGGGGAG</sequence>
+<mem:qvalue>0.118</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:26324711-26324912_shuf" name="chr1:26324711-26324912_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:26362527-26362728_shuf" name="chr1:26362527-26362728_shuf">
+<matched-element start="78" stop="92" score="13.6818" pvalue="7.57e-06">
+<sequence>ACCACCCGAGGGAGC</sequence>
+<mem:qvalue>0.0821</mem:qvalue>
+</matched-element>
+<matched-element start="17" stop="3" score="8.72727" pvalue="8.78e-05">
+<sequence>GCACCCGGGTGGCGC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:26431526-26431727_shuf" name="chr1:26431526-26431727_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:26496226-26496427_shuf" name="chr1:26496226-26496427_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:26560325-26560526_shuf" name="chr1:26560325-26560526_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:26602107-26602308_shuf" name="chr1:26602107-26602308_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:26611637-26611838_shuf" name="chr1:26611637-26611838_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:26648112-26648313_shuf" name="chr1:26648112-26648313_shuf">
+<matched-element start="97" stop="111" score="8.48485" pvalue="9.79e-05">
+<sequence>AGCAGCAGGCGGAAG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:26690394-26690595_shuf" name="chr1:26690394-26690595_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:26743608-26743809_shuf" name="chr1:26743608-26743809_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:26826739-26826940_shuf" name="chr1:26826739-26826940_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:27004067-27004268_shuf" name="chr1:27004067-27004268_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:27115750-27115951_shuf" name="chr1:27115750-27115951_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:27324198-27324399_shuf" name="chr1:27324198-27324399_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:27371095-27371296_shuf" name="chr1:27371095-27371296_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:27372479-27372680_shuf" name="chr1:27372479-27372680_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:27423964-27424165_shuf" name="chr1:27423964-27424165_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:27429250-27429451_shuf" name="chr1:27429250-27429451_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:27481596-27481797_shuf" name="chr1:27481596-27481797_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:27524498-27524699_shuf" name="chr1:27524498-27524699_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:27627358-27627559_shuf" name="chr1:27627358-27627559_shuf">
+<matched-element start="121" stop="107" score="13.697" pvalue="7.5e-06">
+<sequence>TCCTCCAGGGGCCAC</sequence>
+<mem:qvalue>0.0821</mem:qvalue>
+</matched-element>
+<matched-element start="85" stop="99" score="8.75758" pvalue="8.66e-05">
+<sequence>ATCAGCAGGGGGCTT</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:27659360-27659561_shuf" name="chr1:27659360-27659561_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:27684069-27684270_shuf" name="chr1:27684069-27684270_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:27714975-27715176_shuf" name="chr1:27714975-27715176_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:27721980-27722181_shuf" name="chr1:27721980-27722181_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:27883311-27883512_shuf" name="chr1:27883311-27883512_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:27932951-27933152_shuf" name="chr1:27932951-27933152_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:27935201-27935402_shuf" name="chr1:27935201-27935402_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:27970465-27970666_shuf" name="chr1:27970465-27970666_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:27989748-27989949_shuf" name="chr1:27989748-27989949_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:27995722-27995923_shuf" name="chr1:27995722-27995923_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:28184627-28184828_shuf" name="chr1:28184627-28184828_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:28575057-28575258_shuf" name="chr1:28575057-28575258_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:28844582-28844783_shuf" name="chr1:28844582-28844783_shuf">
+<matched-element start="136" stop="122" score="8.95455" pvalue="7.96e-05">
+<sequence>CCCCGGAGGGGGAGC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+<matched-element start="80" stop="66" score="8.75758" pvalue="8.66e-05">
+<sequence>CCCGCCAGAGGCTGC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:29063156-29063357_shuf" name="chr1:29063156-29063357_shuf">
+<matched-element start="3" stop="17" score="11.0303" pvalue="3.02e-05">
+<sequence>AGCGGCAGGGGGAAG</sequence>
+<mem:qvalue>0.111</mem:qvalue>
+</matched-element>
+<matched-element start="59" stop="45" score="9.72727" pvalue="5.6e-05">
+<sequence>GCCGGGAGGGGGTTC</sequence>
+<mem:qvalue>0.128</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:29111681-29111882_shuf" name="chr1:29111681-29111882_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:29203782-29203983_shuf" name="chr1:29203782-29203983_shuf">
+<matched-element start="89" stop="75" score="11.0152" pvalue="3.04e-05">
+<sequence>GCCTCCCGGTGGTGG</sequence>
+<mem:qvalue>0.111</mem:qvalue>
+</matched-element>
+<matched-element start="77" stop="91" score="9.80303" pvalue="5.4e-05">
+<sequence>ACCACCGGGAGGCAT</sequence>
+<mem:qvalue>0.127</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:29208634-29208835_shuf" name="chr1:29208634-29208835_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:29529464-29529665_shuf" name="chr1:29529464-29529665_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:30176481-30176682_shuf" name="chr1:30176481-30176682_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:30853316-30853517_shuf" name="chr1:30853316-30853517_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:31192115-31192316_shuf" name="chr1:31192115-31192316_shuf">
+<matched-element start="74" stop="88" score="10.1818" pvalue="4.54e-05">
+<sequence>GCCCCAGGGGGGAGG</sequence>
+<mem:qvalue>0.117</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:31252527-31252728_shuf" name="chr1:31252527-31252728_shuf">
+<matched-element start="160" stop="174" score="8.83333" pvalue="8.39e-05">
+<sequence>GCAACCTGGGGGAAG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:31274649-31274850_shuf" name="chr1:31274649-31274850_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:31635605-31635806_shuf" name="chr1:31635605-31635806_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:31654357-31654558_shuf" name="chr1:31654357-31654558_shuf">
+<matched-element start="144" stop="158" score="15.9848" pvalue="1.9e-06">
+<sequence>GGCACGAGAGGGCGG</sequence>
+<mem:qvalue>0.0625</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:31867547-31867748_shuf" name="chr1:31867547-31867748_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:31895683-31895884_shuf" name="chr1:31895683-31895884_shuf">
+<matched-element start="26" stop="40" score="8.57576" pvalue="9.41e-05">
+<sequence>GTCGCTAGGGGGACC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:32014568-32014769_shuf" name="chr1:32014568-32014769_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:32059680-32059881_shuf" name="chr1:32059680-32059881_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:32129509-32129710_shuf" name="chr1:32129509-32129710_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:32211309-32211510_shuf" name="chr1:32211309-32211510_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:32254907-32255108_shuf" name="chr1:32254907-32255108_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:32429796-32429997_shuf" name="chr1:32429796-32429997_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:32681306-32681507_shuf" name="chr1:32681306-32681507_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:32713864-32714065_shuf" name="chr1:32713864-32714065_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:32866505-32866706_shuf" name="chr1:32866505-32866706_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:32986085-32986286_shuf" name="chr1:32986085-32986286_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:33177842-33178043_shuf" name="chr1:33177842-33178043_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:33238684-33238885_shuf" name="chr1:33238684-33238885_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:33342295-33342496_shuf" name="chr1:33342295-33342496_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:33560680-33560881_shuf" name="chr1:33560680-33560881_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:33592861-33593062_shuf" name="chr1:33592861-33593062_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:33761161-33761362_shuf" name="chr1:33761161-33761362_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:33764352-33764553_shuf" name="chr1:33764352-33764553_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:33833445-33833646_shuf" name="chr1:33833445-33833646_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:33936176-33936377_shuf" name="chr1:33936176-33936377_shuf">
+<matched-element start="11" stop="25" score="11.1364" pvalue="2.87e-05">
+<sequence>TCCAGCAGGGGACCG</sequence>
+<mem:qvalue>0.111</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:34078600-34078801_shuf" name="chr1:34078600-34078801_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:34098708-34098909_shuf" name="chr1:34098708-34098909_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:35063596-35063797_shuf" name="chr1:35063596-35063797_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:35208367-35208568_shuf" name="chr1:35208367-35208568_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:35252141-35252342_shuf" name="chr1:35252141-35252342_shuf">
+<matched-element start="166" stop="180" score="14.8485" pvalue="3.84e-06">
+<sequence>CACACTAGAGGGCAC</sequence>
+<mem:qvalue>0.0625</mem:qvalue>
+</matched-element>
+<matched-element start="200" stop="186" score="10.1818" pvalue="4.54e-05">
+<sequence>ACCACAAGATGCAGC</sequence>
+<mem:qvalue>0.117</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:35318354-35318555_shuf" name="chr1:35318354-35318555_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:35325417-35325618_shuf" name="chr1:35325417-35325618_shuf">
+<matched-element start="52" stop="66" score="9.16667" pvalue="7.23e-05">
+<sequence>TCCCTGAGGGGGCGG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:35332022-35332223_shuf" name="chr1:35332022-35332223_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:35667765-35667966_shuf" name="chr1:35667765-35667966_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:35916731-35916932_shuf" name="chr1:35916731-35916932_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:36030332-36030533_shuf" name="chr1:36030332-36030533_shuf">
+<matched-element start="25" stop="11" score="11.197" pvalue="2.79e-05">
+<sequence>CCCTCAAGGGGGTGG</sequence>
+<mem:qvalue>0.111</mem:qvalue>
+</matched-element>
+<matched-element start="166" stop="152" score="10.6818" pvalue="3.58e-05">
+<sequence>GCCTCCAGTGGGTGG</sequence>
+<mem:qvalue>0.116</mem:qvalue>
+</matched-element>
+<matched-element start="54" stop="40" score="8.43939" pvalue="9.98e-05">
+<sequence>GGCAGAAGAGGGAGT</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:36034597-36034798_shuf" name="chr1:36034597-36034798_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:36181149-36181350_shuf" name="chr1:36181149-36181350_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:36192524-36192725_shuf" name="chr1:36192524-36192725_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:36240360-36240561_shuf" name="chr1:36240360-36240561_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:36348592-36348793_shuf" name="chr1:36348592-36348793_shuf">
+<matched-element start="112" stop="98" score="14.4545" pvalue="4.82e-06">
+<sequence>GCCAGCGGGAGGCAC</sequence>
+<mem:qvalue>0.0654</mem:qvalue>
+</matched-element>
+<matched-element start="153" stop="139" score="11.8636" pvalue="1.99e-05">
+<sequence>AGCGGAAGAGGGCGG</sequence>
+<mem:qvalue>0.104</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:36554284-36554485_shuf" name="chr1:36554284-36554485_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:36565271-36565472_shuf" name="chr1:36565271-36565472_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:36615200-36615401_shuf" name="chr1:36615200-36615401_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:36653849-36654050_shuf" name="chr1:36653849-36654050_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:36834706-36834907_shuf" name="chr1:36834706-36834907_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:36886500-36886701_shuf" name="chr1:36886500-36886701_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:36982031-36982232_shuf" name="chr1:36982031-36982232_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:37041734-37041935_shuf" name="chr1:37041734-37041935_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:37074935-37075136_shuf" name="chr1:37074935-37075136_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:37116153-37116354_shuf" name="chr1:37116153-37116354_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:37169388-37169589_shuf" name="chr1:37169388-37169589_shuf">
+<matched-element start="62" stop="48" score="9.42424" pvalue="6.44e-05">
+<sequence>GCCGGAAGAGGGCCA</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+<matched-element start="95" stop="109" score="9.15152" pvalue="7.28e-05">
+<sequence>GCCTGTGGGGGGGGG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:37899977-37900178_shuf" name="chr1:37899977-37900178_shuf">
+<matched-element start="140" stop="126" score="10.2879" pvalue="4.31e-05">
+<sequence>TGCAGCAGAAGGCAC</sequence>
+<mem:qvalue>0.117</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:37920517-37920718_shuf" name="chr1:37920517-37920718_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:37953063-37953264_shuf" name="chr1:37953063-37953264_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:38148146-38148347_shuf" name="chr1:38148146-38148347_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:38276809-38277010_shuf" name="chr1:38276809-38277010_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:38325860-38326061_shuf" name="chr1:38325860-38326061_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:38455740-38455941_shuf" name="chr1:38455740-38455941_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:39052814-39053015_shuf" name="chr1:39052814-39053015_shuf">
+<matched-element start="81" stop="67" score="10" pvalue="4.94e-05">
+<sequence>TGCACTAGAGGCCAG</sequence>
+<mem:qvalue>0.118</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:39564407-39564608_shuf" name="chr1:39564407-39564608_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:40004956-40005157_shuf" name="chr1:40004956-40005157_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:40071921-40072122_shuf" name="chr1:40071921-40072122_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:40075381-40075582_shuf" name="chr1:40075381-40075582_shuf">
+<matched-element start="156" stop="142" score="9.34848" pvalue="6.65e-05">
+<sequence>GCCACCGTGGGGAGC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:40119287-40119488_shuf" name="chr1:40119287-40119488_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:40123794-40123995_shuf" name="chr1:40123794-40123995_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:40265443-40265644_shuf" name="chr1:40265443-40265644_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:40439267-40439468_shuf" name="chr1:40439267-40439468_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:40781032-40781233_shuf" name="chr1:40781032-40781233_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:40804462-40804663_shuf" name="chr1:40804462-40804663_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:41078018-41078219_shuf" name="chr1:41078018-41078219_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:41134653-41134854_shuf" name="chr1:41134653-41134854_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:41239944-41240145_shuf" name="chr1:41239944-41240145_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:41315768-41315969_shuf" name="chr1:41315768-41315969_shuf">
+<matched-element start="99" stop="85" score="8.84848" pvalue="8.33e-05">
+<sequence>TACTGCAGGGGACGG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:41418245-41418446_shuf" name="chr1:41418245-41418446_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:41733904-41734105_shuf" name="chr1:41733904-41734105_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:41748445-41748646_shuf" name="chr1:41748445-41748646_shuf">
+<matched-element start="10" stop="24" score="11.8636" pvalue="1.99e-05">
+<sequence>TCCACAGGGTGGAGC</sequence>
+<mem:qvalue>0.104</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:41882842-41883043_shuf" name="chr1:41882842-41883043_shuf">
+<matched-element start="42" stop="28" score="9.59091" pvalue="5.97e-05">
+<sequence>AGAAGCAGGTGGCAC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:41898482-41898683_shuf" name="chr1:41898482-41898683_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:41981829-41982030_shuf" name="chr1:41981829-41982030_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:42039836-42040037_shuf" name="chr1:42039836-42040037_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:42612614-42612815_shuf" name="chr1:42612614-42612815_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:42639095-42639296_shuf" name="chr1:42639095-42639296_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:43388684-43388885_shuf" name="chr1:43388684-43388885_shuf">
+<matched-element start="180" stop="166" score="11.7879" pvalue="2.07e-05">
+<sequence>TCAGCTAGGGGGCAC</sequence>
+<mem:qvalue>0.104</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:43539389-43539590_shuf" name="chr1:43539389-43539590_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:43693006-43693207_shuf" name="chr1:43693006-43693207_shuf">
+<matched-element start="136" stop="150" score="10.697" pvalue="3.55e-05">
+<sequence>GCCAGTAGTTGGCCC</sequence>
+<mem:qvalue>0.116</mem:qvalue>
+</matched-element>
+<matched-element start="121" stop="107" score="9.09091" pvalue="7.49e-05">
+<sequence>GGCAGCAGGAGGCTG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:43994873-43995074_shuf" name="chr1:43994873-43995074_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:44229202-44229403_shuf" name="chr1:44229202-44229403_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:44399936-44400137_shuf" name="chr1:44399936-44400137_shuf">
+<matched-element start="137" stop="123" score="11.5606" pvalue="2.32e-05">
+<sequence>GCCGCCAGAAGGCAT</sequence>
+<mem:qvalue>0.104</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:44400521-44400722_shuf" name="chr1:44400521-44400722_shuf">
+<matched-element start="31" stop="17" score="12.7121" pvalue="1.28e-05">
+<sequence>TTCAGGAGAGGGCGC</sequence>
+<mem:qvalue>0.0883</mem:qvalue>
+</matched-element>
+<matched-element start="57" stop="71" score="9.57576" pvalue="6.02e-05">
+<sequence>TGCAGCAGAGGGGGC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:44412110-44412311_shuf" name="chr1:44412110-44412311_shuf">
+<matched-element start="22" stop="8" score="13.4545" pvalue="8.53e-06">
+<sequence>ACCACCTGGGGGCCG</sequence>
+<mem:qvalue>0.0846</mem:qvalue>
+</matched-element>
+<matched-element start="10" stop="24" score="9.66667" pvalue="5.76e-05">
+<sequence>GCCCCCAGGTGGTCG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:44471409-44471610_shuf" name="chr1:44471409-44471610_shuf">
+<matched-element start="124" stop="138" score="11.5455" pvalue="2.34e-05">
+<sequence>CCAAGCAGAGGGCAG</sequence>
+<mem:qvalue>0.104</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:44502327-44502528_shuf" name="chr1:44502327-44502528_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:44513445-44513646_shuf" name="chr1:44513445-44513646_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:44683469-44683670_shuf" name="chr1:44683469-44683670_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:44784000-44784201_shuf" name="chr1:44784000-44784201_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:45060895-45061096_shuf" name="chr1:45060895-45061096_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:45118609-45118810_shuf" name="chr1:45118609-45118810_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:45180713-45180914_shuf" name="chr1:45180713-45180914_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:45195007-45195208_shuf" name="chr1:45195007-45195208_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:45197014-45197215_shuf" name="chr1:45197014-45197215_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:45251845-45252046_shuf" name="chr1:45251845-45252046_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:45265423-45265624_shuf" name="chr1:45265423-45265624_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:45301582-45301783_shuf" name="chr1:45301582-45301783_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:45480219-45480420_shuf" name="chr1:45480219-45480420_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:45484379-45484580_shuf" name="chr1:45484379-45484580_shuf">
+<matched-element start="24" stop="38" score="10.2273" pvalue="4.44e-05">
+<sequence>GCCGAGAGGGGGCTG</sequence>
+<mem:qvalue>0.117</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:46035825-46036026_shuf" name="chr1:46035825-46036026_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:46502791-46502992_shuf" name="chr1:46502791-46502992_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:46645283-46645484_shuf" name="chr1:46645283-46645484_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:46689226-46689427_shuf" name="chr1:46689226-46689427_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:46813860-46814061_shuf" name="chr1:46813860-46814061_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:46908388-46908589_shuf" name="chr1:46908388-46908589_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:46912599-46912800_shuf" name="chr1:46912599-46912800_shuf">
+<matched-element start="25" stop="39" score="10.7879" pvalue="3.39e-05">
+<sequence>ACCAGAAGGGGCAGG</sequence>
+<mem:qvalue>0.115</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:46943154-46943355_shuf" name="chr1:46943154-46943355_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:46993779-46993980_shuf" name="chr1:46993779-46993980_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:47190999-47191200_shuf" name="chr1:47190999-47191200_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:47641107-47641308_shuf" name="chr1:47641107-47641308_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:47644911-47645112_shuf" name="chr1:47644911-47645112_shuf">
+<matched-element start="47" stop="33" score="10.9545" pvalue="3.13e-05">
+<sequence>GGCAGAAGGAGGCAG</sequence>
+<mem:qvalue>0.111</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:47658642-47658843_shuf" name="chr1:47658642-47658843_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:47902187-47902388_shuf" name="chr1:47902187-47902388_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:48176259-48176460_shuf" name="chr1:48176259-48176460_shuf">
+<matched-element start="37" stop="51" score="12.303" pvalue="1.59e-05">
+<sequence>GGCTCTGGGGGGCGG</sequence>
+<mem:qvalue>0.0956</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:48192024-48192225_shuf" name="chr1:48192024-48192225_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:48221173-48221374_shuf" name="chr1:48221173-48221374_shuf">
+<matched-element start="74" stop="60" score="9.07576" pvalue="7.54e-05">
+<sequence>GGCTCTTGATGGCAC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:48463393-48463594_shuf" name="chr1:48463393-48463594_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:48559437-48559638_shuf" name="chr1:48559437-48559638_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:48963859-48964060_shuf" name="chr1:48963859-48964060_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:49162859-49163060_shuf" name="chr1:49162859-49163060_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:50737742-50737943_shuf" name="chr1:50737742-50737943_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:50814476-50814677_shuf" name="chr1:50814476-50814677_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:51339310-51339511_shuf" name="chr1:51339310-51339511_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:51655186-51655387_shuf" name="chr1:51655186-51655387_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:51762573-51762774_shuf" name="chr1:51762573-51762774_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:52468066-52468267_shuf" name="chr1:52468066-52468267_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:53647776-53647977_shuf" name="chr1:53647776-53647977_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:53743982-53744183_shuf" name="chr1:53743982-53744183_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:53859085-53859286_shuf" name="chr1:53859085-53859286_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:54326636-54326837_shuf" name="chr1:54326636-54326837_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:54547427-54547628_shuf" name="chr1:54547427-54547628_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:54955171-54955372_shuf" name="chr1:54955171-54955372_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:55137772-55137973_shuf" name="chr1:55137772-55137973_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:55276232-55276433_shuf" name="chr1:55276232-55276433_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:55487830-55488031_shuf" name="chr1:55487830-55488031_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:55743284-55743485_shuf" name="chr1:55743284-55743485_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:55841423-55841624_shuf" name="chr1:55841423-55841624_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:56167809-56168010_shuf" name="chr1:56167809-56168010_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:57286793-57286994_shuf" name="chr1:57286793-57286994_shuf">
+<matched-element start="124" stop="138" score="15.5152" pvalue="2.56e-06">
+<sequence>TCCACCAGTGGGCGG</sequence>
+<mem:qvalue>0.0625</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:57297632-57297833_shuf" name="chr1:57297632-57297833_shuf">
+<matched-element start="11" stop="25" score="10.3788" pvalue="4.13e-05">
+<sequence>GACAAAAGGGGGAGG</sequence>
+<mem:qvalue>0.117</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:58628747-58628948_shuf" name="chr1:58628747-58628948_shuf">
+<matched-element start="13" stop="27" score="8.65152" pvalue="9.09e-05">
+<sequence>ACCAGCAAGTGGCAA</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:59012464-59012665_shuf" name="chr1:59012464-59012665_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:60165034-60165235_shuf" name="chr1:60165034-60165235_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:60225221-60225422_shuf" name="chr1:60225221-60225422_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:60413085-60413286_shuf" name="chr1:60413085-60413286_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:60437123-60437324_shuf" name="chr1:60437123-60437324_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:60442566-60442767_shuf" name="chr1:60442566-60442767_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:60747102-60747303_shuf" name="chr1:60747102-60747303_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:62054432-62054633_shuf" name="chr1:62054432-62054633_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:62548488-62548689_shuf" name="chr1:62548488-62548689_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:62596889-62597090_shuf" name="chr1:62596889-62597090_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:64602866-64603067_shuf" name="chr1:64602866-64603067_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:66153456-66153657_shuf" name="chr1:66153456-66153657_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:66708428-66708629_shuf" name="chr1:66708428-66708629_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:67191823-67192024_shuf" name="chr1:67191823-67192024_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:67461814-67462015_shuf" name="chr1:67461814-67462015_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:67966215-67966416_shuf" name="chr1:67966215-67966416_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:68027396-68027597_shuf" name="chr1:68027396-68027597_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:68808517-68808718_shuf" name="chr1:68808517-68808718_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:70953659-70953860_shuf" name="chr1:70953659-70953860_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:71151062-71151263_shuf" name="chr1:71151062-71151263_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:74969910-74970111_shuf" name="chr1:74969910-74970111_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:75199474-75199675_shuf" name="chr1:75199474-75199675_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:76619873-76620074_shuf" name="chr1:76619873-76620074_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:76796749-76796950_shuf" name="chr1:76796749-76796950_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:78149164-78149365_shuf" name="chr1:78149164-78149365_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:78445118-78445319_shuf" name="chr1:78445118-78445319_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:78580156-78580357_shuf" name="chr1:78580156-78580357_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:78610829-78611030_shuf" name="chr1:78610829-78611030_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:79083294-79083495_shuf" name="chr1:79083294-79083495_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:79962939-79963140_shuf" name="chr1:79962939-79963140_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:81880183-81880384_shuf" name="chr1:81880183-81880384_shuf">
+<matched-element start="103" stop="89" score="10.303" pvalue="4.28e-05">
+<sequence>TCCACAATAGGGCAC</sequence>
+<mem:qvalue>0.117</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:85086591-85086792_shuf" name="chr1:85086591-85086792_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:85219322-85219523_shuf" name="chr1:85219322-85219523_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:85238112-85238313_shuf" name="chr1:85238112-85238313_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:85248243-85248444_shuf" name="chr1:85248243-85248444_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:85401993-85402194_shuf" name="chr1:85401993-85402194_shuf">
+<matched-element start="101" stop="115" score="14.5" pvalue="4.71e-06">
+<sequence>GCCAGGAGAGGTCAG</sequence>
+<mem:qvalue>0.0654</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:85410701-85410902_shuf" name="chr1:85410701-85410902_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:85725351-85725552_shuf" name="chr1:85725351-85725552_shuf">
+<matched-element start="165" stop="151" score="8.5303" pvalue="9.6e-05">
+<sequence>GCCGCCCGGGGCAAC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+<matched-element start="32" stop="18" score="8.4697" pvalue="9.85e-05">
+<sequence>GGCAAGCGGGGGCGC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:85773898-85774099_shuf" name="chr1:85773898-85774099_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:87170078-87170279_shuf" name="chr1:87170078-87170279_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:87597503-87597704_shuf" name="chr1:87597503-87597704_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:88646279-88646480_shuf" name="chr1:88646279-88646480_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:90228604-90228805_shuf" name="chr1:90228604-90228805_shuf">
+<matched-element start="80" stop="94" score="9.07576" pvalue="7.54e-05">
+<sequence>CTCAGCAGAGGCCAC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:90270295-90270496_shuf" name="chr1:90270295-90270496_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:90452855-90453056_shuf" name="chr1:90452855-90453056_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:91187044-91187245_shuf" name="chr1:91187044-91187245_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:91630908-91631109_shuf" name="chr1:91630908-91631109_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:93297394-93297595_shuf" name="chr1:93297394-93297595_shuf">
+<matched-element start="138" stop="124" score="8.71212" pvalue="8.84e-05">
+<sequence>GCCCACAGAGGACAG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:93324510-93324711_shuf" name="chr1:93324510-93324711_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:93770278-93770479_shuf" name="chr1:93770278-93770479_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:94279656-94279857_shuf" name="chr1:94279656-94279857_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:94375136-94375337_shuf" name="chr1:94375136-94375337_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:94505137-94505338_shuf" name="chr1:94505137-94505338_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:94527055-94527256_shuf" name="chr1:94527055-94527256_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:95271478-95271679_shuf" name="chr1:95271478-95271679_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:95320026-95320227_shuf" name="chr1:95320026-95320227_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:95509030-95509231_shuf" name="chr1:95509030-95509231_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:97432174-97432375_shuf" name="chr1:97432174-97432375_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:98516732-98516933_shuf" name="chr1:98516732-98516933_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:98519785-98519986_shuf" name="chr1:98519785-98519986_shuf">
+<matched-element start="150" stop="136" score="11.1212" pvalue="2.89e-05">
+<sequence>GACGGGAGGGGGAGC</sequence>
+<mem:qvalue>0.111</mem:qvalue>
+</matched-element>
+<matched-element start="19" stop="5" score="9.43939" pvalue="6.4e-05">
+<sequence>ACCGCAGGGAGGCGG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:100173206-100173407_shuf" name="chr1:100173206-100173407_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:100925164-100925365_shuf" name="chr1:100925164-100925365_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:100929366-100929567_shuf" name="chr1:100929366-100929567_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:101704389-101704590_shuf" name="chr1:101704389-101704590_shuf">
+<matched-element start="136" stop="122" score="8.59091" pvalue="9.34e-05">
+<sequence>GCCGCTGGAGGGTGT</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:101754073-101754274_shuf" name="chr1:101754073-101754274_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:101774859-101775060_shuf" name="chr1:101774859-101775060_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:101823015-101823216_shuf" name="chr1:101823015-101823216_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:101985872-101986073_shuf" name="chr1:101985872-101986073_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:102033243-102033444_shuf" name="chr1:102033243-102033444_shuf">
+<matched-element start="74" stop="60" score="8.45455" pvalue="9.91e-05">
+<sequence>GCCAACAGAGGGGTC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:102639907-102640108_shuf" name="chr1:102639907-102640108_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:107973340-107973541_shuf" name="chr1:107973340-107973541_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:108072265-108072466_shuf" name="chr1:108072265-108072466_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:108668243-108668444_shuf" name="chr1:108668243-108668444_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:109102521-109102722_shuf" name="chr1:109102521-109102722_shuf">
+<matched-element start="127" stop="141" score="8.71212" pvalue="8.84e-05">
+<sequence>GCCGGCGGGGGACGT</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:109104465-109104666_shuf" name="chr1:109104465-109104666_shuf">
+<matched-element start="107" stop="93" score="9.09091" pvalue="7.49e-05">
+<sequence>GCCCCTAGGTGAAGC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:109289048-109289249_shuf" name="chr1:109289048-109289249_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:109642576-109642777_shuf" name="chr1:109642576-109642777_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:109655381-109655582_shuf" name="chr1:109655381-109655582_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:109736374-109736575_shuf" name="chr1:109736374-109736575_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:109806297-109806498_shuf" name="chr1:109806297-109806498_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:109820139-109820340_shuf" name="chr1:109820139-109820340_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:110036519-110036720_shuf" name="chr1:110036519-110036720_shuf">
+<matched-element start="156" stop="142" score="20.7879" pvalue="5.23e-08">
+<sequence>ACCGCCAGGGGGCGC</sequence>
+<mem:qvalue>0.0085</mem:qvalue>
+</matched-element>
+<matched-element start="2" stop="16" score="12.697" pvalue="1.29e-05">
+<sequence>TCCTGGAGATGGCGG</sequence>
+<mem:qvalue>0.0883</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:110074987-110075188_shuf" name="chr1:110074987-110075188_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:110075566-110075767_shuf" name="chr1:110075566-110075767_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:110182913-110183114_shuf" name="chr1:110182913-110183114_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:110186025-110186226_shuf" name="chr1:110186025-110186226_shuf">
+<matched-element start="25" stop="39" score="8.69697" pvalue="8.9e-05">
+<sequence>CCCAGTAGAAGGTGC</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:110316389-110316590_shuf" name="chr1:110316389-110316590_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:110319537-110319738_shuf" name="chr1:110319537-110319738_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:110527120-110527321_shuf" name="chr1:110527120-110527321_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:110572275-110572476_shuf" name="chr1:110572275-110572476_shuf">
+<matched-element start="54" stop="68" score="8.66667" pvalue="9.03e-05">
+<sequence>CTCACAAGAGGGTGG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:110596535-110596736_shuf" name="chr1:110596535-110596736_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:110602782-110602983_shuf" name="chr1:110602782-110602983_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:110648833-110649034_shuf" name="chr1:110648833-110649034_shuf">
+<matched-element start="79" stop="65" score="12.6818" pvalue="1.3e-05">
+<sequence>ACCACTAGGGGTCTG</sequence>
+<mem:qvalue>0.0883</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:110659159-110659360_shuf" name="chr1:110659159-110659360_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:110739598-110739799_shuf" name="chr1:110739598-110739799_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:110750458-110750659_shuf" name="chr1:110750458-110750659_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:110855304-110855505_shuf" name="chr1:110855304-110855505_shuf">
+<matched-element start="63" stop="49" score="10.5758" pvalue="3.77e-05">
+<sequence>GGCACCTGAGGGCGA</sequence>
+<mem:qvalue>0.117</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:110955210-110955411_shuf" name="chr1:110955210-110955411_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:111002969-111003170_shuf" name="chr1:111002969-111003170_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:111038711-111038912_shuf" name="chr1:111038711-111038912_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:111067166-111067367_shuf" name="chr1:111067166-111067367_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:111158462-111158663_shuf" name="chr1:111158462-111158663_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:111162035-111162236_shuf" name="chr1:111162035-111162236_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:111173463-111173664_shuf" name="chr1:111173463-111173664_shuf">
+<matched-element start="177" stop="191" score="9.43939" pvalue="6.4e-05">
+<sequence>CCAACCAGGGGGCTG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:111323583-111323784_shuf" name="chr1:111323583-111323784_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:111326026-111326227_shuf" name="chr1:111326026-111326227_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:111372676-111372877_shuf" name="chr1:111372676-111372877_shuf">
+<matched-element start="110" stop="96" score="12.3333" pvalue="1.56e-05">
+<sequence>ATCACTAGGGGGCTG</sequence>
+<mem:qvalue>0.0956</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:111573215-111573416_shuf" name="chr1:111573215-111573416_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:111575023-111575224_shuf" name="chr1:111575023-111575224_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:111765568-111765769_shuf" name="chr1:111765568-111765769_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:112050910-112051111_shuf" name="chr1:112050910-112051111_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:112289988-112290189_shuf" name="chr1:112289988-112290189_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:112298228-112298429_shuf" name="chr1:112298228-112298429_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:112901493-112901694_shuf" name="chr1:112901493-112901694_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:112912388-112912589_shuf" name="chr1:112912388-112912589_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:112933523-112933724_shuf" name="chr1:112933523-112933724_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:113250001-113250202_shuf" name="chr1:113250001-113250202_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:113258956-113259157_shuf" name="chr1:113258956-113259157_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:113346905-113347106_shuf" name="chr1:113346905-113347106_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:113351904-113352105_shuf" name="chr1:113351904-113352105_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:113423640-113423841_shuf" name="chr1:113423640-113423841_shuf">
+<matched-element start="165" stop="179" score="16.4848" pvalue="1.38e-06">
+<sequence>TGCAGCAGGGGGCAC</sequence>
+<mem:qvalue>0.0625</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:113683203-113683404_shuf" name="chr1:113683203-113683404_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:114889204-114889405_shuf" name="chr1:114889204-114889405_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:115595210-115595411_shuf" name="chr1:115595210-115595411_shuf">
+<matched-element start="149" stop="135" score="13.2879" pvalue="9.37e-06">
+<sequence>GGCTGTAGAGGGCAG</sequence>
+<mem:qvalue>0.0846</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:115655499-115655700_shuf" name="chr1:115655499-115655700_shuf">
+<matched-element start="78" stop="64" score="15.1818" pvalue="3.16e-06">
+<sequence>GCCTCAAGGGGGCGT</sequence>
+<mem:qvalue>0.0625</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:115681601-115681802_shuf" name="chr1:115681601-115681802_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:116012405-116012606_shuf" name="chr1:116012405-116012606_shuf">
+<matched-element start="135" stop="121" score="9.15152" pvalue="7.28e-05">
+<sequence>GTAGGCAGGGGGCAG</sequence>
+<mem:qvalue>0.129</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="chr1:116138530-116138731_shuf" name="chr1:116138530-116138731_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:116681743-116681944_shuf" name="chr1:116681743-116681944_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:116694688-116694889_shuf" name="chr1:116694688-116694889_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:116711062-116711263_shuf" name="chr1:116711062-116711263_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:117027963-117028164_shuf" name="chr1:117027963-117028164_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:117117315-117117516_shuf" name="chr1:117117315-117117516_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:117279980-117280181_shuf" name="chr1:117279980-117280181_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:118301560-118301761_shuf" name="chr1:118301560-118301761_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:118694034-118694235_shuf" name="chr1:118694034-118694235_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:119818111-119818312_shuf" name="chr1:119818111-119818312_shuf">
+</scanned-sequence>
+<scanned-sequence accession="chr1:119910228-119910429_shuf" name="chr1:119910228-119910429_shuf">
+</scanned-sequence>
+<mem:has-qvalues>yes</mem:has-qvalues>
+</pattern>
+</cis-element-search>

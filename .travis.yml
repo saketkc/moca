@@ -36,7 +36,7 @@ before_install:
 install:
   - python setup.py install --single-version-externally-managed --record=/tmp/record.txt 
 
-script: py.test --mpl --cov --cov-report term-missing
+script: py.test --verbose --mpl --cov --cov-report term-missing
 
 after_script:
   - codecov
