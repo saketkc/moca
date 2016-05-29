@@ -34,9 +34,9 @@ before_install:
  - export PATH="$PATH:$HOME/meme_bin/bin"
 
 install:
-  - python setup.py install --single-version-externally-managed --record=/tmp/record.txt 
+  - python setup.py install --single-version-externally-managed --record=/tmp/record.txt
 
-script: py.test --verbose --mpl --cov --cov-report term-missing
+script: py.test --verbose --mpl --cov=moca --cov-config .coveragerc --cov-report term-missing
 
 after_script:
   - codecov
