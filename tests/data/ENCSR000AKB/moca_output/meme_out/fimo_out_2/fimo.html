@@ -1,0 +1,1748 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:cis="http://zlab.bu.edu/schema/cisml" xmlns:fimo="http://noble.gs.washington.edu/schema/cisml" xmlns:mem="http://noble.gs.washington.edu/meme">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<title>FIMO Results</title>
+<style type="text/css">
+td.left {text-align: left;}
+td.right {text-align: right; padding-right: 1cm;}
+</style>
+</head>
+<body bgcolor="#D5F0FF">
+<a name="top_buttons"></a>
+<hr>
+<table summary="buttons" align="left" cellspacing="0">
+<tr>
+<td bgcolor="#00FFFF"><a href="#database_and_motifs"><b>Database and Motifs</b></a></td>
+<td bgcolor="#DDFFDD"><a href="#sec_i"><b>High-scoring Motif Occurences</b></a></td>
+<td bgcolor="#DDDDFF"><a href="#debugging_information"><b>Debugging Information</b></a></td>
+</tr>
+</table>
+<br/>
+<br/>
+<hr/>
+<center><big><b>FIMO - Motif search tool</b></big></center>
+<hr>
+<p>
+FIMO version 4.11.1, (Release date: Fri Jan 15 12:51:59 2016 -0800)
+</p>
+<p>
+For further information on how to interpret these results
+or to get a copy of the FIMO software please access
+<a href="http://meme.nbcr.net">http://meme.nbcr.net</a></p>
+<p>If you use FIMO in your research, please cite the following paper:<br>
+Charles E. Grant, Timothy L. Bailey, and William Stafford Noble,
+"FIMO: Scanning for occurrences of a given motif",
+<i>Bioinformatics</i>, <b>27</b>(7):1017-1018, 2011.
+<a href="http://bioinformatics.oxfordjournals.org/content/27/7/1017">[full text]</a></p>
+<hr>
+<center><big><b><a name="database_and_motifs">DATABASE AND MOTIFS</a></b></big></center>
+<hr>
+<div style="padding-left: 0.75in; line-height: 1em; font-family: monospace;">
+<p>
+  DATABASE /media/data1/encode_analysis/ENCSR000AKB/moca_output/ENCFF002CDP_flank_100.fasta
+  <br />
+  Database contains 0 sequences, 0 residues
+</p>
+<p>
+  MOTIFS /media/data1/encode_analysis/ENCSR000AKB/moca_output/meme_out/meme.txt (DNA)
+  <table>
+    <thead>
+      <tr>
+        <th style="border-bottom: 1px dashed;">MOTIF</th>
+        <th style="border-bottom: 1px dashed; padding-left: 1em;">WIDTH</th>
+        <th style="border-bottom: 1px dashed; padding-left: 1em;text-align:left;" >
+         BEST POSSIBLE MATCH
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="text-align:right;">1</td>
+        <td style="text-align:right;padding-left: 1em;">15</td>
+        <td style="text-align:left;padding-left: 1em;">GCCACCAGGGGGCGC</td>
+       </tr>
+      <tr>
+        <td style="text-align:right;">2</td>
+        <td style="text-align:right;padding-left: 1em;">21</td>
+        <td style="text-align:left;padding-left: 1em;">TTCTGTTTTTTTTTTCTTTTT</td>
+       </tr>
+      <tr>
+        <td style="text-align:right;">3</td>
+        <td style="text-align:right;padding-left: 1em;">15</td>
+        <td style="text-align:left;padding-left: 1em;">GAGGCAGGAGAGGGA</td>
+       </tr>
+    </tbody>
+  </table>
+</p>
+<p>
+Random model letter frequencies (from non-redundant database):
+<br/>
+
+A 0.275 C 0.225 G 0.225 T 0.275 </p>
+</div>
+<hr>
+<center><big><b><a name="sec_i">SECTION I: HIGH-SCORING MOTIF OCCURENCES</a></b></big></center>
+<hr>
+<ul>
+<li>
+There were 156 motif occurences with a p-value less than 0.0001.
+
+The full set of motif occurences can be seen in the
+tab-delimited plain text output file
+<a href="fimo.txt">fimo.txt</a>, 
+the GFF file 
+<a href="fimo.gff">fimo.gff</a> 
+which may be suitable for uploading to the 
+<a href="http://genome.ucsc.edu/cgi-bin/hgTables">UCSC Genome Table Browser</a>
+(assuming the FASTA input sequences included genomic coordinates in UCSC or Galaxy format),
+or the XML file 
+<a href="fimo.xml">fimo.xml</a>.
+</li>
+<li>
+The p-value of a motif occurrence is defined as the
+probability of a random sequence of the same length as the motif
+matching that position of the sequence with as good or better a score.
+</li>
+<li>
+The score for the match of a position in a sequence to a motif
+is computed by summing the appropriate entries from each column of
+the position-dependent scoring matrix that represents the motif.
+</li>
+<li>
+The q-value of a motif occurrence is defined as the
+false discovery rate if the occurrence is accepted as significant.
+</li>
+<li>The table is sorted by increasing p-value.</li>
+</ul>
+<table border="1">
+<thead>
+<tr>
+<th>Motif</th>
+<th>Sequence Name</th>
+<th>Strand</th>
+<th>Start</th>
+<th>End</th>
+<th>p-value</th>
+<th>q-value</th>
+<th>Matched Sequence</th>
+</tr>
+</thead>
+<tbody>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:17278223-17278424</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">152</td>
+      <td style="text-align:left;">172</td>
+      <td style="text-align:left;">5.18e-11</td>
+      <td style="text-align:left;">9.36e-06</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTCTTTTTTTTTTTTCTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:27481596-27481797</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">178</td>
+      <td style="text-align:left;">198</td>
+      <td style="text-align:left;">6e-09</td>
+      <td style="text-align:left;">0.000542</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GACTTTTTTTTTTTTTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:12178755-12178956</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">162</td>
+      <td style="text-align:left;">182</td>
+      <td style="text-align:left;">1.16e-08</td>
+      <td style="text-align:left;">0.000693</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTGTTTGTTTCTTTTCTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:19567829-19568030</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">178</td>
+      <td style="text-align:left;">198</td>
+      <td style="text-align:left;">1.53e-08</td>
+      <td style="text-align:left;">0.000693</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTCTTTGTTGTGTTTTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:32986085-32986286</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">174</td>
+      <td style="text-align:left;">194</td>
+      <td style="text-align:left;">3.5e-08</td>
+      <td style="text-align:left;">0.00126</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TAATTTTTTTTTTTTTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:32986085-32986286</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">171</td>
+      <td style="text-align:left;">191</td>
+      <td style="text-align:left;">1.08e-07</td>
+      <td style="text-align:left;">0.00325</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GTGTAATTTTTTTTTTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:43539389-43539590</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">22</td>
+      <td style="text-align:left;">1.44e-07</td>
+      <td style="text-align:left;">0.00371</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TACTCTTTTTTTTCTCTTTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:32986085-32986286</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">173</td>
+      <td style="text-align:left;">193</td>
+      <td style="text-align:left;">1.81e-07</td>
+      <td style="text-align:left;">0.0041</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GTAATTTTTTTTTTTTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:32986085-32986286</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">177</td>
+      <td style="text-align:left;">197</td>
+      <td style="text-align:left;">2.15e-07</td>
+      <td style="text-align:left;">0.00431</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTTTTTTTTTTTTTTTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:50814476-50814677</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">125</td>
+      <td style="text-align:left;">145</td>
+      <td style="text-align:left;">3.15e-07</td>
+      <td style="text-align:left;">0.00557</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ATCAGAGATTTCTTTCTTTCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:27481596-27481797</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">176</td>
+      <td style="text-align:left;">196</td>
+      <td style="text-align:left;">3.39e-07</td>
+      <td style="text-align:left;">0.00557</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTTTTTTTTTTTTTTTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:50737742-50737943</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">124</td>
+      <td style="text-align:left;">144</td>
+      <td style="text-align:left;">4.7e-07</td>
+      <td style="text-align:left;">0.00624</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TGCTGTGTTTTTACTCTCTGT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:113683203-113683404</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">1</td>
+      <td style="text-align:left;">21</td>
+      <td style="text-align:left;">4.77e-07</td>
+      <td style="text-align:left;">0.00624</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTCTTGCCTTTTTATCTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:90270295-90270496</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">178</td>
+      <td style="text-align:left;">198</td>
+      <td style="text-align:left;">4.84e-07</td>
+      <td style="text-align:left;">0.00624</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TACTGTTTATTTCTTCTCTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:51655186-51655387</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">5</td>
+      <td style="text-align:left;">25</td>
+      <td style="text-align:left;">5.33e-07</td>
+      <td style="text-align:left;">0.00642</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTCTATTCTTTTTATTTTTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:27481596-27481797</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">174</td>
+      <td style="text-align:left;">194</td>
+      <td style="text-align:left;">7.68e-07</td>
+      <td style="text-align:left;">0.00823</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTTTTTTTTTTTTTTTTTTGT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:27721980-27722181</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">15</td>
+      <td style="text-align:left;">35</td>
+      <td style="text-align:left;">7.79e-07</td>
+      <td style="text-align:left;">0.00823</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTCTGGTTTTTTATTTTTTTA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:17278223-17278424</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">155</td>
+      <td style="text-align:left;">175</td>
+      <td style="text-align:left;">8.21e-07</td>
+      <td style="text-align:left;">0.00823</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTTTTTTTTTTTCTTTTTTCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:17662689-17662890</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">145</td>
+      <td style="text-align:left;">165</td>
+      <td style="text-align:left;">8.65e-07</td>
+      <td style="text-align:left;">0.00823</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TGCTAATTTTCTTTCTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:17278223-17278424</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">159</td>
+      <td style="text-align:left;">179</td>
+      <td style="text-align:left;">9.36e-07</td>
+      <td style="text-align:left;">0.00842</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTTTTTTTCTTTTTTCTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:32986085-32986286</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">169</td>
+      <td style="text-align:left;">189</td>
+      <td style="text-align:left;">9.86e-07</td>
+      <td style="text-align:left;">0.00842</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CAGTGTAATTTTTTTTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:12269000-12269201</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">4</td>
+      <td style="text-align:left;">24</td>
+      <td style="text-align:left;">1.03e-06</td>
+      <td style="text-align:left;">0.00842</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GTCTGACTTTTTTTTTCTTTA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:12184916-12185117</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">5</td>
+      <td style="text-align:left;">25</td>
+      <td style="text-align:left;">1.23e-06</td>
+      <td style="text-align:left;">0.00955</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTGTTTGTTTTGTTTTGTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:40119287-40119488</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">23</td>
+      <td style="text-align:left;">43</td>
+      <td style="text-align:left;">1.37e-06</td>
+      <td style="text-align:left;">0.00955</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CACTGATTTACTTTTCTCTCC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:17278223-17278424</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">154</td>
+      <td style="text-align:left;">174</td>
+      <td style="text-align:left;">1.37e-06</td>
+      <td style="text-align:left;">0.00955</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTTTTTTTTTTTTCTTTTTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:67191823-67192024</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">134</td>
+      <td style="text-align:left;">154</td>
+      <td style="text-align:left;">1.44e-06</td>
+      <td style="text-align:left;">0.00955</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTATTGTATTTTTCTCTTTGC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:32986085-32986286</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">176</td>
+      <td style="text-align:left;">196</td>
+      <td style="text-align:left;">1.46e-06</td>
+      <td style="text-align:left;">0.00955</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ATTTTTTTTTTTTTTTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:108668243-108668444</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">15</td>
+      <td style="text-align:left;">35</td>
+      <td style="text-align:left;">1.48e-06</td>
+      <td style="text-align:left;">0.00955</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ATCTTTGCTTTCTCCCTTTCC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:110596535-110596736</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">24</td>
+      <td style="text-align:left;">44</td>
+      <td style="text-align:left;">1.7e-06</td>
+      <td style="text-align:left;">0.0106</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTCAGATCATCTTTTCTCTCC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:32986085-32986286</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">167</td>
+      <td style="text-align:left;">187</td>
+      <td style="text-align:left;">1.89e-06</td>
+      <td style="text-align:left;">0.0114</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTCAGTGTAATTTTTTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:32986085-32986286</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">178</td>
+      <td style="text-align:left;">198</td>
+      <td style="text-align:left;">2.11e-06</td>
+      <td style="text-align:left;">0.0123</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTTTTTTTTTTTTTTTTTTTA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:102033243-102033444</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">38</td>
+      <td style="text-align:left;">58</td>
+      <td style="text-align:left;">2.24e-06</td>
+      <td style="text-align:left;">0.0126</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTCTTGATTTTTTTTTTTTAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:17278223-17278424</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">150</td>
+      <td style="text-align:left;">170</td>
+      <td style="text-align:left;">2.37e-06</td>
+      <td style="text-align:left;">0.0128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGCTCTTTTTTTTTTTTCTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:68027396-68027597</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">31</td>
+      <td style="text-align:left;">51</td>
+      <td style="text-align:left;">2.4e-06</td>
+      <td style="text-align:left;">0.0128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TGGAGATTTTTTTTCCTTTAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:57297632-57297833</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">175</td>
+      <td style="text-align:left;">195</td>
+      <td style="text-align:left;">2.52e-06</td>
+      <td style="text-align:left;">0.0128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GTCTTTTATTTCTTTCGTTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:17278223-17278424</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">161</td>
+      <td style="text-align:left;">181</td>
+      <td style="text-align:left;">2.55e-06</td>
+      <td style="text-align:left;">0.0128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTTTTTCTTTTTTCTTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:23866397-23866598</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">19</td>
+      <td style="text-align:left;">39</td>
+      <td style="text-align:left;">2.7e-06</td>
+      <td style="text-align:left;">0.0132</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TCGTTAGTTCCTTTTCCTTCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:17278223-17278424</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">157</td>
+      <td style="text-align:left;">177</td>
+      <td style="text-align:left;">2.83e-06</td>
+      <td style="text-align:left;">0.0135</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTTTTTTTTTCTTTTTTCTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:45480219-45480420</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">166</td>
+      <td style="text-align:left;">186</td>
+      <td style="text-align:left;">3.32e-06</td>
+      <td style="text-align:left;">0.015</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCCTGAGATCTGCTTTTTTCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:66708428-66708629</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">27</td>
+      <td style="text-align:left;">47</td>
+      <td style="text-align:left;">3.4e-06</td>
+      <td style="text-align:left;">0.015</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTCAGTTATGTTTCTCCCTCC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:32986085-32986286</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">175</td>
+      <td style="text-align:left;">195</td>
+      <td style="text-align:left;">3.4e-06</td>
+      <td style="text-align:left;">0.015</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AATTTTTTTTTTTTTTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:17278223-17278424</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">160</td>
+      <td style="text-align:left;">180</td>
+      <td style="text-align:left;">3.56e-06</td>
+      <td style="text-align:left;">0.0153</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTTTTTTCTTTTTTCTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:16405442-16405643</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">129</td>
+      <td style="text-align:left;">149</td>
+      <td style="text-align:left;">3.98e-06</td>
+      <td style="text-align:left;">0.0167</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTCTCTGTTGCTTTCCTTTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:45251845-45252046</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">21</td>
+      <td style="text-align:left;">41</td>
+      <td style="text-align:left;">4.07e-06</td>
+      <td style="text-align:left;">0.0167</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTCAAACTTTTTCCTCTCTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:95509030-95509231</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">156</td>
+      <td style="text-align:left;">176</td>
+      <td style="text-align:left;">4.35e-06</td>
+      <td style="text-align:left;">0.0175</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GACTTATATTTTCTTTCCTCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:27481596-27481797</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">177</td>
+      <td style="text-align:left;">197</td>
+      <td style="text-align:left;">4.65e-06</td>
+      <td style="text-align:left;">0.0182</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACTTTTTTTTTTTTTTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:44784000-44784201</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">146</td>
+      <td style="text-align:left;">166</td>
+      <td style="text-align:left;">4.91e-06</td>
+      <td style="text-align:left;">0.0189</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTCTGGTTTTCGCCTTCCTCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:60165034-60165235</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">11</td>
+      <td style="text-align:left;">31</td>
+      <td style="text-align:left;">5.02e-06</td>
+      <td style="text-align:left;">0.0189</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTAAATGTACTTTTTCTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:78580156-78580357</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">163</td>
+      <td style="text-align:left;">183</td>
+      <td style="text-align:left;">5.24e-06</td>
+      <td style="text-align:left;">0.0192</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CCCAGATTTTTTTTTTTTATC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:17278223-17278424</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">158</td>
+      <td style="text-align:left;">178</td>
+      <td style="text-align:left;">5.35e-06</td>
+      <td style="text-align:left;">0.0192</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTTTTTTTTCTTTTTTCTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:32986085-32986286</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">172</td>
+      <td style="text-align:left;">192</td>
+      <td style="text-align:left;">5.41e-06</td>
+      <td style="text-align:left;">0.0192</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TGTAATTTTTTTTTTTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:23961549-23961750</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">80</td>
+      <td style="text-align:left;">100</td>
+      <td style="text-align:left;">5.77e-06</td>
+      <td style="text-align:left;">0.02</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GACTGTCTTTCCCCTTTTTCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:17278223-17278424</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">153</td>
+      <td style="text-align:left;">173</td>
+      <td style="text-align:left;">6.09e-06</td>
+      <td style="text-align:left;">0.0207</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TCTTTTTTTTTTTTCTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:7130527-7130728</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">18</td>
+      <td style="text-align:left;">38</td>
+      <td style="text-align:left;">6.49e-06</td>
+      <td style="text-align:left;">0.0213</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TGCAGTGATTTCTTTTCCTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:47641107-47641308</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">116</td>
+      <td style="text-align:left;">136</td>
+      <td style="text-align:left;">6.56e-06</td>
+      <td style="text-align:left;">0.0213</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TCGTGATTTTCCTTTCCTTGC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:12178755-12178956</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">164</td>
+      <td style="text-align:left;">184</td>
+      <td style="text-align:left;">6.69e-06</td>
+      <td style="text-align:left;">0.0213</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GTTTGTTTCTTTTCTTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:35916731-35916932</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">173</td>
+      <td style="text-align:left;">193</td>
+      <td style="text-align:left;">6.77e-06</td>
+      <td style="text-align:left;">0.0213</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTCTATTCTTTGCATTTTTAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:47644911-47645112</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">173</td>
+      <td style="text-align:left;">193</td>
+      <td style="text-align:left;">6.84e-06</td>
+      <td style="text-align:left;">0.0213</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCATATGCTCTGTCTCTTTCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:32986085-32986286</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">179</td>
+      <td style="text-align:left;">199</td>
+      <td style="text-align:left;">7.43e-06</td>
+      <td style="text-align:left;">0.0228</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTTTTTTTTTTTTTTTTTTAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:46645283-46645484</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">161</td>
+      <td style="text-align:left;">181</td>
+      <td style="text-align:left;">7.83e-06</td>
+      <td style="text-align:left;">0.0234</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TCTTTTTCTTTTTCTCCTTCC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:33238684-33238885</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">139</td>
+      <td style="text-align:left;">159</td>
+      <td style="text-align:left;">7.91e-06</td>
+      <td style="text-align:left;">0.0234</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACCTGAGTTTCATTTTTTTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:107973340-107973541</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">8</td>
+      <td style="text-align:left;">28</td>
+      <td style="text-align:left;">8.33e-06</td>
+      <td style="text-align:left;">0.0237</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TACATTTCTGTTCTTCCTTGC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:78610829-78611030</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">51</td>
+      <td style="text-align:left;">71</td>
+      <td style="text-align:left;">8.33e-06</td>
+      <td style="text-align:left;">0.0237</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CACTAGGCTATTTCTTTTTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:12178755-12178956</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">166</td>
+      <td style="text-align:left;">186</td>
+      <td style="text-align:left;">8.41e-06</td>
+      <td style="text-align:left;">0.0237</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTGTTTCTTTTCTTTTTTTGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:7707382-7707583</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">26</td>
+      <td style="text-align:left;">46</td>
+      <td style="text-align:left;">8.59e-06</td>
+      <td style="text-align:left;">0.0239</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGCTTTGTTGATTTTCCTTCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:22743162-22743363</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">179</td>
+      <td style="text-align:left;">199</td>
+      <td style="text-align:left;">9.04e-06</td>
+      <td style="text-align:left;">0.0247</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CCCTGATCTCTGTCCCTCTCC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:42639095-42639296</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">1</td>
+      <td style="text-align:left;">21</td>
+      <td style="text-align:left;">9.41e-06</td>
+      <td style="text-align:left;">0.0254</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGCTGTGCTCCCTTTCTCTGC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:25015110-25015311</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">73</td>
+      <td style="text-align:left;">93</td>
+      <td style="text-align:left;">9.9e-06</td>
+      <td style="text-align:left;">0.0263</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTCTGGCCTTCTCTTCGTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:16405442-16405643</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">137</td>
+      <td style="text-align:left;">157</td>
+      <td style="text-align:left;">1.04e-05</td>
+      <td style="text-align:left;">0.0272</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TGCTTTCCTTTTCCTTCCTCC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:36982031-36982232</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">57</td>
+      <td style="text-align:left;">77</td>
+      <td style="text-align:left;">1.13e-05</td>
+      <td style="text-align:left;">0.0291</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAGAGACCTTTGTCTCTTTCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:17662689-17662890</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">142</td>
+      <td style="text-align:left;">162</td>
+      <td style="text-align:left;">1.21e-05</td>
+      <td style="text-align:left;">0.0307</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TAATTTTCTTTCTTTTTTTAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:41078018-41078219</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">175</td>
+      <td style="text-align:left;">195</td>
+      <td style="text-align:left;">1.23e-05</td>
+      <td style="text-align:left;">0.0309</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGAAGTTTTGCTTCTCTTTCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:57297632-57297833</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">170</td>
+      <td style="text-align:left;">190</td>
+      <td style="text-align:left;">1.27e-05</td>
+      <td style="text-align:left;">0.0314</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTATTTCTTTCGTTTCTTCCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:27481596-27481797</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">180</td>
+      <td style="text-align:left;">200</td>
+      <td style="text-align:left;">1.33e-05</td>
+      <td style="text-align:left;">0.0325</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGGACTTTTTTTTTTTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:58628747-58628948</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">119</td>
+      <td style="text-align:left;">139</td>
+      <td style="text-align:left;">1.38e-05</td>
+      <td style="text-align:left;">0.0331</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TGATGAAATTTTTATCTTTGT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:19717889-19718090</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">132</td>
+      <td style="text-align:left;">152</td>
+      <td style="text-align:left;">1.4e-05</td>
+      <td style="text-align:left;">0.0331</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CAATTTGTTCCTTTTATTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:102639907-102640108</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">34</td>
+      <td style="text-align:left;">54</td>
+      <td style="text-align:left;">1.41e-05</td>
+      <td style="text-align:left;">0.0331</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TGATAATCATTGTTTCTCTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:12178755-12178956</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">137</td>
+      <td style="text-align:left;">157</td>
+      <td style="text-align:left;">1.55e-05</td>
+      <td style="text-align:left;">0.0358</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TGGTTGCATTTGTTTTTTTGT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:32986085-32986286</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">68</td>
+      <td style="text-align:left;">88</td>
+      <td style="text-align:left;">1.57e-05</td>
+      <td style="text-align:left;">0.0358</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTATAAACATTTCTTCTTTCC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:90270295-90270496</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">176</td>
+      <td style="text-align:left;">196</td>
+      <td style="text-align:left;">1.74e-05</td>
+      <td style="text-align:left;">0.0392</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTGTTTATTTCTTCTCTTCTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:47190999-47191200</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">73</td>
+      <td style="text-align:left;">93</td>
+      <td style="text-align:left;">1.84e-05</td>
+      <td style="text-align:left;">0.0407</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CACAAAGCTGTGCCTCTCTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:23871270-23871471</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">57</td>
+      <td style="text-align:left;">77</td>
+      <td style="text-align:left;">1.86e-05</td>
+      <td style="text-align:left;">0.0407</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TCATCATTTTTGTTCCTCTCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:30853316-30853517</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">132</td>
+      <td style="text-align:left;">152</td>
+      <td style="text-align:left;">1.89e-05</td>
+      <td style="text-align:left;">0.0407</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTCTGAATATTTTTCATTTCC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:35325417-35325618</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">135</td>
+      <td style="text-align:left;">155</td>
+      <td style="text-align:left;">1.89e-05</td>
+      <td style="text-align:left;">0.0407</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGATGATCTTTCACTTTTTCC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:85401993-85402194</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">141</td>
+      <td style="text-align:left;">161</td>
+      <td style="text-align:left;">1.96e-05</td>
+      <td style="text-align:left;">0.0417</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAATGTATTTTTCTTCCTTGC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:112289988-112290189</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">151</td>
+      <td style="text-align:left;">171</td>
+      <td style="text-align:left;">2e-05</td>
+      <td style="text-align:left;">0.042</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TGCAATTCTGCTCCTCTCTCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:46645283-46645484</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">162</td>
+      <td style="text-align:left;">182</td>
+      <td style="text-align:left;">2.05e-05</td>
+      <td style="text-align:left;">0.0426</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ATCTTTTTCTTTTTCTCCTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:53743982-53744183</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">118</td>
+      <td style="text-align:left;">138</td>
+      <td style="text-align:left;">2.07e-05</td>
+      <td style="text-align:left;">0.0426</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GTCTGTGTTTTCACTTTCTGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:57297632-57297833</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">181</td>
+      <td style="text-align:left;">201</td>
+      <td style="text-align:left;">2.23e-05</td>
+      <td style="text-align:left;">0.0452</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ATCATAGTCTTTTATTTCTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:27970465-27970666</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">85</td>
+      <td style="text-align:left;">105</td>
+      <td style="text-align:left;">2.25e-05</td>
+      <td style="text-align:left;">0.0452</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CCCTGAGCACTTCTTCTCTGC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:43539389-43539590</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">9</td>
+      <td style="text-align:left;">29</td>
+      <td style="text-align:left;">2.29e-05</td>
+      <td style="text-align:left;">0.0455</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GACTTTCTACTCTTTTTTTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:27481596-27481797</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">150</td>
+      <td style="text-align:left;">170</td>
+      <td style="text-align:left;">2.38e-05</td>
+      <td style="text-align:left;">0.0464</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTCTGACTCTCCTTCCTCTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:15241922-15242123</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">161</td>
+      <td style="text-align:left;">181</td>
+      <td style="text-align:left;">2.42e-05</td>
+      <td style="text-align:left;">0.0464</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTCTGAGTCCCCCCTCTTTAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:67191823-67192024</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">138</td>
+      <td style="text-align:left;">158</td>
+      <td style="text-align:left;">2.44e-05</td>
+      <td style="text-align:left;">0.0464</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ATCTTTATTGTATTTTTCTCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:17662689-17662890</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">143</td>
+      <td style="text-align:left;">163</td>
+      <td style="text-align:left;">2.44e-05</td>
+      <td style="text-align:left;">0.0464</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTAATTTTCTTTCTTTTTTTA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:13992238-13992439</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">33</td>
+      <td style="text-align:left;">53</td>
+      <td style="text-align:left;">2.53e-05</td>
+      <td style="text-align:left;">0.0476</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TGGTTTGCTCTGTTTTTTTAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:51655186-51655387</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">3</td>
+      <td style="text-align:left;">23</td>
+      <td style="text-align:left;">2.67e-05</td>
+      <td style="text-align:left;">0.0497</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TCCTCTATTCTTTTTATTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:17278223-17278424</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">156</td>
+      <td style="text-align:left;">176</td>
+      <td style="text-align:left;">2.74e-05</td>
+      <td style="text-align:left;">0.0505</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTTTTTTTTTTCTTTTTTCTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:108668243-108668444</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">20</td>
+      <td style="text-align:left;">40</td>
+      <td style="text-align:left;">2.76e-05</td>
+      <td style="text-align:left;">0.0505</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTCAGATCTTTGCTTTCTCCC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:29111681-29111882</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">14</td>
+      <td style="text-align:left;">34</td>
+      <td style="text-align:left;">3.02e-05</td>
+      <td style="text-align:left;">0.0544</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTCATTCATTCGTTCTTTTGT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:17278223-17278424</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">146</td>
+      <td style="text-align:left;">166</td>
+      <td style="text-align:left;">3.05e-05</td>
+      <td style="text-align:left;">0.0544</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GTAAAGCTCTTTTTTTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:9170892-9171093</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">181</td>
+      <td style="text-align:left;">201</td>
+      <td style="text-align:left;">3.07e-05</td>
+      <td style="text-align:left;">0.0544</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGCTAAGCCTCGTTTCCTTAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:41134653-41134854</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">157</td>
+      <td style="text-align:left;">177</td>
+      <td style="text-align:left;">3.13e-05</td>
+      <td style="text-align:left;">0.0548</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGCTGTTATTTATTTATTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:113258956-113259157</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">149</td>
+      <td style="text-align:left;">169</td>
+      <td style="text-align:left;">3.15e-05</td>
+      <td style="text-align:left;">0.0548</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GAGTGTGCTTTTACTCTTCTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:42639095-42639296</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">49</td>
+      <td style="text-align:left;">69</td>
+      <td style="text-align:left;">3.21e-05</td>
+      <td style="text-align:left;">0.0552</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGCTGTGCACCTTTCCTCTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:36030332-36030533</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">62</td>
+      <td style="text-align:left;">82</td>
+      <td style="text-align:left;">3.24e-05</td>
+      <td style="text-align:left;">0.0552</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CACTTGCTTATGTTCCTCTCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:9349131-9349332</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">43</td>
+      <td style="text-align:left;">63</td>
+      <td style="text-align:left;">3.41e-05</td>
+      <td style="text-align:left;">0.0574</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTCTTAGTCTTTTCCTTTATT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:53647776-53647977</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">157</td>
+      <td style="text-align:left;">177</td>
+      <td style="text-align:left;">3.47e-05</td>
+      <td style="text-align:left;">0.0574</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCCTTAGTTCTTTTTATTTAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:35667765-35667966</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">10</td>
+      <td style="text-align:left;">30</td>
+      <td style="text-align:left;">3.5e-05</td>
+      <td style="text-align:left;">0.0574</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGCTTAGATGTCCTTCTTTTA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:57297632-57297833</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">180</td>
+      <td style="text-align:left;">200</td>
+      <td style="text-align:left;">3.5e-05</td>
+      <td style="text-align:left;">0.0574</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TCATAGTCTTTTATTTCTTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:20820367-20820568</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">144</td>
+      <td style="text-align:left;">164</td>
+      <td style="text-align:left;">3.56e-05</td>
+      <td style="text-align:left;">0.0579</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTCATTTCCTCATTTCCTTCC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:12178755-12178956</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">163</td>
+      <td style="text-align:left;">183</td>
+      <td style="text-align:left;">3.97e-05</td>
+      <td style="text-align:left;">0.0641</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TGTTTGTTTCTTTTCTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:85238112-85238313</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">114</td>
+      <td style="text-align:left;">134</td>
+      <td style="text-align:left;">4.07e-05</td>
+      <td style="text-align:left;">0.0651</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CAGAGGCCTTTTTCTCCCTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:111002969-111003170</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">136</td>
+      <td style="text-align:left;">156</td>
+      <td style="text-align:left;">4.14e-05</td>
+      <td style="text-align:left;">0.0656</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTCTGAGTCGCCCATCTTTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:28844582-28844783</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">122</td>
+      <td style="text-align:left;">142</td>
+      <td style="text-align:left;">4.28e-05</td>
+      <td style="text-align:left;">0.0673</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTCTTTGTTTTCCTTTCTCAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:75199474-75199675</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">177</td>
+      <td style="text-align:left;">197</td>
+      <td style="text-align:left;">4.32e-05</td>
+      <td style="text-align:left;">0.0673</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TGGTTAGACTTTTTTTTTTAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:43388684-43388885</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">157</td>
+      <td style="text-align:left;">177</td>
+      <td style="text-align:left;">4.46e-05</td>
+      <td style="text-align:left;">0.0689</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTCTGTTCTCTCACTCCTTGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:46993779-46993980</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">26</td>
+      <td style="text-align:left;">46</td>
+      <td style="text-align:left;">4.61e-05</td>
+      <td style="text-align:left;">0.0707</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CACAATTTTGCCTTTTCCTCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:9256591-9256792</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">180</td>
+      <td style="text-align:left;">200</td>
+      <td style="text-align:left;">4.81e-05</td>
+      <td style="text-align:left;">0.073</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTTATGGTTCCTCTTCTTTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:25015110-25015311</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">178</td>
+      <td style="text-align:left;">198</td>
+      <td style="text-align:left;">4.85e-05</td>
+      <td style="text-align:left;">0.073</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TCCATGCTTTCTTCCCCTTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:60165034-60165235</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">13</td>
+      <td style="text-align:left;">33</td>
+      <td style="text-align:left;">4.93e-05</td>
+      <td style="text-align:left;">0.0736</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAATGTACTTTTTCTTTTTGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:23871270-23871471</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">59</td>
+      <td style="text-align:left;">79</td>
+      <td style="text-align:left;">4.97e-05</td>
+      <td style="text-align:left;">0.0736</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ATCATTTTTGTTCCTCTCTGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:111158462-111158663</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">176</td>
+      <td style="text-align:left;">196</td>
+      <td style="text-align:left;">5.01e-05</td>
+      <td style="text-align:left;">0.0736</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTCAGGTCTCTCTTTTTCTGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:16405442-16405643</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">133</td>
+      <td style="text-align:left;">153</td>
+      <td style="text-align:left;">5.09e-05</td>
+      <td style="text-align:left;">0.0742</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTGTTGCTTTCCTTTTCCTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:27524498-27524699</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">180</td>
+      <td style="text-align:left;">200</td>
+      <td style="text-align:left;">5.22e-05</td>
+      <td style="text-align:left;">0.0754</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCGTTTACTTTGTATTTCTCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:51655186-51655387</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">6</td>
+      <td style="text-align:left;">26</td>
+      <td style="text-align:left;">5.26e-05</td>
+      <td style="text-align:left;">0.0754</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TCTATTCTTTTTATTTTTTCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:45251845-45252046</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">19</td>
+      <td style="text-align:left;">39</td>
+      <td style="text-align:left;">5.56e-05</td>
+      <td style="text-align:left;">0.0792</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTCTCAAACTTTTTCCTCTCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:20820367-20820568</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">9</td>
+      <td style="text-align:left;">29</td>
+      <td style="text-align:left;">5.61e-05</td>
+      <td style="text-align:left;">0.0792</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCCTGTGCAATTTTCCCTTCC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:20427477-20427678</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">109</td>
+      <td style="text-align:left;">129</td>
+      <td style="text-align:left;">5.65e-05</td>
+      <td style="text-align:left;">0.0792</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CAGAGGTTCTCCTTTCTCTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:110572275-110572476</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">153</td>
+      <td style="text-align:left;">173</td>
+      <td style="text-align:left;">5.79e-05</td>
+      <td style="text-align:left;">0.0805</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTGTATTTTATTATCCTTTGT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:17278223-17278424</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">145</td>
+      <td style="text-align:left;">165</td>
+      <td style="text-align:left;">5.84e-05</td>
+      <td style="text-align:left;">0.0805</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGTAAAGCTCTTTTTTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:111038711-111038912</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">140</td>
+      <td style="text-align:left;">160</td>
+      <td style="text-align:left;">6.12e-05</td>
+      <td style="text-align:left;">0.0838</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TCCTGTAACATTTCTCCTTCC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:33560680-33560881</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">26</td>
+      <td style="text-align:left;">46</td>
+      <td style="text-align:left;">6.22e-05</td>
+      <td style="text-align:left;">0.0845</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTCTCTTCCTCTATTCCCTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:67461814-67462015</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">39</td>
+      <td style="text-align:left;">59</td>
+      <td style="text-align:left;">6.83e-05</td>
+      <td style="text-align:left;">0.0922</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GTAAATACTGCTTTTCCTTCC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:12178755-12178956</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">160</td>
+      <td style="text-align:left;">180</td>
+      <td style="text-align:left;">6.89e-05</td>
+      <td style="text-align:left;">0.0922</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GTTTGTTTGTTTCTTTTCTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:33560680-33560881</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">17</td>
+      <td style="text-align:left;">37</td>
+      <td style="text-align:left;">7e-05</td>
+      <td style="text-align:left;">0.0929</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCCTGTCCATTCTCTTCCTCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:24525841-24526042</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">164</td>
+      <td style="text-align:left;">184</td>
+      <td style="text-align:left;">7.11e-05</td>
+      <td style="text-align:left;">0.0937</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GAGATAACGTTTTTTTTTTCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:36192524-36192725</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">114</td>
+      <td style="text-align:left;">134</td>
+      <td style="text-align:left;">7.5e-05</td>
+      <td style="text-align:left;">0.0968</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GTGTGGATACTGTCTCTTTAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:17662689-17662890</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">144</td>
+      <td style="text-align:left;">164</td>
+      <td style="text-align:left;">7.5e-05</td>
+      <td style="text-align:left;">0.0968</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCTAATTTTCTTTCTTTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:36240360-36240561</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">167</td>
+      <td style="text-align:left;">187</td>
+      <td style="text-align:left;">7.5e-05</td>
+      <td style="text-align:left;">0.0968</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTCAAGTTATTTAATTTTTCC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:40804462-40804663</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">1</td>
+      <td style="text-align:left;">21</td>
+      <td style="text-align:left;">7.62e-05</td>
+      <td style="text-align:left;">0.0969</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGCTGGGCCTTTTCTTCCTGC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:23302989-23303190</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">172</td>
+      <td style="text-align:left;">192</td>
+      <td style="text-align:left;">7.62e-05</td>
+      <td style="text-align:left;">0.0969</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TACTTGCATGTGTCTCTTCCT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:43539389-43539590</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">13</td>
+      <td style="text-align:left;">33</td>
+      <td style="text-align:left;">7.68e-05</td>
+      <td style="text-align:left;">0.097</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCTTGACTTTCTACTCTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:43539389-43539590</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">4</td>
+      <td style="text-align:left;">24</td>
+      <td style="text-align:left;">7.79e-05</td>
+      <td style="text-align:left;">0.0978</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TCTACTCTTTTTTTTCTCTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:36886500-36886701</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">165</td>
+      <td style="text-align:left;">185</td>
+      <td style="text-align:left;">8.03e-05</td>
+      <td style="text-align:left;">0.1</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TCCTGTACCCCTCTTCCTTGT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:15241922-15242123</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">4</td>
+      <td style="text-align:left;">24</td>
+      <td style="text-align:left;">8.1e-05</td>
+      <td style="text-align:left;">0.1</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTCTGTGTCTCCATTTCCTGC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:31635605-31635806</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">44</td>
+      <td style="text-align:left;">64</td>
+      <td style="text-align:left;">8.41e-05</td>
+      <td style="text-align:left;">0.103</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACTTTTGTTTTGTTTTGTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:85219322-85219523</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">27</td>
+      <td style="text-align:left;">47</td>
+      <td style="text-align:left;">8.73e-05</td>
+      <td style="text-align:left;">0.106</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TGGTGAGATGTCCTCCCTTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:113683203-113683404</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">6</td>
+      <td style="text-align:left;">26</td>
+      <td style="text-align:left;">8.8e-05</td>
+      <td style="text-align:left;">0.106</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCCTTTTTATCTTTTTGTTCA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:8621192-8621393</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">174</td>
+      <td style="text-align:left;">194</td>
+      <td style="text-align:left;">8.8e-05</td>
+      <td style="text-align:left;">0.106</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTCAAATTGTTGTTTACTTCC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:95509030-95509231</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">154</td>
+      <td style="text-align:left;">174</td>
+      <td style="text-align:left;">9.13e-05</td>
+      <td style="text-align:left;">0.109</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CTTATATTTTCTTTCCTCTGC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:19717889-19718090</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">134</td>
+      <td style="text-align:left;">154</td>
+      <td style="text-align:left;">9.55e-05</td>
+      <td style="text-align:left;">0.114</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ATTTGTTCCTTTTATTTTTCC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:17278223-17278424</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">163</td>
+      <td style="text-align:left;">183</td>
+      <td style="text-align:left;">9.62e-05</td>
+      <td style="text-align:left;">0.114</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTTTCTTTTTTCTTTTTTTGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:28184627-28184828</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">5</td>
+      <td style="text-align:left;">25</td>
+      <td style="text-align:left;">9.84e-05</td>
+      <td style="text-align:left;">0.115</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CAATGGTTTTATTCCCTCTCC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:19717889-19718090</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">175</td>
+      <td style="text-align:left;">195</td>
+      <td style="text-align:left;">9.84e-05</td>
+      <td style="text-align:left;">0.115</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GAAATGCTCTTTTATCTTTTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">2</td>
+      <td style="text-align:left;">chr1:91187044-91187245</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">169</td>
+      <td style="text-align:left;">189</td>
+      <td style="text-align:left;">9.98e-05</td>
+      <td style="text-align:left;">0.116</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TTGTTTATCTTGCATCTTTTA</td>
+   </tr>
+</tbody>
+</table>
+
+<hr>
+<center><big><b><a name="debugging_information">DEBUGGING INFORMATION</a></b></big></center>
+<hr>
+<p>
+Command line:
+</p>
+<pre>
+fimo --motif 2 -oc /media/data1/encode_analysis/ENCSR000AKB/moca_output/meme_out/fimo_out_2 /media/data1/encode_analysis/ENCSR000AKB/moca_output/meme_out/meme.txt /media/data1/encode_analysis/ENCSR000AKB/moca_output/ENCFF002CDP_flank_100.fasta
+</pre>
+<p>
+Settings:
+</p>
+<pre>
+<table>
+  <tr>
+    <td style="padding-right: 2em">output_directory = /media/data1/encode_analysis/ENCSR000AKB/moca_output/meme_out/fimo_out_2</td>
+    <td style="padding-left: 5em; padding-right: 2em">MEME file name = /media/data1/encode_analysis/ENCSR000AKB/moca_output/meme_out/meme.txt</td>
+    <td style="padding-left: 5em; padding-right: 2em">sequence file name = /media/data1/encode_analysis/ENCSR000AKB/moca_output/ENCFF002CDP_flank_100.fasta</td>
+  </tr>  <tr>
+    <td style="padding-right: 2em">background file name = non-redundant database</td>
+    <td style="padding-left: 5em; padding-right: 2em">alphabet = DNA</td>
+    <td style="padding-left: 5em; padding-right: 2em">max stored scores = 100000</td>
+  </tr>  <tr>
+    <td style="padding-right: 2em">allow clobber = true</td>
+    <td style="padding-left: 5em; padding-right: 2em">compute q-values = true</td>
+    <td style="padding-left: 5em; padding-right: 2em">parse genomic coord. = false</td>
+  </tr>
+  <tr>
+    <td style="padding-right: 2em">text only = false</td>
+    <td style="padding-left: 5em; padding-right: 2em">scan both strands = true</td>
+    <td style="padding-left: 5em; padding-right: 2em">max strand = false</td>
+  </tr>
+  <tr>
+    <td style="padding-right: 2em">threshold type = p-value</td>
+    <td style="padding-left: 5em; padding-right: 2em">output theshold = 0.0001</td>
+    <td style="padding-left: 5em; padding-right: 2em">pseudocount = 0.1</td>
+  </tr>
+  <tr>
+    <td style="padding-right: 2em">alpha = 1</td>
+    <td style="padding-left: 5em; padding-right: 2em">verbosity = 2</td>
+    <td style="padding-left: 5em; padding-right: 2em"></td>
+  </tr>
+
+</table>
+</pre>
+<p>
+This information can be useful in the event you wish to report a
+problem with the FIMO software.
+</p>
+<hr>
+<span style="background-color: #DDDDFF"><a href="#top_buttons"><b>Go to top</b></a></span>
+</body>
+</html>
