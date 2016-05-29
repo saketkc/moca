@@ -110,24 +110,6 @@ def get_center_enrichment(centrimo_txt, motif_number=1):
     enrichment = float(centrimo_motif_dict['sites_in_bin'])/float(centrimo_motif_dict['total_sites'])
     return {'enrichment': enrichment, 'enrichment_pval': enrichment_pval}
 
-
-def perform_regression(X_values, Y_values):
-    """Perform linear regression
-    Parameters
-    ----------
-    X_values: array_like
-
-    Y_values: array
-
-    Returns
-    -------
-    r2: Coefficient of determination
-
-    r2_pval: p-value associated with r2
-
-    """
-    pass
-
 def get_motif_evalue(motif):
     """Get motif E-value"""
     return motif.evalue

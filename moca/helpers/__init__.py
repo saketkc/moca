@@ -12,6 +12,7 @@ from .xstr import xstr
 from .filename import filename_extension
 from .filename import get_filename_without_ext
 from .filename import search_files
+from .filename import path_leaf
 from .meme import read_memefile
 from .meme import get_motif_ic
 from .meme import get_motif_bg_freq

@@ -3,8 +3,9 @@ from __future__ import division
 from __future__ import absolute_import
 from builtins import object
 import os
-from ..helpers import MocaException
-from ..helpers import make_uppercase_fasta
+from moca.helpers import MocaException
+from moca.helpers import make_uppercase_fasta
+from moca.helpers import path_leaf
 import pandas
 from pybedtools import BedTool
 import numpy as np
@@ -38,9 +39,15 @@ class Bedfile(object):
 
     genome_table: string
         Absolute path to geonme chromosome size file
+
+    output_dir: string
+        Output directory
     """
-    def __init__(self, filepath, genome_table):
+    def __init__(self, filepath, genome_table, output_dir=None):
         self.filepath = os.path.abspath(filepath)
+        if not output_dir:
+            output_dir = os.path.dirname(self.filepath)
+        self.output_dir = output_dir
         self.bed_format = None
         self.extracted_fasta = None
         self.bed = None
@@ -55,6 +62,7 @@ class Bedfile(object):
         assert self.bed_format is not None
         self._determine_peaks()
         self._sort_bed()
+        self.write_to_scorefile(self.bed_df)
 
     def _count_peaks(self):
         with open(self.filepath) as f:
@@ -133,8 +141,9 @@ class Bedfile(object):
         """Write bed file as score file
 
         """
-        filename, file_extension = os.path.splitext(self.filepath)
-        filename += '.{}'.format(out_suffix)
+        file_path, file_extension = os.path.splitext(self.filepath)
+        filename = path_leaf(file_path)
+        filename = os.path.join(self.output_dir, filename+'.{}'.format(out_suffix))
         bed_df.to_csv(filename, header=False,
                       sep='\t',
                       index=False,

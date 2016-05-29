@@ -38,7 +38,7 @@ class WigReader(object):
             A numpy array containing scores for each tuple
         """
         scores = []
-        chrom_lengths = self._get_chromosomes()
+        chrom_lengths = self.get_chromosomes
         for chrom, chromStart, chromEnd, strand in intervals:
             if chrom not in list(chrom_lengths.keys()):
                 warnings.warn('Chromosome {} does not appear in the bigwig'.format(chrom), UserWarning)
@@ -55,7 +55,8 @@ class WigReader(object):
             scores.append(score)
         return np.array(scores)
 
-    def _get_chromosomes(self):
+    @property
+    def get_chromosomes(self):
         """Return list of chromsome and their sizes
         as in the wig file
 

@@ -63,7 +63,7 @@ def cli(bedfile, oc, configuration, flank_seq, flank_motif, genome_build):
 
 
     bed_o = bedoperations.Bedfile(bedfile, genome_table, moca_out_dir)
-    bed_train, bed_test = bed_o.split_train_test_bed(train_peaks=500, test_peaks=500)
+    bed_train, bed_test = bed_o.split_train_test_bed(train_peaks_count=500, test_peaks_count=500)
 
     bed_train_slopped  = bed_o.slop_bed(bed_train, flank_length=flank_seq)
     bed_test_slopped  = bed_o.slop_bed(bed_test, flank_length=flank_seq)

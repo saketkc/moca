@@ -29,6 +29,10 @@ class TestWigoperations(unittest.TestCase):
                           [1.5]])
         np.equal(expected_scores, scores)
 
+    def test_chroms(self):
+        loaded_wig = WigReader(self.wig_location)
+        assert loaded_wig.get_chromosomes == {'1': 195471971, '10': 130694993}
+
     def test_out_of_bounds(self):
         """Test if query is out of bounds"""
         loaded_wig = WigReader(self.wig_location)
