@@ -8,9 +8,6 @@ MoCA
 .. image:: https://img.shields.io/travis/saketkc/moca.svg
         :target: https://travis-ci.org/saketkc/moca
 
-.. image:: https://codecov.io/github/saketkc/moca/coverage.svg?branch=master
-        :target: https://codecov.io/github/saketkc/moca?branch=master
-
 .. image:: https://coveralls.io/repos/github/saketkc/moca/badge.svg?branch=master
         :target: https://coveralls.io/github/saketkc/moca?branch=master
 
@@ -20,12 +17,13 @@ MoCA
 .. image:: https://requires.io/github/saketkc/moca/requirements.svg?branch=master
         :target: https://requires.io/github/saketkc/moca/requirements/?branch=master
 
-Tool for motif conservation analysis
-Python rewrite of `MoCA0.1.0`
+Tool for MOtif Conservation Analysis
 
-* Free software: BSD license
+Python rewrite of `MoCA0.1.0`_
 
-Documentation
+* Free software: ISC license
+
+API Documentation
 -------------
 
 http://saketkc.github.io/moca/
@@ -41,35 +39,41 @@ Installation
     $ cd moca
     $ conda create env -f environment.yml python=2.7
     $ source activate mocatest
-    $ export MEME_ETC_DIR="/home/user/anaconda2/envs/mocatest/etc"
-    $ export MEME_BIN_DIR="/home/user/anaconda2/envs/mocatest/bin"
     $ pip install .
-    $ mocacli --bedfile tests/data/ENCFF002CDP.ctcf.bed --phylop /media/data1/genomes/hg19/phylop/hg19.100way.phyloP100way.bw --gerp /media/data1/genomes/hg19/gerp/All_hg19_RS.bw -gt /media/data1/genomes/hg19/fasta/hg19.sizes -gf /media/data1/genomes/hg19/fasta/hg19.fa --configuration tests/data/application.cfg
 
+
+A sample configuration file is available: `tests/data/application.cfg`
 
 Usage
 -----
 
 ::
 
-    $ mocacli [OPTIONS]
+    $ mocacli --help
+    Usage: mocacli [OPTIONS]
 
-      Run moca
+    Run moca
 
-      Options:
-        -i, --bedfile TEXT            Bed file input  [required]
-        -o, --oc TEXT                 Output Directory
-        -c, --configuration TEXT      Configuration file  [required]
-        --flank-seq INTEGER           Flanking sequence length  [required]
-        --flank-motif INTEGER         Length of sequence flanking motif  [required]
-        -g, -gb, --genome-build TEXT  Key denoting genome build to use in
-                                      configuration file  [required]
+    Options:
+      -i, --bedfile TEXT            Bed file input  [required]
+      -o, --oc TEXT                 Output Directory
+      -c, --configuration TEXT      Configuration file  [required]
+      --flank-seq INTEGER           Flanking sequence length  [required]
+      --flank-motif INTEGER         Length of sequence flanking motif  [required]
+      -g, -gb, --genome-build TEXT  Key denoting genome build to use in
+                                configuration file  [required]
+      --help                        Show this message and exit.
+
+
 Example
 -------
 
 ::
 
-    mocacli -i tests/data/ENCFF002CDP.ctcf.bed -c tests/data/application.cfg -g hg19
+    $ mocacli -i tests/data/ENCFF002CDP.ctcf.bed\
+        -g hg19
+        -c tests/data/application.cfg\
+        -o output_dir
 
 .. image:: http://www.saket-choudhary.me/moca/_static/img/ENCFF002CEL.png
 
@@ -87,27 +91,8 @@ Run tests locally
 
 ::
 
-    $ nosetests -v
-     nosetests -v
-     Test load broadPeak ... ok
-     Test generate fasta ... ok
-     Test load macsPeak ... ok
-     Test load narrowPeak ... ok
-     test_scorefile (tests.test_bedoperations.TestBedoperations) ... ok
-     Test configuration genomes ... ok
-     Test configuration sections ... ok
-     bits            2.3                    * ... ok
-     Test fimo runner ... ok
-     Test fimo_to_sites ... ok
-     Test meme runner ... ok
-     Test load wig ... ok
-     Test if query is out of bounds ... ok
-     Test wig query ... ok
-
-     ----------------------------------------------------------------------
-     Ran 14 tests in 2.506s
-    
-
+    $ py.test --verbose --mpl --cov=moca --cov-config .coveragerc\
+        --cov-report term-missing
 
 Credits
 ---------
