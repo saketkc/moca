@@ -30,6 +30,7 @@ before_install:
  - conda env create -q -f environment.yml python=$TRAVIS_PYTHON_VERSION
 
  - source activate mocatest
+ - conda install -c pkgw texlive-core
 
  - bash travis/install_meme.sh
  - export PATH="$PATH:$HOME/meme_bin/bin"
