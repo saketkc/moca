@@ -80,6 +80,7 @@ dependencies:
 - pip=8.1.1=py27_1
 - pixman=0.32.6=0
 - ptyprocess=0.5.1=py27_0
+- py=1.4.31=py27_0
 - py2cairo=1.10.0=py27_2
 - pybedtools=0.7.7=py27_1
 - pybigwig=0.2.8=py27_0
@@ -92,6 +93,9 @@ dependencies:
 - pyparsing=2.1.4=py27_0
 - pyqt=4.11.4=py27_1
 - pysam=0.9.0=py27_1
+- pytest=2.9.1=py27_0
+- pytest-cov=2.2.1=py27_0
+- pytest-mpl=0.5=py27_0
 - python=2.7.11=0
 - python-coveralls=2.5.0=py27_0
 - python-dateutil=2.5.3=py27_0

@@ -472,6 +472,7 @@ def create_scatter_plot(matplot_dict, motif_freq,
     f.add_subplot(scatter_plot)
 
 
+"""
 @click.command()
 @click.option('--meme_file', '-i', help='MEME file', required=True)
 @click.option('--peak_file', '-p', help='BED file', required=True)
@@ -484,6 +485,7 @@ def create_scatter_plot(matplot_dict, motif_freq,
 @click.option('--control_score_files', help='List of control score files', nargs=3)
 @click.option('--reg_plot_titles', help='List of regression plot titles', nargs=3)
 @click.option('--annotate', help='Annotation dict')
+"""
 
 def create_plot(meme_file,
                 peak_file,
@@ -573,11 +575,11 @@ def create_plot(meme_file,
     plot_title = os.path.split(peak_file)[1] + r' \# {}'.format(motif_number)
     ##FIXME This is a big dirty hacl to get thegenerate plots for the Reverse complement logo too
     logo_name =['logo{}.png'.format(motif_number), 'logo_rc{}.png'.format(motif_number)]
+    figures = []
     for sample_score, control_score, subplot_legend_title in zip(sample_conservation_scores,
                                                   control_conservation_scores,
                                                   reg_plot_titles):
         for logo_filename in logo_name:
-            print(logo_filename)
             setup_matplotlib()
             if 'rc'in logo_filename:
                 sample_score = sample_score[::-1]
@@ -634,8 +636,8 @@ def create_plot(meme_file,
                                         annotate)
 
             f.savefig(out_file, figsize=figsize, dpi=DPI)
-            break
-        break
-
+            figures.append(f)
+            plt.close('all')
+    return figures
 if __name__ == '__main__':
     create_plot()
