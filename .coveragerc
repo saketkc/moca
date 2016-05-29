@@ -2,6 +2,10 @@
 branch = True
 source = moca/*
 include = moca/*
-omit = */setup.py
+omit = 
+        */setup.py
+        moca/helpers/encode.py
+        moca/helpers/db.py
+        moca/webservice/
 [report]
 include = moca/*

@@ -75,6 +75,22 @@ class TestPipeline(unittest.TestCase):
             else:
                 assert str(fasta_sequence[start:end].reverse_complement()) == fimo_sequence
 
+    def test_fimostd(self):
+        """Test fimo to sites with
+        standard sequence names"""
+        fimo_file = 'tests/data/fimo.std.txt'
+        fimo_df = fimo_to_sites(os.path.abspath(fimo_file))
+        for _, row in fimo_df.iterrows():
+            record_id = row['sequence name']
+            fimo_sequence = row['matched sequence']
+            start = row['start']
+            end = row['stop'] # 1-based end
+            strand = row['strand']
+            assert start-1 == row['motifStartZeroBased']
+            assert end == row['motifEndOneBased']
+
+
+
     def test_shuffler(self):
         """Smoke test for shuffler"""
         fasta_in = 'tests/data/expected_out/macsPeak.fasta'
