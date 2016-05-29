@@ -1,6 +1,6 @@
-===============================
-MoCA
-===============================
+==========================================
+MoCA: Tool for MOtif Conservation Analysis
+==========================================
 
 .. image:: https://img.shields.io/pypi/v/moca.svg
         :target: https://testpypi.python.org/pypi/moca/0.1.0
@@ -17,11 +17,13 @@ MoCA
 .. image:: https://requires.io/github/saketkc/moca/requirements.svg?branch=master
         :target: https://requires.io/github/saketkc/moca/requirements/?branch=master
 
-Tool for MOtif Conservation Analysis
 
 Python rewrite of `MoCA0.1.0`_
 
-* Free software: ISC license
+LICENSE
+-------
+ISC
+
 
 API Documentation
 -------------
@@ -43,6 +45,15 @@ Installation
 
 
 A sample configuration file is available: `tests/data/application.cfg`
+
+Workflow
+--------
+
+MoCA makes use of PhyloP/PhastCons/GERP scores to assess the quality of a
+motif, the hypothesis being a 'true motif' would evolve slower as compared
+to its surrounding(flanking sequences).
+
+.. image:: https://raw.githubusercontent.com/saketkc/moca_web/master/docs/abstract/workflow.png
 
 Usage
 -----
@@ -76,12 +87,6 @@ Example
         -o output_dir
 
 .. image:: http://www.saket-choudhary.me/moca/_static/img/ENCFF002CEL.png
-
-
-Workflow
---------
-
-.. image:: https://raw.githubusercontent.com/saketkc/moca_web/master/docs/abstract/workflow.png
 
 Tests
 -----
