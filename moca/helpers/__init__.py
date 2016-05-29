@@ -19,5 +19,4 @@ from .meme import get_max_occuring_bases
 from .meme import create_position_profile
 from .meme import get_total_sequences
 from .fasta import make_uppercase_fasta
-from .fasta import generate_random_fasta
 from .fasta import get_fasta_metadata

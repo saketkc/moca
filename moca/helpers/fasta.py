@@ -6,7 +6,6 @@ from builtins import zip
 import os
 from Bio import SeqIO
 import pandas
-from pyfaidx import Fasta
 import numpy as np
 
 def get_fasta_metadata(in_fasta):
@@ -27,7 +26,6 @@ def get_fasta_metadata(in_fasta):
         assert length == len(record_dict[key])
     fasta_metadata = {'num_seq': len(list(record_dict.keys())), 'len_seq': length}
     return fasta_metadata
-
 
 def make_uppercase_fasta(mixed_fasta, upper_fasta):
     """Convert fasta to have all upper case letters
@@ -54,41 +52,3 @@ def make_uppercase_fasta(mixed_fasta, upper_fasta):
     records = (rec.upper() for rec in SeqIO.parse(os.path.abspath(mixed_fasta), 'fasta'))
     SeqIO.write(records, os.path.abspath(upper_fasta), 'fasta')
 
-def generate_random_fasta(genome,
-                       genome_table,
-                       num_seq,
-                       len_seq,
-                       out_fasta):
-    """Generate fasta pooling seqe
-    Attributes
-    ---------
-    genome: str
-        Path to genome
-    genome_table: str
-        Path to chromosome size
-    len_seq: int
-        Length of fasta sequences to generate
-    num_seq: int
-        Number of fasta records to generate
-    out_fasta: str
-        Path to write random fasta
-    """
-    filt_func = lambda chrom: '_' not in chrom and chrom[-1].isdigit()
-    gt_map = pandas.read_table(genome_table, index_col=0, header=None)
-    chr_keys = gt_map.index.tolist()
-    ## Avoid scaffolds and enforce the last chracter of chromsome key being numeric
-    ## TODO This is not  foolproofi. though I can't think of cases it will fail, but it is also not random in true sense
-    chr_keys_filtered = [chrom for chrom in chr_keys if '_' not in chrom and chrom[-1].isdigit()]
-    chr_selected = np.random.choice(chr_keys_filtered, num_seq)
-
-    chr_selected_length = gt_map.ix[chr_selected].values.flatten()
-    chr_selected_start = np.array([np.random.choice(np.arange(1, chr_length-len_seq)) for chr_length in chr_selected_length])
-    chr_selected_end = chr_selected_start+len_seq-1
-
-    fasta = Fasta(genome, read_ahead=10000, filt_function=filt_func, sequence_always_upper=True)
-
-    with open(out_fasta, 'w') as f:
-        for chr_name, chr_start, chr_end in zip(chr_selected, chr_selected_start, chr_selected_end):
-            seq = fasta[chr_name][chr_start:chr_end]
-            f.write('>{}:{}-{}\n'.format(seq.name, seq.start, seq.end))
-            f.write(seq.seq + '\n')
