@@ -65,7 +65,7 @@
   <ul class="dropdown-menu globaltoc"
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">MoCA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">MoCA: Tool for MOtif Conservation Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../usage.html">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
@@ -120,6 +120,9 @@
   <h1>Source code for moca.pipeline.job_processor</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Job Processor Module</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">ConfigurationParser</span>
@@ -148,7 +151,7 @@
             <span class="c1">#raise MocaException(&#39;Config file {} not found&#39;.format(config_file))</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No configuration file supplied. Defaults will be used.&#39;</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cpu_cores</span> <span class="o">=</span> <span class="n">get_cpu_count</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">meme_default_params</span> <span class="o">=</span> <span class="s1">&#39;-dna -mod zoops -nmotifs 3 -minw 6 -maxw 30 -revcomp -nostatus -maxsize 1000000 -p {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpu_cores</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meme_default_params</span> <span class="o">=</span> <span class="s1">&#39;-dna -mod zoops -nmotifs 5 -minw 6 -maxw 30 -revcomp -nostatus -maxsize 1000000 -p {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpu_cores</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">meme_strargs</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">meme_location</span> <span class="o">=</span> <span class="s1">&#39;meme&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fimo_default_params</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
@@ -157,7 +160,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">shuffler_location</span> <span class="o">=</span> <span class="s1">&#39;fasta-shuffle-letters&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">centrimo_args</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">centrimo_location</span> <span class="o">=</span> <span class="s1">&#39;centrimo&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">memechip_default_params</span> <span class="o">=</span> <span class="s1">&#39;-dna -meme-mod zoops -meme-nmotifs 3 -meme-minw 6 -meme-maxw 30 -meme-maxsize 1000000 -meme-p {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpu_cores</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">memechip_default_params</span> <span class="o">=</span> <span class="s1">&#39;-dna -meme-mod zoops -meme-nmotifs 5 -meme-minw 6 -meme-maxw 30 -meme-maxsize 1000000 -meme-p {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpu_cores</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">memechip_args</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">memechip_location</span> <span class="o">=</span> <span class="s1">&#39;meme-chip&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">commands_run</span> <span class="o">=</span> <span class="p">[]</span>
@@ -170,7 +173,7 @@
 <span class="sd">        ---------</span>
 <span class="sd">        strargs: string</span>
 <span class="sd">            A concatenated string containing parameters as would be passed to standalone meme</span>
-<span class="sd">            Defualt parametes used: &#39;-dna -revcomp -maxsize 1000000 -nmotifs 3 -p 4&#39;</span>
+<span class="sd">            Defualt parametes used: &#39;-dna -revcomp -maxsize 1000000 -nmotifs 5 -p 4&#39;</span>
 <span class="sd">            To modify: Pipeline.meme_default_params</span>
 <span class="sd">        fasta_in: string</span>
 <span class="sd">            Location of the fasta file</span>
@@ -262,7 +265,12 @@
         <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">exitcode</span> <span class="o">=</span> <span class="n">run_job</span><span class="p">(</span><span class="n">cmd</span><span class="o">=</span><span class="n">cmd</span><span class="p">,</span>
                                            <span class="n">cwd</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fasta_out</span><span class="p">))</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">fasta_out</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">stdout</span><span class="p">)</span></div>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">stdout</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;stdout&#39;</span><span class="p">:</span> <span class="n">stdout</span><span class="p">,</span>
+                  <span class="s1">&#39;stderr&#39;</span><span class="p">:</span> <span class="n">stderr</span><span class="p">,</span>
+                  <span class="s1">&#39;exitcode&#39;</span><span class="p">:</span> <span class="n">exitcode</span><span class="p">,</span>
+                  <span class="s1">&#39;cmd&#39;</span><span class="p">:</span> <span class="n">cmd</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">output</span></div>
 
 <div class="viewcode-block" id="Pipeline.run_centrimo"><a class="viewcode-back" href="../../../moca.pipeline.html#moca.pipeline.job_processor.Pipeline.run_centrimo">[docs]</a>    <span class="k">def</span> <span class="nf">run_centrimo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fasta_in</span><span class="p">,</span> <span class="n">meme_file</span><span class="p">,</span> <span class="n">out_dir</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Run centrimo</span>
@@ -311,7 +319,7 @@
 <span class="sd">        ---------</span>
 <span class="sd">        strargs: string</span>
 <span class="sd">            A concatenated string containing parameters as would be passed to standalone meme</span>
-<span class="sd">            Defualt parametes used: &#39;-dna -revcomp -maxsize 1000000 -nmotifs 3 -p 4&#39;</span>
+<span class="sd">            Defualt parametes used: &#39;-dna -revcomp -maxsize 1000000 -nmotifs 5 -p 4&#39;</span>
 <span class="sd">            To modify: Pipeline.meme_default_params</span>
 <span class="sd">        fasta_in: string</span>
 <span class="sd">            Location of the fasta file</span>

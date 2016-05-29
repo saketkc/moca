@@ -64,7 +64,7 @@
   <ul class="dropdown-menu globaltoc"
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul>
-<li class="toctree-l1"><a class="reference internal" href="readme.html">MoCA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html">MoCA: Tool for MOtif Conservation Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
@@ -137,8 +137,8 @@
 <span id="moca-bedoperations-model-module"></span><h2>moca.bedoperations.model module<a class="headerlink" href="#module-moca.bedoperations.model" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="moca.bedoperations.model.Bedfile">
-<em class="property">class </em><code class="descclassname">moca.bedoperations.model.</code><code class="descname">Bedfile</code><span class="sig-paren">(</span><em>filepath</em>, <em>genome_table</em>, <em>peaks_to_keep=500</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<em class="property">class </em><code class="descclassname">moca.bedoperations.model.</code><code class="descname">Bedfile</code><span class="sig-paren">(</span><em>filepath</em>, <em>genome_table</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">future.types.newobject.newobject</span></code></p>
 <p>Class to crate a bed file object</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -153,20 +153,15 @@
 </tbody>
 </table>
 <dl class="method">
-<dt id="moca.bedoperations.model.Bedfile.determine_peaks">
-<code class="descname">determine_peaks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.determine_peaks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.determine_peaks" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add extra columns representing peaks</p>
-</dd></dl>
-
-<dl class="method">
 <dt id="moca.bedoperations.model.Bedfile.extract_fasta">
-<code class="descname">extract_fasta</code><span class="sig-paren">(</span><em>fasta_in</em>, <em>fasta_out=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.extract_fasta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.extract_fasta" title="Permalink to this definition">¶</a></dt>
+<code class="descname">extract_fasta</code><span class="sig-paren">(</span><em>bed_in</em>, <em>fasta_in</em>, <em>fasta_out=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.extract_fasta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.extract_fasta" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract fasta of bed regions</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bed_in</strong> (<em>string</em>) &#8211; Path to input bed</li>
 <li><strong>fasta_in</strong> (<em>string</em>) &#8211; Absolute path to location of reference fasta file</li>
 <li><strong>fasta_out</strong> (<em>string</em>) &#8211; Path to write extracted fasta sequence</li>
 </ul>
@@ -181,6 +176,11 @@
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="moca.bedoperations.model.Bedfile.get_total_peaks">
+<code class="descname">get_total_peaks</code><a class="headerlink" href="#moca.bedoperations.model.Bedfile.get_total_peaks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="moca.bedoperations.model.Bedfile.guess_bedformat">
@@ -203,17 +203,23 @@
 
 <dl class="method">
 <dt id="moca.bedoperations.model.Bedfile.slop_bed">
-<code class="descname">slop_bed</code><span class="sig-paren">(</span><em>flank_length=200</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.slop_bed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.slop_bed" title="Permalink to this definition">¶</a></dt>
+<code class="descname">slop_bed</code><span class="sig-paren">(</span><em>bed_in</em>, <em>flank_length=50</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.slop_bed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.slop_bed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add flanking sequences to bed file</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>flank_length</strong> (<em>int</em>) &#8211; the bed region is expanded in both direction by flank_length number of bases</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bed_in</strong> (<em>string</em>) &#8211; Path to input bed file</li>
+<li><strong>flank_length</strong> (<em>int</em>) &#8211; the bed region is expanded in both direction by flank_length number of bases</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>slop_bed</strong> &#8211; Slopped bed data object</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>slopped_bed</strong> &#8211; Slopped bed data object</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dataframe</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dataframe</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -244,8 +250,29 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="moca.bedoperations.model.Bedfile.split_train_test_bed">
+<code class="descname">split_train_test_bed</code><span class="sig-paren">(</span><em>train_peaks_count=500</em>, <em>test_peaks_count=500</em>, <em>train_suffix='train'</em>, <em>test_suffix='test'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.split_train_test_bed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.split_train_test_bed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split bedfile into ranked training and testing sets</p>
+<p>Training set consists of top <cite>train_peaks_count</cite> peaks
+while testing set will consist of next <cite>test_peaks_count</cite> ranked
+peaks</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>train_peaks_count</strong> (<em>int</em>) &#8211; Count of training peaks</li>
+<li><strong>test_peaks_count</strong> (<em>int</em>) &#8211; Count of testing peaks</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="moca.bedoperations.model.Bedfile.write_to_scorefile">
-<code class="descname">write_to_scorefile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.write_to_scorefile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.write_to_scorefile" title="Permalink to this definition">¶</a></dt>
+<code class="descname">write_to_scorefile</code><span class="sig-paren">(</span><em>bed_df</em>, <em>out_suffix='sorted'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/bedoperations/model.html#Bedfile.write_to_scorefile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.bedoperations.model.Bedfile.write_to_scorefile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write bed file as score file</p>
 </dd></dl>
 

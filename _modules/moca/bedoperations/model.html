@@ -65,7 +65,7 @@
   <ul class="dropdown-menu globaltoc"
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">MoCA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">MoCA: Tool for MOtif Conservation Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../usage.html">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
@@ -118,7 +118,11 @@
     <div class="col-md-12 content">
       
   <h1>Source code for moca.bedoperations.model</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="kn">import</span> <span class="nb">object</span>
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">MocaException</span>
 <span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">make_uppercase_fasta</span>
 <span class="kn">import</span> <span class="nn">pandas</span>
@@ -155,21 +159,28 @@
 <span class="sd">    genome_table: string</span>
 <span class="sd">        Absolute path to geonme chromosome size file</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">genome_table</span><span class="p">,</span> <span class="n">peaks_to_keep</span><span class="o">=</span><span class="mi">500</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">genome_table</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bed_format</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">extracted_fasta</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bed</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">peaks_to_keep</span> <span class="o">=</span> <span class="n">peaks_to_keep</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">MocaException</span><span class="p">(</span><span class="s1">&#39;Bed file {} not found&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_read</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bed_format</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">guess_bedformat</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_peaks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_count_peaks</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_peaks_count</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_peaks_count</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">genome_table</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">genome_table</span><span class="p">)</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed_format</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">determine_peaks</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_determine_peaks</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sort_bed</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_to_scorefile</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_count_peaks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+                <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
 
     <span class="k">def</span> <span class="nf">_read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Read bedfile as a pandas dataframe</span>
@@ -206,39 +217,75 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sort_by</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="s1">&#39;chrom&#39;</span><span class="p">,</span> <span class="s1">&#39;peakStartZeroBased&#39;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="bp">False</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">True</span><span class="p">])</span>
 
-<div class="viewcode-block" id="Bedfile.write_to_scorefile"><a class="viewcode-back" href="../../../moca.bedoperations.html#moca.bedoperations.model.Bedfile.write_to_scorefile">[docs]</a>    <span class="k">def</span> <span class="nf">write_to_scorefile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Bedfile.split_train_test_bed"><a class="viewcode-back" href="../../../moca.bedoperations.html#moca.bedoperations.model.Bedfile.split_train_test_bed">[docs]</a>    <span class="k">def</span> <span class="nf">split_train_test_bed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_peaks_count</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+                             <span class="n">test_peaks_count</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+                             <span class="n">train_suffix</span><span class="o">=</span><span class="s1">&#39;train&#39;</span><span class="p">,</span>
+                             <span class="n">test_suffix</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Split bedfile into ranked training and testing sets</span>
+
+<span class="sd">        Training set consists of top `train_peaks_count` peaks</span>
+<span class="sd">        while testing set will consist of next `test_peaks_count` ranked</span>
+<span class="sd">        peaks</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        train_peaks_count: int</span>
+<span class="sd">            Count of training peaks</span>
+
+<span class="sd">        test_peaks_count: int</span>
+<span class="sd">            Count of testing peaks</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">train_peaks_count</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_peaks</span>
+        <span class="k">assert</span> <span class="n">test_peaks_count</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_peaks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_determine_peaks</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sort_bed</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_bed_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">[:</span><span class="nb">min</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">train_peaks_count</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_peaks</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_bed_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">test_peaks_count</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_peaks</span><span class="p">):]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_bed_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_to_scorefile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_bed_df</span><span class="p">,</span> <span class="n">out_suffix</span><span class="o">=</span><span class="s1">&#39;train&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_bed_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_to_scorefile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_bed_df</span><span class="p">,</span> <span class="n">out_suffix</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_bed_file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_bed_file</span></div>
+
+<div class="viewcode-block" id="Bedfile.write_to_scorefile"><a class="viewcode-back" href="../../../moca.bedoperations.html#moca.bedoperations.model.Bedfile.write_to_scorefile">[docs]</a>    <span class="k">def</span> <span class="nf">write_to_scorefile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bed_df</span><span class="p">,</span> <span class="n">out_suffix</span><span class="o">=</span><span class="s1">&#39;sorted&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Write bed file as score file</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">filename</span><span class="p">,</span> <span class="n">file_extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">)</span>
-        <span class="n">filename</span> <span class="o">+=</span> <span class="s1">&#39;.sorted&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scorefile</span> <span class="o">=</span> <span class="n">filename</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">peaks_to_keep</span><span class="p">]</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scorefile</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-                <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span>
-                <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-                <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">,</span> <span class="s1">&#39;peakStartZeroBased&#39;</span><span class="p">,</span> <span class="s1">&#39;peakEndOneBased&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;score&#39;</span><span class="p">])</span></div>
+        <span class="n">filename</span> <span class="o">+=</span> <span class="s1">&#39;.{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_suffix</span><span class="p">)</span>
+        <span class="n">bed_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                      <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span>
+                      <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                      <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;chrom&#39;</span><span class="p">,</span> <span class="s1">&#39;peakStartZeroBased&#39;</span><span class="p">,</span>
+                               <span class="s1">&#39;peakEndOneBased&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;score&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">filename</span></div>
 
 
-<div class="viewcode-block" id="Bedfile.slop_bed"><a class="viewcode-back" href="../../../moca.bedoperations.html#moca.bedoperations.model.Bedfile.slop_bed">[docs]</a>    <span class="k">def</span> <span class="nf">slop_bed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flank_length</span><span class="o">=</span><span class="mi">200</span><span class="p">):</span>
+<div class="viewcode-block" id="Bedfile.slop_bed"><a class="viewcode-back" href="../../../moca.bedoperations.html#moca.bedoperations.model.Bedfile.slop_bed">[docs]</a>    <span class="k">def</span> <span class="nf">slop_bed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bed_in</span><span class="p">,</span> <span class="n">flank_length</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add flanking sequences to bed file</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        bed_in: string</span>
+<span class="sd">            Path to input bed file</span>
 <span class="sd">        flank_length: int</span>
 <span class="sd">            the bed region is expanded in both direction by flank_length number of bases</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        slop_bed: dataframe</span>
+<span class="sd">        slopped_bed: dataframe</span>
 <span class="sd">            Slopped bed data object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="c1"># Load bed fole into bedtools</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">bed</span> <span class="o">=</span> <span class="n">BedTool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scorefile</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed</span><span class="o">.</span><span class="n">slop</span><span class="p">(</span><span class="n">g</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">genome_table</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">flank_length</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed</span></div>
+        <span class="n">inbed</span> <span class="o">=</span> <span class="n">BedTool</span><span class="p">(</span><span class="n">bed_in</span><span class="p">)</span>
+        <span class="n">slopped_bed</span> <span class="o">=</span> <span class="n">inbed</span><span class="o">.</span><span class="n">slop</span><span class="p">(</span><span class="n">g</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">genome_table</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">flank_length</span><span class="p">)</span>
+        <span class="n">filename</span><span class="p">,</span> <span class="n">extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">bed_in</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">+=</span> <span class="s1">&#39;_slop_{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">flank_length</span><span class="p">)</span> <span class="o">+</span> <span class="n">extension</span>
+        <span class="n">slopped_bed</span><span class="o">.</span><span class="n">saveas</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">filename</span></div>
 
-<div class="viewcode-block" id="Bedfile.determine_peaks"><a class="viewcode-back" href="../../../moca.bedoperations.html#moca.bedoperations.model.Bedfile.determine_peaks">[docs]</a>    <span class="k">def</span> <span class="nf">determine_peaks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_determine_peaks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add extra columns representing peaks</span>
 
 <span class="sd">        Parameters</span>
@@ -270,13 +317,15 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">[</span><span class="s1">&#39;peakStartZeroBased&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">[</span><span class="s1">&#39;peak_position&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">[</span><span class="s1">&#39;peakEndOneBased&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">[</span><span class="s1">&#39;peak_position&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">MocaException</span><span class="p">(</span><span class="s1">&#39;Format should be one of {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">__BED_TYPES__</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span></div>
+            <span class="k">raise</span> <span class="n">MocaException</span><span class="p">(</span><span class="s1">&#39;Format should be one of {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">__BED_TYPES__</span><span class="o">.</span><span class="n">values</span><span class="p">())))</span>
 
-<div class="viewcode-block" id="Bedfile.extract_fasta"><a class="viewcode-back" href="../../../moca.bedoperations.html#moca.bedoperations.model.Bedfile.extract_fasta">[docs]</a>    <span class="k">def</span> <span class="nf">extract_fasta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fasta_in</span><span class="p">,</span> <span class="n">fasta_out</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Bedfile.extract_fasta"><a class="viewcode-back" href="../../../moca.bedoperations.html#moca.bedoperations.model.Bedfile.extract_fasta">[docs]</a>    <span class="k">def</span> <span class="nf">extract_fasta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bed_in</span><span class="p">,</span> <span class="n">fasta_in</span><span class="p">,</span> <span class="n">fasta_out</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Extract fasta of bed regions</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        bed_in: string</span>
+<span class="sd">            Path to input bed</span>
 <span class="sd">        fasta_in: string</span>
 <span class="sd">            Absolute path to location of reference fasta file</span>
 
@@ -288,15 +337,11 @@
 <span class="sd">        fasta: string</span>
 <span class="sd">            Fasta sequence combined</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1">#if self.bed is None:</span>
-            <span class="c1"># Load bed fole into bedtools</span>
-            <span class="c1">#self.bed = BedTool(self.scorefile)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">downsampled_bed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">peaks_to_keep</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">extracted_fasta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">downsampled_bed</span><span class="o">.</span><span class="n">sequence</span><span class="p">(</span><span class="n">fi</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">fasta_in</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">temp_fasta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extracted_fasta</span><span class="o">.</span><span class="n">seqfn</span>
-        <span class="n">make_uppercase_fasta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp_fasta</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">fasta_out</span><span class="p">))</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp_fasta</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extracted_fasta</span></div>
+        <span class="n">bed</span> <span class="o">=</span> <span class="n">BedTool</span><span class="p">(</span><span class="n">bed_in</span><span class="p">)</span>
+        <span class="n">extracted_fasta</span> <span class="o">=</span> <span class="n">bed</span><span class="o">.</span><span class="n">sequence</span><span class="p">(</span><span class="n">fi</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">fasta_in</span><span class="p">))</span>
+        <span class="n">temp_fasta</span> <span class="o">=</span> <span class="n">extracted_fasta</span><span class="o">.</span><span class="n">seqfn</span>
+        <span class="n">make_uppercase_fasta</span><span class="p">(</span><span class="n">temp_fasta</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">fasta_out</span><span class="p">))</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">temp_fasta</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Bedfile.sort_by"><a class="viewcode-back" href="../../../moca.bedoperations.html#moca.bedoperations.model.Bedfile.sort_by">[docs]</a>    <span class="k">def</span> <span class="nf">sort_by</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Method to sort columns of bedfiles</span>
@@ -317,7 +362,11 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="n">ascending</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">get_total_peaks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_peaks</span></div>
 </pre></div>
 
     </div>
