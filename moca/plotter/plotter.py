@@ -497,7 +497,8 @@ def create_plot(meme_file,
                 sample_score_files=[],
                 control_score_files=[],
                 reg_plot_titles=[],
-                annotate=None):
+                annotate=None,
+                save=True):
     """Create plot
     Parameters
     ----------
@@ -635,7 +636,8 @@ def create_plot(meme_file,
                                         'gridspec_body': subgrid[1,-1]},
                                         annotate)
 
-            f.savefig(out_file, figsize=figsize, dpi=DPI)
+            if save:
+                f.savefig(out_file, figsize=figsize, dpi=DPI)
             figures.append(f)
             plt.close('all')
     return figures
