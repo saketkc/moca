@@ -85,7 +85,7 @@ def cli(bedfile, oc, configuration, flank_seq,
 
     #meme_run_out = moca_pipeline.run_memechip(fasta_in=query_fasta, out_dir=memechip_out_dir)
     #
-    #meme_run_out = moca_pipeline.run_meme(fasta_in=query_train_fasta, out_dir=meme_out_dir)
+    meme_run_out = moca_pipeline.run_meme(fasta_in=query_train_fasta, out_dir=meme_out_dir)
     meme_file = os.path.join(meme_out_dir, 'meme.txt')
     meme_summary = read_memefile(meme_file)
 

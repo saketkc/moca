@@ -25,11 +25,6 @@ LICENSE
 ISC
 
 
-API Documentation
------------------
-
-http://saketkc.github.io/moca/
-
 
 Installation
 ------------
@@ -44,6 +39,12 @@ Requirements
 * statsmodels>=0.6
 * pybigwig>=0.2.8
 * seaborn>=0.7.0
+* MEME>=4.10.2
+
+NOTE: MoCA also relies on `fasta-shuffle-letters` that was introduced in MEME `4.11.0`
+hence if you are using `4.10.2` make sure the `fasta-shuffle-letters` is the updated one.
+
+For a sample script see `travis/install_meme.sh`
 
 Using Conda
 ~~~~~~~~~~~
@@ -55,13 +56,14 @@ Using Conda
     $ cd moca
     $ conda create env -f environment.yml python=2.7
     $ source activate mocatest
-    $ pip install .
+    $ python setup.py install
 
-Yes we mix pip and conda.
+
 Using pip
 ~~~~~~~~~
 
 ::
+
    $ pip install moca
 
 
@@ -97,8 +99,11 @@ Usage
 
 
 A sample configuration file is available: `tests/data/application.cfg`
+
 Example
 -------
+
+Most users will require using the command line version only:
 
 ::
 
@@ -109,6 +114,17 @@ Example
 
 .. image:: http://www.saket-choudhary.me/moca/_static/img/ENCFF002CEL.png
 
+
+There is also a structured API available,
+however it might be missing examples and documentation at places.
+
+API Documentation
+-----------------
+
+http://saketkc.github.io/moca/
+
+
+
 Tests
 -----
 ``moca`` is mostly extensively tested. See `code-coverage`_. 
@@ -118,7 +134,7 @@ Run tests locally
 ::
 
     $ ./runtests.sh
-      
+
 
 Credits
 ---------

@@ -2,6 +2,14 @@
 History
 =======
 
+0.2.8 (2016-05-30)
+------------------
+* Fixed MEME pipeline missing from mocacli
+
+0.2.7 (2016-05-30)
+------------------
+* Fixed bug where missing wig keys were not handled in mocacli
+
 0.2.4 (2016-05-29)
 ------------------
 

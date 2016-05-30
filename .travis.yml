@@ -47,7 +47,7 @@ install:
   - python setup.py install --single-version-externally-managed --record=/tmp/record.txt
 
 script:
-  - mocacli
+  - mocacli --help
   - py.test
   - py.test --verbose --mpl --cov=moca --cov-config .coveragerc --cov-report term-missing
 
