@@ -3,7 +3,6 @@
 """MoCA CLI"""
 import os
 import click
-import sys
 from moca import bedoperations, pipeline
 from moca.bedoperations.fimo import get_start_stop_intervals
 from moca.helpers import filename_extension
@@ -57,7 +56,12 @@ def cli(bedfile, oc, configuration, flank_seq,
 
     moca_pipeline = pipeline.Pipeline(configuration)
     genome_data = moca_pipeline.get_genome_data(genome_build)
-    wigfiles = dict((key,genome_data['{}_wig'.format(key)]) for key in list(conservation_wig_keys))
+    wigfiles = {}
+    for key in list(conservation_wig_keys):
+        try:
+            wigfiles[key] = genome_data['{}_wig'.format(key)]
+        except KeyError:
+            pass
     genome_fasta = genome_data['fasta']
     genome_table = genome_data['genome_table']
 

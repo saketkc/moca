@@ -73,7 +73,7 @@ motif, the hypothesis being a 'true motif' would evolve slower as compared
 to its surrounding(flanking sequences).
 
 .. image:: https://raw.githubusercontent.com/saketkc/moca_web/master/docs/abstract/workflow.png
-   :width: 100%
+   :width: 50%
 
 Usage
 -----
