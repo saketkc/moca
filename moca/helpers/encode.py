@@ -9,13 +9,13 @@ import os
 import requests
 import shutil
 from pymongo import MongoClient
-from ..helpers import safe_makedir
+from moca.helpers import safe_makedir
 import io
 import gzip
 import json
 
 __base_url__ = 'https://www.encodeproject.org/'
-
+__root_dir__ = '/media/data1/ENCODE_V3/'
 ALLOWED_OUTPUT_TYPES = ['optimal idr thresholded peaks', 'peaks']
 ALLOWED_FILETYPES = ['bed narrowPeak', 'bed broadPeak']
 
@@ -34,14 +34,18 @@ def download_idr_tfs(root_dir, metadata):
     """Download all tfs with idr called peaks"""
     idr_records = fetch_idr_record(metadata)
     ## Theere is only one IDR per sample
-    assert len(idr_records) == 1
+    if len(idr_records)!=1:
+        print(idr_records[0]['dataset'])
+    assert len(idr_records) <= 1
     for idr_record in idr_records:
         dataset = idr_record['dataset']
         peakfilename = idr_record['peakfilename'] + '.bed.gz'
         dataset_dir = os.path.join(root_dir, dataset)
         safe_makedir(dataset_dir)
         source_url = __base_url__ + idr_record['href']
+        print(source_url)
         download_peakfile(source_url, peakfilename, dataset_dir)
+        save_metadata_json(idr_record, dataset_dir)
         return {'assembly': idr_record['assembly'],'bedfile': os.path.join(dataset_dir, peakfilename.replace('.gz',''))}
 
 def save_metadata(metadata):
@@ -52,7 +56,7 @@ def save_metadata(metadata):
 
 def save_metadata_json(metadata, directory):
     """Save metadata locally"""
-    with open('metadata.json', 'w') as outfile:
+    with open(os.path.join(directory,'metadata.json'), 'w') as outfile:
         json.dump(metadata, outfile)
 
 def get_experiment(experiment_id):
@@ -60,7 +64,7 @@ def get_experiment(experiment_id):
     req = requests.get("{}experiments/{}/?format=json".format(__base_url__, experiment_id))
     metadata = req.json()
     if metadata['status'] != 'error':
-        save_metadata_json(metadata)
+        download_idr_tfs(__root_dir__, metadata)
     else:
         print('Error fetching metadata for {}'.format(experiment_id))
 
@@ -68,7 +72,7 @@ def get_idr_controlled_peaks():
     """Return records that have atleast one idr called peak"""
     client = MongoClient()
     db = client.moca_encode_tf
-    results = db.tf_metadata.find({'files.output_type': 'optimal idr thresholded peaks'}, no_cursor_timeout=True)
+    results = db.tf_metadata_0529016.find({'files.output_type': 'optimal idr thresholded peaks', 'assembly': 'hg19'}, no_cursor_timeout=True)
     data = results[:]
     client.close()
     return data
@@ -94,7 +98,6 @@ def fetch_idr_record(metadata):
             href = f['href']
             title = f['title']
             assembly = f['assembly']
-            print(dataset)
             idr_records.append({'href': href, 'metadata':f, 'parent_metadata': parent_metadata, 'dataset': dataset, 'peakfilename': title, 'assembly': assembly})
     return idr_records
 
@@ -195,4 +198,9 @@ def search_encode_tfs():
     for experiment in all_experiments:
         print(experiment)
         get_experiment(experiment)
+
+if __name__ == '__main__':
+    list_of_metadata = get_idr_controlled_peaks()
+    for data in list(list_of_metadata):
+        download_idr_tfs(__root_dir__, data)
 
