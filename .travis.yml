@@ -32,12 +32,12 @@ before_install:
  - conda update conda
  - conda info -a
  - conda install python=$TRAVIS_PYTHON_VERSION
- - conda remove --name mocatest --all
+ - conda remove --name mocadev --all
  - conda config --add channels bioconda
  - conda config --add channels r
  - conda env create -q -f environment.yml python=$TRAVIS_PYTHON_VERSION
 
- - source activate mocatest
+ - source activate mocadev
  - conda install -c pkgw texlive-core
 
  - bash travis/install_meme.sh
@@ -51,8 +51,8 @@ script: py.test --verbose --mpl --cov=moca --cov-config .coveragerc --cov-report
 after_script:
   - codecov
   - coveralls
-  - source deactivate mocatest
-  - conda remove --name mocatest --all
+  - source deactivate mocadev
+  - conda remove --name mocadev --all
 
 deploy:
   provider: pypi
