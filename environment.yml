@@ -1,6 +1,7 @@
 name: mocadev
 dependencies:
 - bcftools=1.3=0
+- bedtools=2.25.0=1
 - biopython=1.66=np111py27_0
 - cairo=1.12.18=6
 - click=6.6=py27_0
