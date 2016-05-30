@@ -39,23 +39,3 @@ phastcons_wig = /media/data1/genomes/ce6/phastcons/ce6_phastCons6way.wig
 [binaries]
 meme =
 
-[server]
-## Server settings
-debug = True
-#Host IP
-host = 
-## Celrry Broker Url 
-celery_broker_url = 
-celery_result_backend =
-sqlalchemy_database_uri = 
-celery_max_tasks_per_child = 10
-celeryd_task_time_limit = 1000000
-
-[mongo]
-MONGO_HOST = localhost
-MONGO_PORT = 27017
-MONGO_USERNAME = moca_encode
-MONGO_PASSWORD = moca_encode
-MONGO_DBNAME = moca_encode_tf
-MONGO_ENCODE_STATS_COLLECTION = encode_tf_stats
-MONGO_ENCODE_METADATA_COLLECTION = tf_metadata

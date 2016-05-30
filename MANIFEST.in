@@ -5,11 +5,13 @@ include LICENSE
 include README.rst
 include requirements.txt
 include environment.yml
+include application.cfg.example
 
 recursive-include tests *.py
 recursive-exclude test/data/generated_out *
 recursive-exclude test/data/moca_output *
+recursive-include tests/data/
 recursive-exclude * __pycache__
-recursive-exclude * *.py[co]
+recursive-exclude * *.py[co] *.egg-info
 
-recursive-include docs *.rst conf.py Makefile make.bat
+recursive-include docs *.rst conf.py Makefile

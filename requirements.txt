@@ -62,4 +62,5 @@ sphinxcontrib-napoleon==0.5.0
 statsmodels==0.6.1
 terminado==0.5
 tornado==4.3
+tqdm==4.7.1
 traitlets==4.2.1

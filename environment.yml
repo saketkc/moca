@@ -16,6 +16,7 @@ dependencies:
 - decorator=4.0.9=py27_0
 - docutils=0.12=py27_2
 - entrypoints=0.2=py27_1
+- expat=2.1.0=0
 - fontconfig=2.11.1=5
 - freetype=2.5.5=0
 - functools32=3.2.3.2=py27_0
@@ -51,6 +52,8 @@ dependencies:
 - pandas=0.18.1=np111py27_0
 - path.py=8.2.1=py27_0
 - patsy=0.4.1=py27_0
+- perl-threaded=5.22.0=10
+- perl-xml-parser=2.44=3
 - pexpect=4.0.1=py27_0
 - pickleshare=0.5=py27_0
 - pip=8.1.1=py27_1

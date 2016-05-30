@@ -56,6 +56,9 @@ setup(
     package_dir={'moca':
                  'moca'},
     include_package_data=True,
+    package_data={
+        'application' : ['application.cfg.example', 'environment.yml']
+    },
     install_requires=requirements,
     license="BSD",
     zip_safe=False,
