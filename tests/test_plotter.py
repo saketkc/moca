@@ -11,8 +11,7 @@ def join_path(head, leaf):
 def test_image():
     base_path = 'tests/data/ENCSR000AKB/'
     meme_file = base_path+'moca_output/meme_out/meme.txt'
-    peak_file = 'tests/data/ENCSR000AKB.sorted'
-    fimo_file = base_path + 'moca_output/fimo_out_1/fimo.txt'
+    plot_title = 'ENCSR000AKB.sorted'
     oc = 'tests/data/generate_out'
     motif_number = 1
     flank_motif = 5
@@ -21,8 +20,7 @@ def test_image():
     plot_titles = ['PhyloP']
     centrimo_dir = base_path + 'moca_output/centrimo_out'
     figs = create_plot(meme_file,
-                       peak_file,
-                       fimo_file,
+                       plot_title,
                        output_dir=oc,
                        centrimo_dir=centrimo_dir,
                        motif_number=motif_number,

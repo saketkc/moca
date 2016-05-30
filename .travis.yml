@@ -35,7 +35,6 @@ before_install:
  - conda remove --name mocatest --all
  - conda config --add channels bioconda
  - conda config --add channels r
- - conda config --add channels conda-forge
  - conda env create -q -f environment.yml python=$TRAVIS_PYTHON_VERSION
 
  - source activate mocatest

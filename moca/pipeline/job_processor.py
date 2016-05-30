@@ -255,7 +255,7 @@ class Pipeline(ConfigurationParser):
         """
         wig = WigReader(wig_file)
         conservation_scores = wig.query(intervals)
-        if conservation_scores:
+        if np.any(conservation_scores):
             conservation_scores_mean = np.nanmean(conservation_scores, axis=0)
             np.savetxt(os.path.join(out_directory, '{}.raw.txt'.format(out_prefix)),
                        conservation_scores, fmt='%.4f')
@@ -264,6 +264,7 @@ class Pipeline(ConfigurationParser):
         else:
             touch(os.path.join(out_directory, '{}.mean.txt'.format(out_prefix)))
             touch(os.path.join(out_directory, '{}.raw.txt'.format(out_prefix)))
+        return os.path.join(out_directory, '{}.mean.txt'.format(out_prefix))
 
     @property
     def get_meme_default_params(self):

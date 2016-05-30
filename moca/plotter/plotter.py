@@ -53,7 +53,7 @@ HIST_NBINS = 20
 
 FONTSIZE = 20
 LEGEND_FONTSIZE = 26
-POINTSIZE = 20
+POINTSIZE = 24
 DPI = 300
 
 TICKPAD = 20
@@ -244,7 +244,7 @@ def create_bar_plot(logo_plot,  X_right, height_px,
     bottom_scale = 3
     heights = np.array([height_px/height_scale*all_meme_occurrences[i]/total_sequences for i in range(0, start_point)])
     bottoms = np.array([height_px/bottom_scale for i in range(0, start_point)])
-    barlist = logo_plot.bar(np.array(X_right[-start_point:])-0.05*(np.array(X_right[-start_point:])),
+    barlist = logo_plot.bar(np.array(X_right[-start_point:]),
                             heights,
                             width=24,
                             bottom=bottoms,
@@ -255,7 +255,7 @@ def create_bar_plot(logo_plot,  X_right, height_px,
     index = int(math.floor(-start_point/2))
     total_heights = heights+bottoms
     max_height = np.max(total_heights)
-    logo_plot.text(X_right[0], bottoms[0]/2.5, textstr, fontsize=14)
+    logo_plot.text(X_right[0], bottoms[0]/2.5, textstr, fontsize=12)
     barlist[motif_number-1].set_color('red')
     barlist[motif_number-1].set_hatch('/')
 
@@ -302,8 +302,8 @@ def create_enrichment_plot(matplot_dict, motif_number, centrimo_txt, centrimo_st
     x_smooth = np.linspace(X_values.min(), X_values.max(), 100)
     #y_smooth = spline(X_values, normalized_Y, x_smooth)
     smoother = UnivariateSpline(X_values, normalized_Y, s=0.0005)
-    #density.covariance_factor = lambda : .05
-    #density._compute_covariance()
+    density.covariance_factor = lambda : .0005
+    density._compute_covariance()
 
 
     y_smooth = smoother(x_smooth)
@@ -327,7 +327,7 @@ def create_enrichment_plot(matplot_dict, motif_number, centrimo_txt, centrimo_st
     if 'e' in enrichment_pval:
         enrichment_pval+= '}'
         enrichment_pval= enrichment_pval.replace('e', '*10^{').replace('-0','-')
-    text = '$Center-enrichment$'
+    text = '$\mathrm{Center-enrichment}$'
     textstr = r'\noindent {}=${:.2f}$\\~\\$(p={})$'.format(text, enrichment, enrichment_pval)
     txtx = -0.05*len(textstr)/100.0
     enrichment_plot.text(txtx, TXT_YPOS, textstr, fontsize=LEGEND_FONTSIZE-2)
@@ -335,17 +335,18 @@ def create_enrichment_plot(matplot_dict, motif_number, centrimo_txt, centrimo_st
     enrichment_plot = plt.Subplot(f, gs_b, autoscale_on=True)
 
     #enrichment_plot.plot(X_values, normalized_Y, linewidth=LINEWIDTH)
-    enrichment_plot.plot(x_smooth, density(x_smooth), linewidth=LINEWIDTH)
+    #enrichment_plot.plot(x_smooth, density(x_smooth), linewidth=LINEWIDTH)
+    enrichment_plot.plot(x_smooth, y_smooth, linewidth=LINEWIDTH)
     enrichment_plot.tick_params('both', length=TICKLENGTH, width=2, which='major')
     enrichment_plot.set_xlabel('$\mathrm{Distance}\ \mathrm{from} \ \mathrm{peak}$', fontsize=FONTSIZE, fontweight='bold')
     enrichment_plot.set_ylabel('$\mathrm{Density}$', fontsize=FONTSIZE, fontweight='bold')
-    enrichment_plot.axvline(x=-50, linewidth=3, color='green', linestyle='-.')
-    enrichment_plot.axvline(x=50, linewidth=3, color='green', linestyle='-.')
+    enrichment_plot.axvline(x=X_values.min()/2, linewidth=3, color='green', linestyle='-.')
+    enrichment_plot.axvline(x=X_values.max()/2, linewidth=3, color='green', linestyle='-.')
     enrichment_plot.axvline(x=0, linewidth=3, color='green', linestyle='-.')
     seaborn.despine(ax=enrichment_plot, offset=10, trim=True)
 
-    enrichment_plot.axvline(x=-100, linewidth=3, color='red', linestyle='-.')
-    enrichment_plot.axvline(x=100, linewidth=3, color='red', linestyle='-.')
+    enrichment_plot.axvline(x=X_values.min(), linewidth=3, color='red', linestyle='-.')
+    enrichment_plot.axvline(x=X_values.max(), linewidth=3, color='red', linestyle='-.')
     MAX_YTICKS = 3
     yloc = plt.MaxNLocator(MAX_YTICKS)
     enrichment_plot.yaxis.set_major_locator(yloc)
@@ -439,7 +440,7 @@ def create_scatter_plot(matplot_dict, motif_freq,
 
     s1 = scatter_plot.scatter(motif_freq, sample_scores, color='g',
                               s=[POINTSIZE for i in motif_freq],
-                              marker='x', label=r'$\mathrm{Sample}$')
+                              marker='^', label=r'$\mathrm{Sample}$')
     scatter_plot.plot(motif_freq, sample_regression_line, 'g',
                       motif_freq, fit_fn(motif_freq),
                       color='g', linewidth=LINEWIDTH)
@@ -448,9 +449,13 @@ def create_scatter_plot(matplot_dict, motif_freq,
                               marker='o', label=r'$\mathrm{Control}$')
     scatter_plot.plot(motif_freq, control_regression_line,
                       color=GREYNESS, linewidth=LINEWIDTH)
-    scatter_plot.legend(fontsize=14)
+    leg = scatter_plot.legend(fontsize=14)
+    leg.draw_frame(True)
+    #leg.get_frame().set_edgecolor('b')
+    leg.get_frame().set_linewidth(2.0)
 
-    ticks_and_labels = np.linspace(1.02*min(motif_freq), 1.02*max(motif_freq), num = 3, endpoint=True)
+    ticks_and_labels = np.linspace(1.02*min(motif_freq), 1.02*max(motif_freq),
+                                   num = 3, endpoint=True)
     scatter_plot.set_xticks(ticks_and_labels)
 
     ticks_and_labels = ["$%.2f$"%(x/(1.02*num_occurrences)) for x in ticks_and_labels]
@@ -458,7 +463,7 @@ def create_scatter_plot(matplot_dict, motif_freq,
 
     yloc = plt.MaxNLocator(MAX_YTICKS)
     scatter_plot.yaxis.set_major_locator(yloc)
-    scatter_plot.set_xlabel(r'$\mathrm{Most}\ \mathrm{frequent} \ \mathrm{base}\ \mathrm{Frequency}$',
+    scatter_plot.set_xlabel(r'$\mathrm{Most}\ \mathrm{frequent} \ \mathrm{base}\ \mathrm{frequency}$',
                             fontsize=FONTSIZE, fontweight='bold')
     scatter_plot.get_xaxis().tick_bottom()
     scatter_plot.get_yaxis().tick_left()
@@ -475,8 +480,7 @@ def create_scatter_plot(matplot_dict, motif_freq,
 """
 @click.command()
 @click.option('--meme_file', '-i', help='MEME file', required=True)
-@click.option('--peak_file', '-p', help='BED file', required=True)
-@click.option('--fimo_file', '-f', help='Fimo file', required=True)
+@click.option('--plot_title', '-p', help='Plot title', required=True)
 @click.option('-oc', '--output_directory', '--out_dir', '--output_dir', help='Output directory')
 @click.option('--centrimo_dir', help='Centrimo directory')
 @click.option('--motif_number', '-m', help='1-based motif number', type=int, required=True)
@@ -488,8 +492,7 @@ def create_scatter_plot(matplot_dict, motif_freq,
 """
 
 def create_plot(meme_file,
-                peak_file,
-                fimo_file,
+                plot_title,
                 output_dir=None,
                 centrimo_dir=None,
                 motif_number=1,
@@ -506,8 +509,6 @@ def create_plot(meme_file,
         Path to meme.txt
     peak_file: string
         Path to summit file
-    fimo_file: string
-        Path to fimo.txt
     centrimo_dir: string
         Path to centrimo's output directory
     motif_number: int
@@ -573,7 +574,7 @@ def create_plot(meme_file,
         centrimo_txt = os.path.join(centrimo_dir, 'centrimo.txt')
         centrimo_stats = os.path.join(centrimo_dir, 'site_counts.txt')
 
-    plot_title = os.path.split(peak_file)[1] + r' \# {}'.format(motif_number)
+    plot_title += r' \# {}'.format(motif_number)
     ##FIXME This is a big dirty hacl to get thegenerate plots for the Reverse complement logo too
     logo_name =['logo{}.png'.format(motif_number), 'logo_rc{}.png'.format(motif_number)]
     figures = []
