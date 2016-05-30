@@ -60,7 +60,7 @@ def get_experiment(experiment_id):
     req = requests.get("{}experiments/{}/?format=json".format(__base_url__, experiment_id))
     metadata = req.json()
     if metadata['status'] != 'error':
-        save_metadata(metadata)
+        save_metadata_json(metadata)
     else:
         print('Error fetching metadata for {}'.format(experiment_id))
 

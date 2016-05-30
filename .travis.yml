@@ -39,6 +39,8 @@ before_install:
 
  - source activate mocadev
  - conda install -c pkgw texlive-core
+ - pip install pytest-mpl
+
 
  - bash travis/install_meme.sh
  - export PATH="$PATH:$HOME/meme_bin/bin"
