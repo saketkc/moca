@@ -33,6 +33,20 @@ http://saketkc.github.io/moca/
 
 Installation
 ------------
+
+Requirements
+~~~~~~~~~~~~
+
+* bedtools>=2.25.0
+* biopython>=1.66
+* pandas>=0.18
+* scipy>=0.17
+* statsmodels>=0.6
+* pybigwig>=0.2.8
+* seaborn>=0.7.0
+
+Using Conda
+~~~~~~~~~~~
 ``moca`` is most compatible with the `conda`_ environment.
 
 ::
@@ -43,8 +57,13 @@ Installation
     $ source activate mocatest
     $ pip install .
 
+Yes we mix pip and conda.
+Using pip
+~~~~~~~~~
 
-A sample configuration file is available: `tests/data/application.cfg`
+::
+   $ pip install moca
+
 
 Workflow
 --------
@@ -54,6 +73,7 @@ motif, the hypothesis being a 'true motif' would evolve slower as compared
 to its surrounding(flanking sequences).
 
 .. image:: https://raw.githubusercontent.com/saketkc/moca_web/master/docs/abstract/workflow.png
+   :width: 100%
 
 Usage
 -----
@@ -76,6 +96,7 @@ Usage
       --help                        Show this message and exit.
 
 
+A sample configuration file is available: `tests/data/application.cfg`
 Example
 -------
 
