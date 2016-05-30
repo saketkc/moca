@@ -3,9 +3,10 @@ include CONTRIBUTING.rst
 include HISTORY.rst
 include LICENSE
 include README.rst
+include requirements.txt
+include environment.yml
 
 recursive-include tests *.py
-exclude tests/data/hg19.fa
 recursive-exclude test/data/generated_out *
 recursive-exclude test/data/moca_output *
 recursive-exclude * __pycache__

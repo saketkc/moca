@@ -13,7 +13,6 @@ dependencies:
 - coverage=4.1=py27_0
 - curl=7.49.0=0
 - cycler=0.10.0=py27_0
-- dateutil=2.4.1=py27_0
 - decorator=4.0.9=py27_0
 - docutils=0.12=py27_2
 - entrypoints=0.2=py27_1
@@ -58,7 +57,6 @@ dependencies:
 - pixman=0.32.6=0
 - ptyprocess=0.5=py27_0
 - py=1.4.31=py27_0
-- py2cairo=1.10.0=py27_2
 - pybedtools=0.7.7=py27_1
 - pybigwig=0.2.8=py27_0
 - pycairo=1.10.0=py27_0
@@ -74,7 +72,6 @@ dependencies:
 - pyzmq=15.2.0=py27_1
 - qt=4.8.7=1
 - readline=6.2=2
-- requests=2.10.0=py27_0
 - samtools=1.3.1=1
 - scipy=0.17.1=np111py27_0
 - seaborn=0.7.0=py27_0
@@ -103,7 +100,6 @@ dependencies:
   - ipython-genutils==0.1.0
   - jupyter-client==4.2.2
   - jupyter-core==4.1.0
-  - moca==0.1.0
   - pockets==0.3
   - pytest-mpl==0.5
   - sphinx-bootstrap-theme==0.4.9

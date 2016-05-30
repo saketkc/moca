@@ -2,7 +2,12 @@
 History
 =======
 
-0.1.0 (2016-02-22)
+0.2.3 (2016-05-29)
+
+* Include package_dir in setup.py
+* Include requirements.txt in MANIFEST
+
+0.2.0 (2016-05-29)
 ------------------
 
 * First release on PyPI.
