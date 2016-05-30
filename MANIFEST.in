@@ -12,6 +12,6 @@ recursive-exclude test/data/generated_out *
 recursive-exclude test/data/moca_output *
 recursive-include tests/data/
 recursive-exclude * __pycache__
-recursive-exclude * *.py[co] *.egg-info
+recursive-exclude * *.py[co]
 
 recursive-include docs *.rst conf.py Makefile
