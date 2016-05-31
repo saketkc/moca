@@ -28,7 +28,7 @@ with open(version_file, 'r') as f:
 assert metadata is not None
 fversion = metadata['version'].split('.')
 
-test_requirements = ['nosetests']
+test_requirements = ['pytest', 'pytest-cov', 'pytest-mpl']
 
 MAJOR      = fversion[0]
 MINOR      = fversion[1]
