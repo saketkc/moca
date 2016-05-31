@@ -55,5 +55,5 @@ dependencies:
 - zlib=1.2.8=3
 - pip:
   - pytest-mpl==0.5
-  - tqdm==4.7.1
+  - tqdm==4.7.2
 
