@@ -3,7 +3,7 @@ MoCA: Tool for MOtif Conservation Analysis
 ==========================================
 
 .. image:: https://img.shields.io/pypi/v/moca.svg
-        :target: https://testpypi.python.org/pypi/moca/0.1.0
+        :target: https://pypi.python.org/pypi/moca/
 
 .. image:: https://img.shields.io/travis/saketkc/moca.svg
         :target: https://travis-ci.org/saketkc/moca
