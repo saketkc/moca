@@ -2,6 +2,12 @@
 History
 =======
 
+0.2.9 (2016-05-31)
+------------------
+
+* Do not fail silently on MEME failing
+* Support --cores to support parallel threads
+
 0.2.8 (2016-05-30)
 ------------------
 * Fixed MEME pipeline missing from mocacli

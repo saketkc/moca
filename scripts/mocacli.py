@@ -3,6 +3,8 @@
 """MoCA CLI"""
 import os
 import click
+import re
+import sys
 from moca import bedoperations, pipeline
 from moca.bedoperations.fimo import get_start_stop_intervals
 from moca.helpers import filename_extension
@@ -26,11 +28,12 @@ def show_progress(msg):
 @click.option('--flank-seq', default=50, help='Flanking sequence length', required=True)
 @click.option('--flank-motif', default=5, help='Length of sequence flanking motif', required=True)
 @click.option('--n-motif', default=5, help='Number of motifs', type=int)
+@click.option('--cores', '-t', default=1, help='Number of parallel MEME jobs', type=int, required=True)
 @click.option('--genome-build', '-g', '-gb',  help='Key denoting genome build to use in configuration file', required=True)
 
 
 def cli(bedfile, oc, configuration, flank_seq,
-        flank_motif, n_motif, genome_build):
+        flank_motif, n_motif, cores, genome_build):
     """Run moca"""
     global bar
     root_dir = os.path.dirname(os.path.abspath(bedfile))
@@ -81,11 +84,22 @@ def cli(bedfile, oc, configuration, flank_seq,
     #memechip_out_dir = os.path.join(moca_out_dir, 'memechip_analysis')
     meme_out_dir = os.path.join(moca_out_dir, 'meme_out')
     memechip_out_dir = meme_out_dir
+    meme_params = moca_pipeline.get_meme_default_params
+    if cores==1:
+        re.sub(r' -p*', '', meme_params)
+    else:
+        re.sub(r'-p*', '-p {}'.format(cores), meme_params)
     show_progress('Running MEME')
+
 
     #meme_run_out = moca_pipeline.run_memechip(fasta_in=query_fasta, out_dir=memechip_out_dir)
     #
-    meme_run_out = moca_pipeline.run_meme(fasta_in=query_train_fasta, out_dir=meme_out_dir)
+    meme_run_out = moca_pipeline.run_meme(fasta_in=query_train_fasta,
+                                          out_dir=meme_out_dir,
+                                          strargs=meme_params)
+    if meme_run_out['stderr']!='':
+        sys.stdout.write('Error running MEME: {}'.format(meme_run_out['stderr']))
+        sys.exit(1)
     meme_file = os.path.join(meme_out_dir, 'meme.txt')
     meme_summary = read_memefile(meme_file)
 
