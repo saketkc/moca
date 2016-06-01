@@ -15,9 +15,13 @@ import gzip
 import json
 
 __base_url__ = 'https://www.encodeproject.org/'
-__root_dir__ = '/media/data1/ENCODE_V3/'
 ALLOWED_OUTPUT_TYPES = ['optimal idr thresholded peaks', 'peaks']
 ALLOWED_FILETYPES = ['bed narrowPeak', 'bed broadPeak']
+
+__output_type__ = 'peaks'
+__assembly__ = 'mm9'
+__root_dir__ = '/media/data1/ENCODE_{}_{}/'.format(__output_type__.replace(' ','_'), __assembly__)
+safe_makedir(__root_dir__)
 
 def download_peakfile(source_url, filename, destination_dir):
     """Download peakfile from encode"""
@@ -72,7 +76,7 @@ def get_idr_controlled_peaks():
     """Return records that have atleast one idr called peak"""
     client = MongoClient()
     db = client.moca_encode_tf
-    results = db.tf_metadata_0529016.find({'files.output_type': 'optimal idr thresholded peaks', 'assembly': 'hg19'}, no_cursor_timeout=True)
+    results = db.tf_metadata_0529016.find({'files.output_type': __output_type__, 'assembly': __assembly__}, no_cursor_timeout=True)
     data = results[:]
     client.close()
     return data
@@ -92,7 +96,7 @@ def fetch_idr_record(metadata):
         file_status = f['status']
         file_type = f['file_type']
         output_type = f['output_type']
-        if output_type == 'optimal idr thresholded peaks' and file_type in ALLOWED_FILETYPES and file_status == 'released':
+        if output_type == __output_type__ and file_type in ALLOWED_FILETYPES and file_status == 'released':
             dataset = f['dataset']
             dataset = dataset.replace('experiments','').replace('/','')
             href = f['href']

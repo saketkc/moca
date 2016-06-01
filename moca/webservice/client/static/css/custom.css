@@ -2,49 +2,64 @@ img {
     max-width: 100%;
     height: auto;
     width: auto\9; /* ie8 */
-
 }
+
 .hide { display:none; }
-body {
-      padding-top: 50px;
-      padding-bottom: 20px;
 
+body {
+  padding-top: 100px;
+  padding-bottom: 30px;
 }
+
+#main-container{
+    margin-top: 130px;
+}
+
+.theme-dropdown .dropdown-menu {
+  position: static;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.theme-showcase > p > .btn {
+  margin: 5px 0;
+}
+
+.theme-showcase .navbar .container {
+  width: auto;
+}
+
 .centering{
-float:none;
-margin:0 auto
+    float:none;
+    margin:0 auto
 }
+
 .image-panel{
-background: grey;
-height: 40px;
+    background: grey;
+    height: 40px;
 }
+
 .img-text{
 color: white;
-	
     vertical-align:middle;
 }
 
-.vertical-center {
-color: white;
-
+.vertical-center { 
+  color: white;
   min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
   min-height: 100vh; /* These two lines are counted as one :-)       */
-
   display: flex;
   align-items: center;
 }
+
 .vcenter {
     display: inline-block;
     vertical-align: middle;
     float: left;
 }
+
 .vertical-align {
     display: flex;
     align-items: center;
 }
 
-@media print {
-    a {
-        display: none;
-    }
-}

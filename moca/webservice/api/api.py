@@ -6,7 +6,8 @@ import sys
 from pymongo import MongoClient
 from flask import Flask
 from flask_restful import Resource, Api
-
+from Bio import motifs
+jaspar_motifs = motifs.parse(open('../data/pfm_vertebrates.txt'), 'jaspar')
 from moca.helpers import ConfigurationParser
 
 def api_response(data, success, message):
@@ -42,6 +43,21 @@ def db_connector(configuration_file, collection_config_key='mongo_encode_stats_c
     db = mongo_client.moca_encode_tf
     collection = db[mongo_config['mongo_encode_stats_collection']]
     return collection
+
+class JasparSearch(object):
+
+    def __init__(self):
+        pass
+
+    def get(self, tf_name):
+        for m in jaspar_motifs:
+            if m.name.lower() == tf_name.lower():
+                fn = os.path.join(STATIC_PATH, 'logos', m.name+'.png')
+                m.weblogo(fn,  show_errorbars=False, logo_title=m.name,  show_fineprint=False , symbols0='A', symbols1='T', symbols2='C', symbols3='G',
+                        color0='red', color1='green', color2='blue', color3='orange')
+                return jsonify(path=m.name+'.png', status='success')
+        return jsonify(status='error')
+
 
 class Webservice(Resource):
     """Base class to implement API"""
@@ -124,6 +140,8 @@ class GetEncodeMetadata(Resource):
 
 
 if __name__ == '__main__':
+    from os import sys, path
+    sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
     if len(sys.argv)!=2:
         print('Run: python api.py <configuration.cfg>')
         sys.exit(1)

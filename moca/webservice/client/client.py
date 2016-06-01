@@ -20,11 +20,17 @@ def init_params(configuration_file):
         except ValueError:
             app.config[key] = value
 
-@app.route('/')#encoderesults')
+@app.route('/encoderesults')
 def encode_results():
     response = requests.get('http://moca.usc.edu:8889')
     data = response.json()
     return render_template('encodeanalysis.html', results=data)
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'GET':
+        return render_template('index.html')
+    else:
 
 @app.route('/plot/<string:encode_id>/<int:motif_number>')
 def get_plot(encode_id, motif_number):
