@@ -1,0 +1,96 @@
+{% extends "bootstrap.html" %}
+{% block content %} 
+
+    <div class="row vertical-align">
+        <div class="col-md-8  vertical-align"><h2>Analysed Encode Samples</h2></div>
+        <div class="col-md-4"><a href="#" title="Print" id="print" class="hide glyphicon glyphicon-print pull-right"></a></div>
+    </div>
+
+    <div class="row">
+        <br/>
+        <div id="spin"></div>
+    </div>
+
+
+    <div id="results">
+        <table id="table" data-search="true" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;"
+            data-detail-view="true"
+            data-detail-formatter="detailFormatter">
+            <thead>
+                <tr>
+                    <th data-field="encode_id" data-sortable="true">Dataset</th>
+                    <th data-field="peakfile_id" data-sortable="true">Peakfile</th>
+                    <th data-field="technical_replicate" data-sortable="true">Technical Replicate</th>
+                    <th data-field="biological_replicate" data-sortable="true">Biological Replicate</th>
+                    <th data-field="transcription_factor" data-sortable="true">Transcription Factor</th>
+                    <th data-field="file_type" data-sortable="true">File Type</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.9.1/bootstrap-table.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.9.1/bootstrap-table.min.js"></script>
+<script src="/static/js/jquery.dataTables.yadcf.js"></script>
+<style type="text/css" class="init">
+    
+td.details-control {
+        background: url('../static/img/details_open.png') no-repeat center center;
+            cursor: pointer;
+
+}
+tr.shown td.details-control {
+        background: url('../static/img/details_close.png') no-repeat center center;
+
+}
+</style>
+<script>
+var response_data = '{{ results|tojson }}';
+response_datastr = JSON.stringify(response_data);
+response_data = JSON.parse(response_data);
+data = response_data['data'];
+rows = data['rows'];
+columns = data['columns'];
+oTable = $('#table').bootstrapTable({
+            data: rows
+         });
+
+
+function detailFormatter(index, row){
+    var dataset_id = row['dataset_id'];
+    var peakfile_id = row['peakfile_id'];
+    var html = '';
+    var url = '/encodejob/'+dataset_id+'/'+peakfile_id;
+  $.ajax({
+    url: '/encodejob/'+dataset_id+'/'+peakfile_id,
+    dataType: 'json',
+    type: 'post',
+    async: false,
+    error: function(xhr_data) {
+       $("#spin").html("Errored");
+    },
+    success: function(xhr_data) {
+        var d = (xhr_data.data);
+        //console.log(d);
+        var motifs = (d.motifs);
+        //console.log(motifs);
+        var motif=1;
+        for (var key in motifs){
+            html+="<a href='"+ url + "' target='_blank'><b> Motif: "+motif+"</b><br/>"+"<img src='"+motifs[key]+"'/></a><br/>";
+            motif+=1;
+        }
+    }
+    }); 
+  return html;
+}
+function linkFormatter(value, row){
+    var dataset_id = row['dataset_id'];
+    var peakfile_id = row['peakfile_id'];
+    return "<a href='"+'/encodejob/'+dataset_id+'/'+peakfile_id+"' target='_blank'>"+peakfile_id+"</a>";
+}
+</script>
+{% endblock %}

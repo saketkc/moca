@@ -1,0 +1,42 @@
+{% extends "bootstrap.html" %}
+{% block scripts %}
+{{ super()  }}
+{% endblock %}
+{% block content %}
+
+       <div>
+            <h3>Run MoCA</h3>
+       </div>
+        <form class="form-horizontal" method="post" action="/" enctype="multipart/form-data" accept-charset="utf-8" role="form">
+             <div class="form-group">
+                 <label class="col-sm-4 control-label"><b>Assembly</b></label>
+                <div class="col-sm-8">
+                    <div class="radio">
+                        <label><input type="radio" name="genome" value="hg19" checked="checked">Human: (Feb. 2009 (GRCh37/hg19)) </a></label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" name="genome" value="hg38">Human: hg38<a href="http://genome.ucsc.edu/cgi-bin/hgGateway?db=hg19">(Feb. 2009 (GRCh37/hg19)) </a></label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" name="genome" value="mm9">Mouse: mm9<a href="http://genome.ucsc.edu/cgi-bin/hgGateway?db=hg19">(Feb. 2009 (GRCh37/hg19)) </a></label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" name="genome" value="mm10">Mouse: mm10<a href="http://genome.ucsc.edu/cgi-bin/hgGateway?db=hg19">(Feb. 2009 (GRCh37/hg19)) </a></label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" name="genome" value="dm3">Drosophila: dm3<a href="http://genome.ucsc.edu/cgi-bin/hgGateway?db=hg19">(Feb. 2009 (GRCh37/hg19)) </a></label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" name="genome" value="ce6">C.elegans: ce6<a href="http://genome.ucsc.edu/cgi-bin/hgGateway?db=hg19">(Feb. 2009 (GRCh37/hg19)) </a></label>
+                    </div>  
+                    <div class="radio">
+                        <label><input type="radio" name="genome" value="ce6">C.elegans: ce6<a href="http://genome.ucsc.edu/cgi-bin/hgGateway?db=hg19">(Feb. 2009 (GRCh37/hg19)) </a></label>
+                    </div>  
+                    <div class="radio">
+                        <label><input type="radio" name="genome" value="ce6">C.elegans: ce6<a href="http://genome.ucsc.edu/cgi-bin/hgGateway?db=hg19">(Feb. 2009 (GRCh37/hg19)) </a></label>
+                    </div>  
+                </div>
+            </div>
+        </form>
+{% endblock %}
+

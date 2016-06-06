@@ -1,0 +1,122 @@
+{% extends "bootstrap.html" %}
+{% block content %} 
+
+    <div class="row vertical-align">
+        <div class="col-md-8  vertical-align"><h2>Analysed Encode Samples</h2></div>
+        <div class="col-md-4"><a href="#" title="Print" id="print" class="hide glyphicon glyphicon-print pull-right"></a></div>
+    </div>
+
+    <div class="row">
+        <br/>
+        <div id="spin"></div>
+    </div>
+
+
+    <div id="results">
+        <table id="table" data-search="true" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
+        </table>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/ju-1.11.4/dt-1.10.12,af-2.1.2,b-1.2.0,b-colvis-1.2.0,cr-1.3.2,fc-3.2.2,fh-3.1.2,r-2.1.0,se-1.2.0/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/u/ju-1.11.4/dt-1.10.12,af-2.1.2,b-1.2.0,b-colvis-1.2.0,cr-1.3.2,fc-3.2.2,fh-3.1.2,r-2.1.0,se-1.2.0/datatables.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css"/>
+<link rel="stylesheet" href="/static/css/jquery.dataTables.yadcf.css">
+<script src="/static/js/jquery.dataTables.yadcf.js"></script>
+<style type="text/css" class="init">
+    
+td.details-control {
+        background: url('../static/img/details_open.png') no-repeat center center;
+            cursor: pointer;
+
+}
+tr.shown td.details-control {
+        background: url('../static/img/details_close.png') no-repeat center center;
+
+}
+</style>
+<script>
+var response_data = '{{ results|tojson }}';
+response_datastr = JSON.stringify(response_data);
+response_data = JSON.parse(response_data);
+data = response_data['data'];
+rows = data['rows'];
+columns = data['columns'];
+oTable = $('#table').DataTable({
+            stateSave: true,
+            aaData: rows,
+            aoColumns: columns
+         });
+
+yadcf.init(oTable, [{
+        column_number: 0,
+    },
+    {
+        column_number: 1,
+        filter_type: 'range_number_slider',
+    },
+    {
+        column_number: 2,
+    },
+    {
+        column_number: 3,
+    },
+    {
+        column_number: 4,
+    },
+
+]);
+
+$('#table tbody').on('click', 'td.details-control', function (){
+	var tr = $(this).closest('tr');
+        var row = table.row( tr );
+ 
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Open this row
+            row.child( format(row.data()) ).show();
+            tr.addClass('shown');
+        }
+    });
+
+function detailFormatter(index, row){
+    var dataset_id = row['dataset_id'];
+    var peakfile_id = row['peakfile_id'];
+    var html = '';
+    var url = '/encodejob/'+dataset_id+'/'+peakfile_id;
+  $.ajax({
+    url: '/encodejob/'+dataset_id+'/'+peakfile_id,
+    dataType: 'json',
+    type: 'post',
+    async: false,
+    error: function(xhr_data) {
+       $("#spin").html("Errored");
+    },
+    success: function(xhr_data) {
+        var d = (xhr_data.data);
+        //console.log(d);
+        var motifs = (d.motifs);
+        //console.log(motifs);
+        var motif=1;
+        for (var key in motifs){
+            html+="<a href='"+ url + "' target='_blank'><b> Motif: "+motif+"</b><br/>"+"<img src='"+motifs[key]+"'/></a><br/>";
+            motif+=1;
+        }
+    }
+    }); 
+  return html;
+}
+function linkFormatter(value, row){
+    var dataset_id = row['dataset_id'];
+    var peakfile_id = row['peakfile_id'];
+    return "<a href='"+'/encodejob/'+dataset_id+'/'+peakfile_id+"' target='_blank'>"+peakfile_id+"</a>";
+}
+</script>
+{% endblock %}
