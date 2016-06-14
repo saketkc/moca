@@ -55,7 +55,8 @@ Using Conda
     $ conda config --add channels bioconda
     $ conda install moca
     $ conda env create -n mocaenv python=2.7
-
+    $ source activate mocaenv
+    $ conda install moca
 
 
 Using pip
@@ -151,8 +152,8 @@ Run tests locally
 TODO
 ----
 
-- [] Allow skipping MEME step
-- [] Implement logger (-v) instead of tqdm
+- [ ] Allow skipping MEME step
+- [ ] Implement logger (-v) instead of tqdm
 
 Credits
 ---------
