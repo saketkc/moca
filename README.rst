@@ -52,11 +52,10 @@ Using Conda
 
 ::
 
-    $ git clone https://github.com:saketkc/moca.git
-    $ cd moca
-    $ conda create env -f environment.yml python=2.7
-    $ source activate mocatest
-    $ python setup.py install
+    $ conda config --add channels bioconda
+    $ conda install moca
+    $ conda env create -n mocaenv python=2.7
+
 
 
 Using pip
@@ -65,6 +64,19 @@ Using pip
 ::
 
    $ pip install moca
+
+
+For development
+~~~~~~~~~~~~~~~
+
+::
+
+    $ git clone https://github.com:saketkc/moca.git
+    $ cd moca
+    $ conda env create -f environment.yml python=2.7
+    $ source activate mocatest
+    $ python setup.py install
+
 
 
 Workflow
@@ -135,6 +147,12 @@ Run tests locally
 
     $ ./runtests.sh
 
+
+TODO
+----
+
+- [] Allow skipping MEME step
+- [] Implement logger (-v) instead of tqdm
 
 Credits
 ---------
