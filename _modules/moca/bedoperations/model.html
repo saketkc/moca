@@ -123,8 +123,9 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
 <span class="kn">from</span> <span class="nn">builtins</span> <span class="kn">import</span> <span class="nb">object</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">MocaException</span>
-<span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">make_uppercase_fasta</span>
+<span class="kn">from</span> <span class="nn">moca.helpers</span> <span class="kn">import</span> <span class="n">MocaException</span>
+<span class="kn">from</span> <span class="nn">moca.helpers</span> <span class="kn">import</span> <span class="n">make_uppercase_fasta</span>
+<span class="kn">from</span> <span class="nn">moca.helpers</span> <span class="kn">import</span> <span class="n">path_leaf</span>
 <span class="kn">import</span> <span class="nn">pandas</span>
 <span class="kn">from</span> <span class="nn">pybedtools</span> <span class="kn">import</span> <span class="n">BedTool</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -158,9 +159,15 @@
 
 <span class="sd">    genome_table: string</span>
 <span class="sd">        Absolute path to geonme chromosome size file</span>
+
+<span class="sd">    output_dir: string</span>
+<span class="sd">        Output directory</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">genome_table</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">genome_table</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">output_dir</span><span class="p">:</span>
+            <span class="n">output_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">=</span> <span class="n">output_dir</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bed_format</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">extracted_fasta</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bed</span> <span class="o">=</span> <span class="bp">None</span>
@@ -175,6 +182,7 @@
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">bed_format</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_determine_peaks</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sort_bed</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_to_scorefile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bed_df</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_count_peaks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -253,8 +261,9 @@
         <span class="sd">&quot;&quot;&quot;Write bed file as score file</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">filename</span><span class="p">,</span> <span class="n">file_extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">)</span>
-        <span class="n">filename</span> <span class="o">+=</span> <span class="s1">&#39;.{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_suffix</span><span class="p">)</span>
+        <span class="n">file_path</span><span class="p">,</span> <span class="n">file_extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">path_leaf</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">filename</span><span class="o">+</span><span class="s1">&#39;.{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_suffix</span><span class="p">))</span>
         <span class="n">bed_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
                       <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span>
                       <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
@@ -381,7 +390,7 @@
     </p>
     <p>
         &copy; Copyright 2016, Saket Choudhary.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.<br/>
     </p>
   </div>
 </footer>

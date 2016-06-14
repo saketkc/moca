@@ -141,6 +141,23 @@
 <em class="property">class </em><code class="descclassname">moca.wigoperations.query.</code><code class="descname">WigReader</code><span class="sig-paren">(</span><em>wig_location</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/wigoperations/query.html#WigReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.wigoperations.query.WigReader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">future.types.newobject.newobject</span></code></p>
 <p>Class for reading and querying wigfiles</p>
+<dl class="attribute">
+<dt id="moca.wigoperations.query.WigReader.get_chromosomes">
+<code class="descname">get_chromosomes</code><a class="headerlink" href="#moca.wigoperations.query.WigReader.get_chromosomes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of chromsome and their sizes
+as in the wig file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>chroms</strong> &#8211; Dictionary with {&#8220;chr&#8221;: &#8220;Length&#8221;} format</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="method">
 <dt id="moca.wigoperations.query.WigReader.query">
 <code class="descname">query</code><span class="sig-paren">(</span><em>intervals</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/moca/wigoperations/query.html#WigReader.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moca.wigoperations.query.WigReader.query" title="Permalink to this definition">¶</a></dt>
@@ -180,7 +197,7 @@
     </p>
     <p>
         &copy; Copyright 2016, Saket Choudhary.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.<br/>
     </p>
   </div>
 </footer>
