@@ -32,7 +32,7 @@ before_install:
  - conda update conda
  - conda info -a
  - conda install python=$TRAVIS_PYTHON_VERSION
- - conda remove --name mocadev --all
+ - conda remove --name mocadev --all || echo 'removed'
  - conda config --add channels bioconda
  - conda config --add channels r
  - conda env create -q -f environment.yml python=$TRAVIS_PYTHON_VERSION
