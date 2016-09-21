@@ -42,7 +42,8 @@ def cli():
               required=True)
 @click.option('--oc',
               '-o',
-              help='Output Directory')
+              help='Output Directory',
+              required=True)
 @click.option('--configuration',
               '-c',
               help='Configuration file',
@@ -227,7 +228,8 @@ def find_motifs(bedfile, oc, configuration, slop_length,
               type=int)
 @click.option('--oc',
               '-o',
-              help='Output Directory')
+              help='Output Directory',
+              required=True)
 @click.option('--configuration',
               '-c',
               help='Configuration file',
