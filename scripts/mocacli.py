@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 """MoCA CLI"""
 import os
-import click
 import re
 import sys
+from time import sleep
+import click
 from moca import bedoperations, pipeline
 from moca.bedoperations.fimo import get_start_stop_intervals
 from moca.helpers import filename_extension
@@ -12,8 +13,6 @@ from moca.helpers import read_memefile
 from moca.helpers.job_executor import safe_makedir
 from moca.plotter import create_plot
 from tqdm import tqdm
-from time import sleep
-from tqdm import trange
 
 conservation_wig_keys = ['phylop', 'gerp', 'phastcons']
 
@@ -213,8 +212,10 @@ def find_motifs(bedfile, oc, configuration, slop_length,
 
 
 @cli.command('plot')
-@click.option('--meme_dir', help='MEME directory')
-@click.option('--centrimo_dir', help='Centrimo directory')
+@click.option('--meme-dir', '--meme_dir', help='MEME output directory', required=True)
+@click.option('--centrimo-dir', '--centrimo_dir', help='Centrimo output directory', required=True)
+@click.option('--fimo-dir-sample', '--fimo_dir_sample', help='Sample fimo.txt', required=True)
+@click.option('--fimo-dir-control', '--fimo_dir_control', help='Control fimo.txt', required=True)
 @click.option('--name', help='Plot title')
 @click.option('--flank-motif',
               default=5,
@@ -227,17 +228,56 @@ def find_motifs(bedfile, oc, configuration, slop_length,
 @click.option('--oc',
               '-o',
               help='Output Directory')
-@click.option('--sample-scores', help='Location of sample scores file', required=True)
-@click.option('--control-scores', help='Location of control scores file', required=True)
+@click.option('--configuration',
+              '-c',
+              help='Configuration file',
+              required=True)
+@click.option('--show-progress',
+              help='Print progress',
+              is_flag=True)
+@click.option('--genome-build',
+              '-g', '-gb',
+              help='Key denoting genome build to use in configuration file',
+              required=True)
 
-def plot(name, meme_dir, centrimo_dir, oc,
-         motif, flank_motif, sample_score_file, control_score_file):
+def plot(meme_dir, centrimo_dir, fimo_dir_sample, fimo_dir_control, name,
+         flank_motif, motif, oc, configuration, show_progress, genome_build):
     """Create plots"""
-    meme_file = os.path.join(meme_dir, 'meme.txt')
     if not oc:
         moca_out_dir = os.path.join(os.getcwd(), 'moca_output')
     else:
         moca_out_dir = oc
+    if show_progress:
+        progress_bar = ProgressBar(['Creating Plots']*len(conservation_wig_keys))
+    moca_pipeline = pipeline.Pipeline(configuration)
+    meme_file = os.path.join(meme_dir, 'meme.txt')
+    genome_data = moca_pipeline.get_genome_data(genome_build)
+
+    wigfiles = {}
+    for key in list(conservation_wig_keys):
+        try:
+            wigfiles[key] = genome_data['{}_wig'.format(key)]
+        except KeyError:
+            pass
+
+    fimo_control= os.path.join(fimo_dir_control, 'fimo.txt')
+    fimo_sample = os.path.join(fimo_dir_sample, 'fimo.txt')
+    safe_makedir(moca_out_dir)
+    main_intervals = get_start_stop_intervals(fimo_sample, flank_length=flank_motif)
+    random_intervals = get_start_stop_intervals(fimo_control, flank_length=flank_motif)
+
+    sample_score_files = []
+    control_score_files = []
+    for key in list(conservation_wig_keys):
+        wigfile = wigfiles[key]
+        if show_progress:
+            progress_bar.show_progress('Creating plots')
+        sample_score_file = moca_pipeline.save_conservation_scores(main_intervals, wigfile,
+                                                                    fimo_dir_sample, out_prefix=key)
+        control_score_file = moca_pipeline.save_conservation_scores(random_intervals, wigfile,
+                                                                    fimo_dir_control, out_prefix=key)
+        sample_score_files.append(sample_score_file)
+        control_score_files.append(control_score_file)
     create_plot(meme_file,
                 name,
                 output_dir=moca_out_dir,

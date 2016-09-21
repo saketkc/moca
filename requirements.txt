@@ -7,6 +7,7 @@ functools32==3.2.3.post2
 future==0.15.2
 matplotlib==1.5.3
 mmtf-python==1.0.2
+moca==0.3.0
 msgpack-python==0.4.7
 numpy==1.11.1
 pandas==0.18.1
