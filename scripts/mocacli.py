@@ -12,7 +12,9 @@ from moca.helpers import filename_extension
 from moca.helpers import read_memefile
 from moca.helpers.job_executor import safe_makedir
 from moca.plotter import create_plot
+from moca import version
 from tqdm import tqdm
+from click_help_colors import HelpColorsGroup, HelpColorsCommand
 
 conservation_wig_keys = ['phylop', 'gerp', 'phastcons']
 
@@ -31,12 +33,17 @@ class ProgressBar(object):
 
     def close(self):
         self.bar.close()
+CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
-@click.group(chain=True)
+@click.group(cls=HelpColorsGroup,
+             help_headers_color='yellow',
+             help_options_color='green')
+@click.version_option(version=version.__version__)
 def cli():
+    """moca: Motif Conservation Analysis"""
     pass
 
-@cli.command('find_motifs')
+@cli.command('find_motifs', context_settings=CONTEXT_SETTINGS)
 @click.option('--bedfile', '-i',
               help='Bed file input',
               required=True)
@@ -77,7 +84,7 @@ def cli():
 
 def find_motifs(bedfile, oc, configuration, slop_length,
                 flank_motif, n_motif, cores, genome_build, show_progress):
-    """Run meme to locate motifs"""
+    """Run meme to locate motifs and create conservation stacked plots"""
     root_dir = os.path.dirname(os.path.abspath(bedfile))
     if not oc:
         moca_out_dir = os.path.join(os.getcwd(), 'moca_output')
@@ -212,7 +219,7 @@ def find_motifs(bedfile, oc, configuration, slop_length,
         progress_bar.close()
 
 
-@cli.command('plot')
+@cli.command('plot', context_settings=CONTEXT_SETTINGS)
 @click.option('--meme-dir', '--meme_dir', help='MEME output directory', required=True)
 @click.option('--centrimo-dir', '--centrimo_dir', help='Centrimo output directory', required=True)
 @click.option('--fimo-dir-sample', '--fimo_dir_sample', help='Sample fimo.txt', required=True)
@@ -244,7 +251,7 @@ def find_motifs(bedfile, oc, configuration, slop_length,
 
 def plot(meme_dir, centrimo_dir, fimo_dir_sample, fimo_dir_control, name,
          flank_motif, motif, oc, configuration, show_progress, genome_build):
-    """Create plots"""
+    """Create stacked conservation plots"""
     if not oc:
         moca_out_dir = os.path.join(os.getcwd(), 'moca_output')
     else:
@@ -290,3 +297,5 @@ def plot(meme_dir, centrimo_dir, fimo_dir_sample, fimo_dir_control, name,
                 control_score_files=[control_score_file],
                 reg_plot_titles=[key.capitalize() for key in list(conservation_wig_keys)],
                 annotate=None)
+
+

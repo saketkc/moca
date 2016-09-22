@@ -29,6 +29,12 @@ ISC
 Installation
 ------------
 
+
+Current Version
+~~~~~~~~~~~~~~~
+0.3.1.dev0
+
+
 Requirements
 ~~~~~~~~~~~~
 
@@ -53,7 +59,6 @@ Using Conda
 ::
 
     $ conda config --add channels bioconda
-    $ conda install moca
     $ conda env create -n mocaenv python=2.7
     $ source activate mocaenv
     $ conda install moca
@@ -75,7 +80,7 @@ For development
     $ git clone https://github.com:saketkc/moca.git
     $ cd moca
     $ conda env create -f environment.yml python=2.7
-    $ source activate mocatest
+    $ source activate mocadev
     $ python setup.py install
 
 
@@ -89,28 +94,83 @@ to its surrounding(flanking sequences).
 
 .. image:: https://raw.githubusercontent.com/saketkc/moca_web/master/docs/abstract/workflow.png
 
+
 Usage
 -----
 
 ::
 
-    $ mocacli --help
-    Usage: mocacli [OPTIONS]
+    $ moca
+    Usage: moca [OPTIONS] COMMAND [ARGS]...
 
-    Run moca
+      moca: Motif Conservation Analysis
+
+    Options:
+      --version  Show the version and exit.
+      --help     Show this message and exit.
+
+    Commands:
+      find_motifs  Run meme to locate motifs and create...
+      plot         Create stacked conservation plots
+
+
+
+Motif analysis using MEME
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+MoCA can perform motif analysis for you given a bedfile containing
+ChIP-Seq peaks.
+
+Genome builds and MEME binary locations are specified through a configuraton file.
+A sample configuration file is available: `tests/data/application.cfg` and should be
+self-explanatory.
+
+::
+
+    $ moca find_motifs -h
+    Usage: moca find_motifs [OPTIONS]
+
+      Run meme to locate motifs and create conservation stacked plots
 
     Options:
       -i, --bedfile TEXT            Bed file input  [required]
-      -o, --oc TEXT                 Output Directory
+      -o, --oc TEXT                 Output Directory  [required]
       -c, --configuration TEXT      Configuration file  [required]
-      --flank-seq INTEGER           Flanking sequence length  [required]
+      --slop-length INTEGER         Flanking sequence length  [required]
       --flank-motif INTEGER         Length of sequence flanking motif  [required]
+      --n-motif INTEGER             Number of motifs
+      -t, --cores INTEGER           Number of parallel MEME jobs  [required]
       -g, -gb, --genome-build TEXT  Key denoting genome build to use in
-                                configuration file  [required]
-      --help                        Show this message and exit.
+                                    configuration file  [required]
+      --show-progress               Print progress
+      -h, --help                    Show this message and exit.
 
 
-A sample configuration file is available: `tests/data/application.cfg`
+::
+    moca plot -h
+    Usage: moca plot [OPTIONS]
+
+      Create stacked conservation plots
+
+    Options:
+      --meme-dir, --meme_dir TEXT     MEME output directory  [required]
+      --centrimo-dir, --centrimo_dir TEXT
+                                      Centrimo output directory  [required]
+      --fimo-dir-sample, --fimo_dir_sample TEXT
+                                      Sample fimo.txt  [required]
+      --fimo-dir-control, --fimo_dir_control TEXT
+                                      Control fimo.txt  [required]
+      --name TEXT                     Plot title
+      --flank-motif INTEGER           Length of sequence flanking motif
+                                      [required]
+      --motif INTEGER                 Motif number
+      -o, --oc TEXT                   Output Directory  [required]
+      -c, --configuration TEXT        Configuration file  [required]
+      --show-progress                 Print progress
+      -g, -gb, --genome-build TEXT    Key denoting genome build to use in
+                                      configuration file  [required]
+      -h, --help                      Show this message and exit.
+
 
 Example
 -------
@@ -119,10 +179,21 @@ Most users will require using the command line version only:
 
 ::
 
-    $ mocacli -i tests/data/ENCFF002CDP.ctcf.bed\
-        -g hg19
-        -c tests/data/application.cfg\
-        -o output_dir
+    $ moca find_motifs -i encode_test_data/ENCFF002DAR.bed\
+        -c tests/data/application.cfg -g hg19 --show-progress
+
+
+
+Creating plots if you already have run MEME and Centrimo:
+
+::
+    $ mocacli plot -c tests/data/application.cfg -g hg19\
+        --meme-dir moca_output/meme_out\
+        --centrimo-dir moca_output/centrimo_out\
+        --fimo-dir-sample moca_output/meme_out/fimo_out_1\
+        --fimo-dir-control moca_output/meme_out/fimo_random_1\
+        --name ENCODEID
+
 
 .. image:: http://www.saket-choudhary.me/moca/_static/img/ENCFF002CEL.png
 
@@ -147,12 +218,6 @@ Run tests locally
 
     $ ./runtests.sh
 
-
-TODO
-----
-
-- [ ] Allow skipping MEME step
-- [ ] Implement logger (-v) instead of tqdm
 
 Credits
 ---------
