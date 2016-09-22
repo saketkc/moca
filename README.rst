@@ -125,6 +125,10 @@ Genome builds and MEME binary locations are specified through a configuraton fil
 A sample configuration file is available: `tests/data/application.cfg` and should be
 self-explanatory.
 
+moca find_motifs
+~~~~~~~~~~~~~~~~
+
+
 ::
 
     $ moca find_motifs -h
@@ -146,8 +150,13 @@ self-explanatory.
       -h, --help                    Show this message and exit.
 
 
+moca plot
+~~~~~~~~~
+
+
 ::
-    moca plot -h
+
+    $ moca plot -h
     Usage: moca plot [OPTIONS]
 
       Create stacked conservation plots
@@ -187,6 +196,7 @@ Most users will require using the command line version only:
 Creating plots if you already have run MEME and Centrimo:
 
 ::
+
     $ mocacli plot -c tests/data/application.cfg -g hg19\
         --meme-dir moca_output/meme_out\
         --centrimo-dir moca_output/centrimo_out\
