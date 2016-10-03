@@ -477,20 +477,6 @@ def create_scatter_plot(matplot_dict, motif_freq,
     f.add_subplot(scatter_plot)
 
 
-"""
-@click.command()
-@click.option('--meme_file', '-i', help='MEME file', required=True)
-@click.option('--plot_title', '-p', help='Plot title', required=True)
-@click.option('-oc', '--output_directory', '--out_dir', '--output_dir', help='Output directory')
-@click.option('--centrimo_dir', help='Centrimo directory')
-@click.option('--motif_number', '-m', help='1-based motif number', type=int, required=True)
-@click.option('--flank_length', help='Flanking sites', type=int, required=True)
-@click.option('--sample_score_files', help='List of sample score files', nargs=3)
-@click.option('--control_score_files', help='List of control score files', nargs=3)
-@click.option('--reg_plot_titles', help='List of regression plot titles', nargs=3)
-@click.option('--annotate', help='Annotation dict')
-"""
-
 def create_plot(meme_file,
                 plot_title,
                 output_dir=None,
