@@ -32,7 +32,7 @@ Installation
 
 Current Version
 ~~~~~~~~~~~~~~~
-0.3.1.dev0
+0.3.3.dev0
 
 
 Requirements
