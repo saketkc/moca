@@ -197,7 +197,7 @@ Creating plots if you already have run MEME and Centrimo:
 
 ::
 
-    $ mocacli plot -c tests/data/application.cfg -g hg19\
+    $ moca plot -c tests/data/application.cfg -g hg19\
         --meme-dir moca_output/meme_out\
         --centrimo-dir moca_output/centrimo_out\
         --fimo-dir-sample moca_output/meme_out/fimo_out_1\
