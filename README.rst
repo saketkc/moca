@@ -7,6 +7,9 @@ MoCA: Tool for MOtif Conservation Analysis
 
 .. image:: https://img.shields.io/travis/saketkc/moca.svg
         :target: https://travis-ci.org/saketkc/moca
+        
+.. image:: https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg
+        :target: https://bioconda.github.io/recipes/moca/README.html
 
 .. image:: https://coveralls.io/repos/github/saketkc/moca/badge.svg?branch=master
         :target: https://coveralls.io/github/saketkc/moca?branch=master
@@ -17,8 +20,6 @@ MoCA: Tool for MOtif Conservation Analysis
 .. image:: https://requires.io/github/saketkc/moca/requirements.svg?branch=master
         :target: https://requires.io/github/saketkc/moca/requirements/?branch=master
 
-
-Python rewrite of `MoCA0.1.0`_
 
 LICENSE
 -------
