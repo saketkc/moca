@@ -60,8 +60,6 @@ Using Conda
 ::
 
     $ conda config --add channels bioconda
-    $ conda env create -n mocaenv python=2.7
-    $ source activate mocaenv
     $ conda install moca
 
 
