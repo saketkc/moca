@@ -32,8 +32,10 @@ before_install:
   - conda info -a
   - conda install python=$TRAVIS_PYTHON_VERSION
   - conda remove --name mocadev --all || echo 'removed'
-  - conda config --add channels bioconda
+  - conda config --add channels conda-forge
+  - conda config --add channels defaults
   - conda config --add channels r
+  - conda config --add channels bioconda
   - conda env create -q -f environment.yml python=$TRAVIS_PYTHON_VERSION
   - source activate mocadev
   - pip install pytest-mpl codecov
