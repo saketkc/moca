@@ -6,7 +6,10 @@ standard_library.install_aliases()
 from builtins import object
 import csv
 from ..helpers import MocaException
-import configparser
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 import os
 
 def is_executable(fpath):
