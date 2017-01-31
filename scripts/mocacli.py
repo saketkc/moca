@@ -55,14 +55,16 @@ def cli():
               '-c',
               help='Configuration file',
               required=True)
-@click.option('--slop-length',
+@click.option('-s',
+              '--slop-length',
+              '--slop_length',
               default=50,
-              help='Flanking sequence length',
-              required=True)
-@click.option('--flank-motif',
+              help='Flanking sequence length')
+@click.option('-f',
+              '--flank-motif',
+              '--flank_motif',
               default=5,
-              help='Length of sequence flanking motif',
-              required=True)
+              help='Length of sequence flanking motif')
 @click.option('--n-motif',
               default=5,
               help='Number of motifs',
@@ -84,7 +86,7 @@ def cli():
 
 def find_motifs(bedfile, oc, configuration, slop_length,
                 flank_motif, n_motif, cores, genome_build, show_progress):
-    """Run meme to locate motifs and create conservation stacked plots"""
+    """Search motifs and create conservation plots"""
     root_dir = os.path.dirname(os.path.abspath(bedfile))
     if not oc:
         moca_out_dir = os.path.join(os.getcwd(), 'moca_output')
@@ -251,7 +253,7 @@ def find_motifs(bedfile, oc, configuration, slop_length,
 
 def plot(meme_dir, centrimo_dir, fimo_dir_sample, fimo_dir_control, name,
          flank_motif, motif, oc, configuration, show_progress, genome_build):
-    """Create stacked conservation plots"""
+    """Create conservation plots"""
     if not oc:
         moca_out_dir = os.path.join(os.getcwd(), 'moca_output')
     else:

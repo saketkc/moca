@@ -3,21 +3,44 @@
 from __future__ import print_function
 from __future__ import division
 from __future__ import absolute_import
-from future import standard_library
-standard_library.install_aliases()
 import os
 import requests
 import shutil
-from pymongo import MongoClient
-from moca.helpers import safe_makedir
+#from pymongo import MongoClient
 import io
 import gzip
 import json
 
 __base_url__ = 'https://www.encodeproject.org/'
-__root_dir__ = '/media/data1/ENCODE_V3/'
+__root_dir__ = '/media/dna/ENCODE_idr_20Jan_2017/'
 ALLOWED_OUTPUT_TYPES = ['optimal idr thresholded peaks', 'peaks']
 ALLOWED_FILETYPES = ['bed narrowPeak', 'bed broadPeak']
+
+def safe_makedir(dname):
+    """Make a directory if it doesn't exist, handling concurrent race conditions.
+
+    Credits: Brad Chapman for bcbio-nextgen: https://github.com/chapmanb/bcbio-nextgen/blob/master/bcbio/utils.py#L172
+
+    Parameters
+    ----------
+    dname: str
+        Path of directory to be created
+    """
+    if not dname:
+        return dname
+    num_tries = 0
+    max_tries = 5
+    while not os.path.exists(dname):
+        # we could get an error here if multiple processes are creating
+        # the directory at the same time. Grr, concurrency.
+        try:
+            os.makedirs(dname)
+        except OSError:
+            if num_tries > max_tries:
+                raise
+            num_tries += 1
+            time.sleep(2)
+    return dname
 
 def download_peakfile(source_url, filename, destination_dir):
     """Download peakfile from encode"""
