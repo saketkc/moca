@@ -76,7 +76,7 @@ dependencies:
 - !!python/unicode
   'perl-xml-parser=2.44=4'
 - !!python/unicode
-  'pybedtools=0.7.8=py27_1'
+  'pybedtools=0.7.9=py27_0'
 - !!python/unicode
   'pybigwig=0.2.8=py27_0'
 - !!python/unicode
@@ -112,7 +112,7 @@ dependencies:
 - !!python/unicode
   'enum34=1.1.6=py27_0'
 - !!python/unicode
-  'fontconfig=2.12.1=1'
+  'fontconfig=2.12.1=2'
 - !!python/unicode
   'freetype=2.5.5=2'
 - !!python/unicode
@@ -150,7 +150,7 @@ dependencies:
 - !!python/unicode
   'libxcb=1.12=1'
 - !!python/unicode
-  'matplotlib=1.5.3=np111py27_1'
+  'matplotlib=2.0.0=np111py27_0'
 - !!python/unicode
   'mkl=2017.0.1=0'
 - !!python/unicode
@@ -162,7 +162,7 @@ dependencies:
 - !!python/unicode
   'openblas=0.2.19=0'
 - !!python/unicode
-  'openssl=1.0.2j=0'
+  'openssl=1.0.2k=0'
 - !!python/unicode
   'pandas=0.19.2=np111py27_1'
 - !!python/unicode
@@ -218,6 +218,8 @@ dependencies:
 - !!python/unicode
   'statsmodels=0.6.1=np111py27_1'
 - !!python/unicode
+  'subprocess32=3.2.7=py27_0'
+- !!python/unicode
   'tk=8.5.18=0'
 - !!python/unicode
   'wheel=0.29.0=py27_0'
@@ -229,5 +231,7 @@ dependencies:
   'zlib=1.2.8=3'
 - pip:
   - click-help-colors==0.3
+  - moca==0.3.3
+  - olefile==0.44
 prefix: !!python/unicode '/home/saket/anaconda2/envs/mocadev'
 
