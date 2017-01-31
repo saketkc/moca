@@ -38,7 +38,7 @@ before_install:
   - conda config --add channels bioconda
   - conda env create -q -f environment.yml python=$TRAVIS_PYTHON_VERSION
   - source activate mocadev
-  - pip install olefile pytest-mpl codecov
+  - pip install -U olefile pytest-mpl codecov pytest
   - bash travis/install_meme.sh
   - export PATH="$PATH:$HOME/meme_bin/bin"
 
