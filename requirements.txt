@@ -13,7 +13,6 @@ idna==2.2
 ipaddress==1.0.18
 matplotlib==2.0.0
 mmtf-python==1.0.5
-moca==0.3.3
 msgpack-python==0.4.8
 numpy==1.11.3
 olefile==0.44

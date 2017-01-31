@@ -231,7 +231,6 @@ dependencies:
   'zlib=1.2.8=3'
 - pip:
   - click-help-colors==0.3
-  - moca==0.3.3
   - olefile==0.44
 prefix: !!python/unicode '/home/saket/anaconda2/envs/mocadev'
 
