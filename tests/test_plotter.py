@@ -28,9 +28,7 @@ def test_image():
                        sample_score_files=sample_score_files,
                        control_score_files=control_score_files,
                        reg_plot_titles=plot_titles,
-                       annotate=None,
-                       save=False)
-    print(figs)
+                       annotate=None)
     return figs[0]
 
 
