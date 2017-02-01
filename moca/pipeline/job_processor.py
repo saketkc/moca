@@ -31,7 +31,7 @@ class Pipeline(ConfigurationParser):
             #raise MocaException('Config file {} not found'.format(config_file))
             warnings.warn('No configuration file supplied. Defaults will be used.', UserWarning)
         self.cpu_cores = get_cpu_count()
-        self.meme_default_params = '-dna -mod zoops -nmotifs 5 -minw 6 -maxw 30 -revcomp -nostatus -maxsize 1000000 -p {}'.format(self.cpu_cores)
+        self.meme_default_params = '-dna -mod zoops -nmotifs 5 -minw 6 -maxw 30 -revcomp -nostatus -maxsize 1000000'
         self.meme_strargs = None
         self.meme_location = 'meme'
         self.fimo_default_params = ''
@@ -44,6 +44,13 @@ class Pipeline(ConfigurationParser):
         self.memechip_args = None
         self.memechip_location = 'meme-chip'
         self.commands_run = []
+
+    def can_run_meme_parallel(self, cmd):
+        stdout, stderr, exitcode = run_job(cmd=cmd, cwd='/tmp')
+        if '-p <np> given but Parallel MEME not configured.' in stderr:
+            return False
+        return True
+
 
     def run_meme(self, fasta_in, out_dir=None, strargs=None):
         """Run meme
@@ -79,6 +86,8 @@ class Pipeline(ConfigurationParser):
         if not out_dir:
             out_dir = os.path.join(os.path.dirname(fasta_in), 'meme_out')
         out_dir = os.path.abspath(out_dir)
+        if self.can_run_meme_parallel('{} -p 2'.format(meme_binary)):
+            self.meme_strargs += ' -p {}'.format(self.cpu_cores)
         cmd = '{} {} -oc {} {}'.format(self.meme_location, self.meme_strargs,
                                        out_dir, os.path.abspath(fasta_in))
         stdout, stderr, exitcode = run_job(cmd=cmd,
