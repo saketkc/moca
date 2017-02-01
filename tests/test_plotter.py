@@ -12,7 +12,7 @@ def test_image():
     base_path = 'tests/data/ENCSR000AKB/'
     meme_file = base_path+'moca_output/meme_out/meme.txt'
     plot_title = 'ENCSR000AKB.sorted'
-    oc = 'tests/data/generated_out'
+    oc = 'tests/data/generated_out/moca_plots'
     motif_number = 1
     flank_motif = 5
     sample_score_files = [base_path+'moca_output/fimo_out_1/phylop.mean.txt']
@@ -30,6 +30,7 @@ def test_image():
                        reg_plot_titles=plot_titles,
                        annotate=None,
                        save=False)
+    print(figs)
     return figs[0]
 
 

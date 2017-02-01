@@ -9,6 +9,7 @@ matrix:
 addons:
   apt:
     packages:
+      - dvipng
       - texlive-latex-base
       - texlive-latex-extra
       - texlive-fonts-recommended
