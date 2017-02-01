@@ -48,6 +48,7 @@ install:
 
 script:
   - moca --help
+  - py.test --verbose tests/test_plotter.py
   - py.test --verbose --mpl --cov=moca --cov-config .coveragerc --cov-report term-missing
 
 cache:
