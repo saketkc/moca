@@ -195,7 +195,10 @@ def find_motifs(bedfile, oc, configuration, slop_length,
         sample_score_files = []
         control_score_files = []
         for key in list(conservation_wig_keys):
-            wigfile = wigfiles[key]
+            try:
+                wigfile = wigfiles[key]
+            except KeyError:
+                continue
             if show_progress:
                 progress_bar.show_progress('Creating plots')
             sample_score_file = moca_pipeline.save_conservation_scores(main_intervals, wigfile,
