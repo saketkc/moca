@@ -82,3 +82,10 @@ class TestBedoperations(unittest.TestCase):
         assert filecmp.cmp('tests/data/generated_out/ENCFF002CDP_1000_unsorted.train',
                            'tests/data/expected_out/ENCFF002CDP_1000_unsorted.train')
 
+    def test_traintest_split(self):
+        bedfile = 'tests/data/ENCFF070KLR.bed'
+        loaded_bed = Bedfile(bedfile, self.genome_table, 'tests/data/generated_out')
+        total_peaks = loaded_bed.get_total_peaks
+        train_bed_file, test_bed_file = loaded_bed.split_train_test_bed()
+        assert len(open(train_bed_file).readlines()) == total_peaks/2.0
+        assert len(open(test_bed_file).readlines()) == total_peaks/2.0
