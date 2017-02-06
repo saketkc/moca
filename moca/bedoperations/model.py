@@ -124,8 +124,10 @@ class Bedfile(object):
             Count of testing peaks
 
         """
-        assert train_peaks_count < self.total_peaks
-        assert test_peaks_count < self.total_peaks
+        if train_peaks_count >= self.total_peaks:
+            train_peaks_count = np.floor(self.total_peaks/2)
+        if test_peaks_count >= self.total_peaks:
+            test_peaks_count = np.ceil(self.total_peaks/2)
         self._determine_peaks()
         self._sort_bed()
 
