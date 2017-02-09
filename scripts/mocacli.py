@@ -283,7 +283,10 @@ def plot(meme_dir, centrimo_dir, fimo_dir_sample, fimo_dir_control, name,
     sample_score_files = []
     control_score_files = []
     for key in list(conservation_wig_keys):
-        wigfile = wigfiles[key]
+        try:
+            wigfile = wigfiles[key]
+        except KeyError:
+            continue
         if show_progress:
             progress_bar.show_progress('Creating plots')
         sample_score_file = moca_pipeline.save_conservation_scores(main_intervals, wigfile,
