@@ -211,7 +211,7 @@ def find_motifs(bedfile, oc, configuration, slop_length,
             progress_bar.show_progress('Creating Plot')
         create_plot(meme_file,
                     bedfile_fn,
-                    output_dir=moca_out_dir,
+                    output_dir=os.path.join(moca_out_dir, 'moca_plots'),
                     centrimo_dir=centrimo_main_dir,
                     motif_number=motif,
                     flank_length=flank_motif,
