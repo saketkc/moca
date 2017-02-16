@@ -12,7 +12,6 @@ from builtins import str
 from builtins import range
 import click
 import json
-import math
 import matplotlib
 matplotlib.use('Agg')
 import os
@@ -69,7 +68,7 @@ STEM_LINEWIDTH = 3
 TXT_XPOS = 0.02
 TXT_YPOS = 0.09
 
-LEGEND_XMULTIPLIER = 1.8
+LEGEND_XMULTIPLIER = 1.2
 LEGEND_YMULTIPLIER = 1
 
 MAX_YTICKS = 4
@@ -252,9 +251,6 @@ def create_bar_plot(logo_plot,  X_right, height_px,
                             edgecolor='black')
     occurrence = all_meme_occurrences[motif_number-1]/total_sequences*100.0
     textstr = r'\noindent$\mathrm{E-Value}=%s$\\~\\$\mathrm{Enrichment}=%s$'%(format_pvalue(motif_evalue), '{}\%'.format(occurrence))
-    index = int(math.floor(-start_point/2))
-    total_heights = heights+bottoms
-    max_height = np.max(total_heights)
     logo_plot.text(X_right[0], bottoms[0]/2.5, textstr, fontsize=12)
     barlist[motif_number-1].set_color('red')
     barlist[motif_number-1].set_hatch('/')
@@ -396,21 +392,35 @@ def create_ols_legend_plot(matplot_dict, motif_freq,
                                    remove_flanking_scores(sample_scores, flank_length))
     corr_pval = corr_result[1]
     corr_r2 = corr_result[0]
-    ttest_result = perform_t_test(remove_flanking_scores(sample_scores, flank_length),
+    ttest_result_flanking = perform_t_test(remove_flanking_scores(sample_scores, flank_length),
                                   get_flanking_scores(sample_scores, flank_length))
-    p_deltaphylop = ttest_result['one_sided_pval']
-    delta_phylop = ttest_result['delta']
-    #T_deltaphylop = ttest_result['T']
+    p_deltaphylop_flanking = ttest_result_flanking['one_sided_pval']
+    delta_phylop_flanking = ttest_result_flanking['delta']
+
     pearsonr_pval = str('%.1g'%corr_pval)
     if 'e' in pearsonr_pval:
         pearsonr_pval += '}'
         pearsonr_pval = pearsonr_pval.replace('e', '*10^{').replace('-0','-')
-    score_pval = str('%.1g'%p_deltaphylop)
-    if 'e' in score_pval:
-        score_pval += '}'
-        score_pval = score_pval.replace('e', '*10^{').replace('-0','-')
+    delta_phylop_flanking_pval = str('%.1g'%p_deltaphylop_flanking)
+    if 'e' in delta_phylop_flanking_pval:
+        delta_phylop_flanking_pval += '}'
+        delta_phylop_flanking_pval = delta_phylop_flanking_pval.replace('e', '*10^{').replace('-0','-')
 
-    textstr = r'$r^2_{pearson}=%.2f(p=%s)$' '\n' r'$\Delta_{%s}=%.2f(p=%s)$' %(corr_r2, pearsonr_pval, legend_title, delta_phylop, score_pval)
+
+    ttest_result_control = perform_t_test(remove_flanking_scores(sample_scores, flank_length),
+                                          remove_flanking_scores(control_scores, flank_length))
+
+    p_deltaphylop_control = ttest_result_control['one_sided_pval']
+    delta_phylop_control = ttest_result_control['delta']
+
+    delta_phylop_control_pval = str('%.1g'%p_deltaphylop_control)
+    if 'e' in delta_phylop_control_pval:
+        delta_phylop_control_pval += '}'
+        delta_phylop_control_pval = delta_phylop_control_pval.replace('e', '*10^{').replace('-0','-')
+
+    textstr = r'$r^2_{pearson}=%.2f(p=%s)$' '\n' r'$\Delta_{flanking}=%.2f(p=%s)$' '\n' r'$\Delta_{control}=%.2f(p=%s)$' %(corr_r2, pearsonr_pval,
+                                                                                                                            delta_phylop_flanking, delta_phylop_flanking_pval,
+                                                                                                                            delta_phylop_control, delta_phylop_control_pval)
     txtx = 1-LEGEND_XMULTIPLIER*len(textstr)/100.0
     phlyop_plots_legend.set_frame_on(False)
     phlyop_plots_legend.set_xticks([])
@@ -438,15 +448,15 @@ def create_scatter_plot(matplot_dict, motif_freq,
     sample_regression_line = sample_ols['regression_line']
     control_regression_line = control_ols['regression_line']
 
-    s1 = scatter_plot.scatter(motif_freq, sample_scores, color='g',
-                              s=[POINTSIZE for i in motif_freq],
-                              marker='^', label=r'$\mathrm{Sample}$')
+    scatter_plot.scatter(motif_freq, sample_scores, color='g',
+                         s=[POINTSIZE for i in motif_freq],
+                         marker='^', label=r'$\mathrm{Sample}$')
     scatter_plot.plot(motif_freq, sample_regression_line, 'g',
                       motif_freq, fit_fn(motif_freq),
                       color='g', linewidth=LINEWIDTH)
-    s2 = scatter_plot.scatter(motif_freq, control_scores,
-                              color=GREYNESS, s=[POINTSIZE for i in motif_freq],
-                              marker='o', label=r'$\mathrm{Control}$')
+    scatter_plot.scatter(motif_freq, control_scores,
+                         color=GREYNESS, s=[POINTSIZE for i in motif_freq],
+                         marker='o', label=r'$\mathrm{Control}$')
     scatter_plot.plot(motif_freq, control_regression_line,
                       color=GREYNESS, linewidth=LINEWIDTH)
     leg = scatter_plot.legend(fontsize=14)
