@@ -5,4 +5,4 @@ from __future__ import division
 from __future__ import absolute_import
 __author__ = 'Saket Choudhary'
 __email__ = 'saketkc@gmail.com'
-__version__ = '0.1.0'
+__version__ = '0.4.0'
