@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>moca.plotter.plotter &#8212; MoCA 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          MoCA</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.4.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../moca.html">moca package</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">MoCA: Tool for MOtif Conservation Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../history.html">History</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <h1>Source code for moca.plotter.plotter</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/anv python</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Generate conservation plots</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">six</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">zip</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">range</span>
+<span class="kn">import</span> <span class="nn">click</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;Agg&#39;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">seaborn</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;seaborn-ticks&#39;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">matplotlib.gridspec</span> <span class="k">as</span> <span class="nn">gridspec</span>
+<span class="kn">from</span> <span class="nn">matplotlib.font_manager</span> <span class="k">import</span> <span class="n">FontProperties</span>
+<span class="kn">from</span> <span class="nn">pylab</span> <span class="k">import</span> <span class="n">setp</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">gaussian_kde</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="k">import</span> <span class="n">UnivariateSpline</span>
+<span class="n">click</span><span class="o">.</span><span class="n">disable_unicode_literals_warning</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="kn">from</span> <span class="nn">moca.helpers</span> <span class="k">import</span> <span class="n">get_max_occuring_bases</span>
+<span class="kn">from</span> <span class="nn">moca.helpers</span> <span class="k">import</span> <span class="n">get_total_sequences</span>
+<span class="kn">from</span> <span class="nn">moca.helpers</span> <span class="k">import</span> <span class="n">MocaException</span>
+<span class="kn">from</span> <span class="nn">moca.helpers</span> <span class="k">import</span> <span class="n">read_centrimo_stats</span>
+<span class="kn">from</span> <span class="nn">moca.helpers</span> <span class="k">import</span> <span class="n">read_centrimo_txt</span>
+<span class="kn">from</span> <span class="nn">moca.helpers</span> <span class="k">import</span> <span class="n">read_memefile</span>
+<span class="kn">from</span> <span class="nn">moca.helpers</span> <span class="k">import</span> <span class="n">safe_makedir</span>
+<span class="kn">from</span> <span class="nn">moca.helpers.seqstats</span> <span class="k">import</span> <span class="n">format_pvalue</span>
+<span class="kn">from</span> <span class="nn">moca.helpers.seqstats</span> <span class="k">import</span> <span class="n">get_flanking_scores</span>
+<span class="kn">from</span> <span class="nn">moca.helpers.seqstats</span> <span class="k">import</span> <span class="n">get_pearson_corr</span>
+<span class="kn">from</span> <span class="nn">moca.helpers.seqstats</span> <span class="k">import</span> <span class="n">perform_OLS</span>
+<span class="kn">from</span> <span class="nn">moca.helpers.seqstats</span> <span class="k">import</span> <span class="n">perform_t_test</span>
+<span class="kn">from</span> <span class="nn">moca.helpers.seqstats</span> <span class="k">import</span> <span class="n">remove_flanking_scores</span>
+
+<span class="n">OFFSET</span> <span class="o">=</span> <span class="mf">39.33333333</span>
+<span class="n">COUNT_TYPE</span> <span class="o">=</span> <span class="s1">&#39;counts&#39;</span>
+<span class="c1"># Use &#39;pssm&#39; or &#39;counts&#39; to score:</span>
+<span class="n">bases</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">]</span>
+
+<span class="c1">## Plot parameters</span>
+<span class="n">LINEWIDTH</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">PHYLOP_BAR_LINEWIDTH</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">HIST_NBINS</span> <span class="o">=</span> <span class="mi">20</span>
+
+<span class="n">FONTSIZE</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">LEGEND_FONTSIZE</span> <span class="o">=</span> <span class="mi">26</span>
+<span class="n">POINTSIZE</span> <span class="o">=</span> <span class="mi">24</span>
+<span class="n">DPI</span> <span class="o">=</span> <span class="mi">300</span>
+
+<span class="n">TICKPAD</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">TICKLENGTH</span><span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">GREYNESS</span> <span class="o">=</span> <span class="s1">&#39;0.55&#39;</span>
+<span class="n">STEM_MARKER_SIZE</span> <span class="o">=</span> <span class="mi">13</span>
+<span class="n">STEM_MARKER_EDGEWIDTH</span> <span class="o">=</span> <span class="mf">3.5</span>
+<span class="n">STEM_FLANKING_COLOR</span> <span class="o">=</span> <span class="s1">&#39;y&#39;</span>
+<span class="n">STEM_LINEWIDTH</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="c1">##  Text position</span>
+<span class="n">TXT_XPOS</span> <span class="o">=</span> <span class="mf">0.02</span>
+<span class="n">TXT_YPOS</span> <span class="o">=</span> <span class="mf">0.09</span>
+
+<span class="n">LEGEND_XMULTIPLIER</span> <span class="o">=</span> <span class="mf">1.2</span>
+<span class="n">LEGEND_YMULTIPLIER</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">MAX_YTICKS</span> <span class="o">=</span> <span class="mi">4</span>
+
+<div class="viewcode-block" id="setup_matplotlib"><a class="viewcode-back" href="../../../moca.plotter.html#moca.plotter.plotter.setup_matplotlib">[docs]</a><span class="k">def</span> <span class="nf">setup_matplotlib</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Setup matplotlib</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="n">usetex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;font&#39;</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;monospace&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;axes.titlesize&#39;</span><span class="p">:</span> <span class="s1">&#39;small&#39;</span><span class="p">})</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;backend&#39;</span> <span class="p">:</span> <span class="s1">&#39;Agg&#39;</span><span class="p">})</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;xtick.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">FONTSIZE</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;ytick.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">FONTSIZE</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;text.latex.preamble&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">r&#39;\boldmath&#39;</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;legend.loc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;best&#39;</span></div>
+
+<div class="viewcode-block" id="save_figure"><a class="viewcode-back" href="../../../moca.plotter.html#moca.plotter.plotter.save_figure">[docs]</a><span class="k">def</span> <span class="nf">save_figure</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Save figure to file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">extent</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_window_extent</span><span class="p">()</span><span class="o">.</span><span class="n">transformed</span><span class="p">(</span><span class="n">fig</span><span class="o">.</span><span class="n">dpi_scale_trans</span><span class="o">.</span><span class="n">inverted</span><span class="p">())</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">form</span><span class="p">),</span> <span class="nb">format</span><span class="o">=</span><span class="n">form</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">DPI</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="n">extent</span><span class="o">.</span><span class="n">expanded</span><span class="p">(</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">form</span><span class="o">!=</span><span class="s1">&#39;png&#39;</span><span class="p">:</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;png&#39;</span><span class="p">),</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">DPI</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="n">extent</span><span class="o">.</span><span class="n">expanded</span><span class="p">(</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="setp_lines"><a class="viewcode-back" href="../../../moca.plotter.html#moca.plotter.plotter.setp_lines">[docs]</a><span class="k">def</span> <span class="nf">setp_lines</span><span class="p">(</span><span class="n">stemlines</span><span class="p">,</span> <span class="n">markerline</span><span class="p">,</span> <span class="n">baseline</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Set up format for stem plots&quot;&quot;&quot;</span>
+    <span class="n">setp</span><span class="p">(</span><span class="n">stemlines</span><span class="p">,</span> <span class="s1">&#39;linewidth&#39;</span><span class="p">,</span> <span class="n">STEM_LINEWIDTH</span><span class="p">)</span>
+    <span class="n">setp</span><span class="p">(</span><span class="n">markerline</span><span class="p">,</span> <span class="s1">&#39;markersize&#39;</span><span class="p">,</span> <span class="n">STEM_MARKER_SIZE</span><span class="p">)</span>
+    <span class="n">setp</span><span class="p">(</span><span class="n">baseline</span><span class="p">,</span> <span class="s1">&#39;linewidth&#39;</span><span class="p">,</span> <span class="n">STEM_LINEWIDTH</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">setp</span><span class="p">(</span><span class="n">markerline</span><span class="p">,</span> <span class="s1">&#39;markeredgewidth&#39;</span><span class="p">,</span> <span class="n">STEM_MARKER_EDGEWIDTH</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="create_stemplot"><a class="viewcode-back" href="../../../moca.plotter.html#moca.plotter.plotter.create_stemplot">[docs]</a><span class="k">def</span> <span class="nf">create_stemplot</span><span class="p">(</span><span class="n">matplot_dict</span><span class="p">,</span> <span class="n">X_values</span><span class="p">,</span> <span class="n">Y_values</span><span class="p">,</span>
+                    <span class="n">motif_length</span><span class="p">,</span> <span class="n">legend_title</span><span class="p">,</span> <span class="n">flank_length</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create stem plot for phylop/scores scoresi</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    matplot_dict: dict like</span>
+<span class="sd">        A dict like object with the following fields:</span>
+<span class="sd">            {&#39;figure&#39;: plt.figure, &#39;gridspec&#39;: plt.gridspec, &#39;shareX&#39;: plt.axes}</span>
+<span class="sd">        where &#39;gridspec&#39; represents the grid specification</span>
+<span class="sd">        and shareX represents the axis to share X axis with.</span>
+
+<span class="sd">    figure: plt.figure</span>
+<span class="sd">        matplotlib figure</span>
+
+<span class="sd">    X_values: np.array</span>
+<span class="sd">        Array of X values</span>
+
+<span class="sd">    Y_values: np.array</span>
+<span class="sd">        Array of Y-values</span>
+
+<span class="sd">    motif_length: int</span>
+<span class="sd">        Motif length(redundant)</span>
+
+<span class="sd">    flank_length: int</span>
+<span class="sd">        Number of flanking sites</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">Y_values</span><span class="p">):</span>
+        <span class="k">return</span>
+    <span class="n">indices_str</span><span class="o">=</span><span class="p">[]</span>
+    <span class="n">indices_left</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">flank_length</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">indices_str</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">indices_left</span><span class="p">]</span>
+    <span class="n">indices_center</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_values</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">flank_length</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices_center</span><span class="p">:</span>
+        <span class="n">indices_str</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;$</span><span class="si">{}</span><span class="s1">$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">indices_right</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">motif_length</span><span class="p">,</span> <span class="n">motif_length</span><span class="o">+</span><span class="n">flank_length</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices_right</span><span class="p">:</span>
+        <span class="n">indices_str</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+    <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">indices_left</span><span class="p">,</span> <span class="n">indices_center</span><span class="p">,</span> <span class="n">indices_right</span><span class="p">))</span>
+    <span class="n">xticks</span> <span class="o">=</span> <span class="p">[</span><span class="n">X_values</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="n">flank_length</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
+    <span class="c1">#if len(X_values)!=len(Y_values):</span>
+    <span class="c1">#    raise MocaException(&#39;Error creating stem plots. (X,Y) dimenstion mismatch:\</span>
+    <span class="c1">#                        ({},{})&#39;.format(len(X_values), len(Y_values)))</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">matplot_dict</span><span class="p">[</span><span class="s1">&#39;figure&#39;</span><span class="p">]</span>
+    <span class="n">gs</span> <span class="o">=</span> <span class="n">matplot_dict</span><span class="p">[</span><span class="s1">&#39;gridspec&#39;</span><span class="p">]</span>
+    <span class="n">shareX</span> <span class="o">=</span> <span class="n">matplot_dict</span><span class="p">[</span><span class="s1">&#39;shareX&#39;</span><span class="p">]</span>
+    <span class="n">stem_plot</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Subplot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">gs</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="n">shareX</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">flank_length</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">X_flank_left</span> <span class="o">=</span> <span class="n">X_values</span><span class="p">[:</span><span class="n">flank_length</span><span class="p">]</span>
+        <span class="n">Y_flank_left</span> <span class="o">=</span> <span class="n">Y_values</span><span class="p">[:</span><span class="n">flank_length</span><span class="p">]</span>
+        <span class="n">X_center</span> <span class="o">=</span> <span class="n">X_values</span><span class="p">[</span><span class="n">flank_length</span><span class="p">:</span><span class="o">-</span><span class="n">flank_length</span><span class="p">]</span>
+        <span class="n">Y_center</span> <span class="o">=</span> <span class="n">Y_values</span><span class="p">[</span><span class="n">flank_length</span><span class="p">:</span><span class="o">-</span><span class="n">flank_length</span><span class="p">]</span>
+        <span class="n">X_flank_right</span> <span class="o">=</span> <span class="n">X_values</span><span class="p">[</span><span class="o">-</span><span class="n">flank_length</span><span class="p">:]</span>
+        <span class="n">Y_flank_right</span> <span class="o">=</span> <span class="n">Y_values</span><span class="p">[</span><span class="o">-</span><span class="n">flank_length</span><span class="p">:]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">X_center</span> <span class="o">=</span> <span class="n">X_values</span>
+        <span class="n">Y_center</span> <span class="o">=</span> <span class="n">Y_values</span>
+    <span class="n">markerline</span><span class="p">,</span> <span class="n">stemlines</span><span class="p">,</span> <span class="n">baseline</span>  <span class="o">=</span> <span class="n">stem_plot</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">X_center</span><span class="p">,</span> <span class="n">Y_center</span><span class="p">,</span>
+                                                      <span class="n">markerfmt</span><span class="o">=</span><span class="s2">&quot;g_&quot;</span><span class="p">,</span>
+                                                      <span class="n">linefmt</span><span class="o">=</span><span class="s2">&quot;g-&quot;</span><span class="p">,</span>
+                                                      <span class="n">basefmt</span><span class="o">=</span><span class="s2">&quot;r-&quot;</span><span class="p">)</span>
+    <span class="n">setp_lines</span><span class="p">(</span><span class="n">stemlines</span><span class="p">,</span> <span class="n">markerline</span><span class="p">,</span> <span class="n">baseline</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">flank_length</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">markerline</span><span class="p">,</span> <span class="n">stemlines</span><span class="p">,</span> <span class="n">baseline</span>  <span class="o">=</span> <span class="n">stem_plot</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">X_flank_left</span><span class="p">,</span>
+                                                          <span class="n">Y_flank_left</span><span class="p">,</span>
+                                                          <span class="n">markerfmt</span><span class="o">=</span><span class="s2">&quot;_&quot;</span><span class="p">,</span>
+                                                          <span class="n">linefmt</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
+                                                          <span class="n">markerfacecolor</span><span class="o">=</span><span class="n">STEM_FLANKING_COLOR</span><span class="p">,</span>
+                                                          <span class="n">color</span><span class="o">=</span><span class="n">GREYNESS</span><span class="p">)</span>
+        <span class="n">setp</span><span class="p">(</span><span class="n">stemlines</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="n">STEM_FLANKING_COLOR</span><span class="p">)</span>
+        <span class="n">setp</span><span class="p">(</span><span class="n">markerline</span><span class="p">,</span> <span class="s1">&#39;markerfacecolor&#39;</span><span class="p">,</span> <span class="n">STEM_FLANKING_COLOR</span><span class="p">)</span>
+        <span class="n">setp_lines</span><span class="p">(</span><span class="n">stemlines</span><span class="p">,</span> <span class="n">markerline</span><span class="p">,</span> <span class="n">baseline</span><span class="p">)</span>
+        <span class="n">setp</span><span class="p">(</span><span class="n">markerline</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="n">STEM_FLANKING_COLOR</span><span class="p">)</span>
+        <span class="n">markerline</span><span class="p">,</span> <span class="n">stemlines</span><span class="p">,</span> <span class="n">baseline</span>  <span class="o">=</span>  <span class="n">stem_plot</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">X_flank_right</span><span class="p">,</span> <span class="n">Y_flank_right</span><span class="p">,</span>
+                                                           <span class="n">markerfmt</span><span class="o">=</span><span class="s2">&quot;_&quot;</span><span class="p">,</span>
+                                                           <span class="n">linefmt</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
+                                                           <span class="n">markerfacecolor</span><span class="o">=</span><span class="n">STEM_FLANKING_COLOR</span><span class="p">,</span>
+                                                           <span class="n">color</span><span class="o">=</span><span class="n">GREYNESS</span><span class="p">)</span>
+        <span class="n">setp</span><span class="p">(</span><span class="n">stemlines</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="n">STEM_FLANKING_COLOR</span><span class="p">)</span>
+        <span class="n">setp</span><span class="p">(</span><span class="n">markerline</span><span class="p">,</span> <span class="s1">&#39;markerfacecolor&#39;</span><span class="p">,</span> <span class="n">STEM_FLANKING_COLOR</span><span class="p">)</span>
+        <span class="n">setp</span><span class="p">(</span><span class="n">markerline</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="n">STEM_FLANKING_COLOR</span><span class="p">)</span>
+        <span class="n">setp_lines</span><span class="p">(</span><span class="n">stemlines</span><span class="p">,</span> <span class="n">markerline</span><span class="p">,</span> <span class="n">baseline</span><span class="p">)</span>
+
+    <span class="n">yloc</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">MaxNLocator</span><span class="p">(</span><span class="n">MAX_YTICKS</span><span class="p">)</span>
+    <span class="n">stem_plot</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">yloc</span><span class="p">)</span>
+    <span class="n">stem_plot</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;$\mathrm</span><span class="si">{Base}</span><span class="s1">\ \mathrm</span><span class="si">{Position}</span><span class="s1">$&#39;</span><span class="p">,</span>
+                         <span class="n">fontsize</span><span class="o">=</span><span class="n">FONTSIZE</span><span class="p">,</span>
+                         <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+    <span class="n">stem_plot</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">xticks</span><span class="p">)</span>
+    <span class="n">stem_plot</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">indices_str</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">FONTSIZE</span><span class="p">)</span>
+    <span class="n">seaborn</span><span class="o">.</span><span class="n">despine</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">stem_plot</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">trim</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">stem_plot</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;$\mathrm{</span><span class="si">%s</span><span class="s1">}\ \mathrm</span><span class="si">{Score}</span><span class="s1">$&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">legend_title</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">FONTSIZE</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">stem_plot</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">X_flank_left</span><span class="p">,</span> <span class="n">X_center</span><span class="p">,</span> <span class="n">X_flank_right</span></div>
+
+<div class="viewcode-block" id="create_logo_plot"><a class="viewcode-back" href="../../../moca.plotter.html#moca.plotter.plotter.create_logo_plot">[docs]</a><span class="k">def</span> <span class="nf">create_logo_plot</span><span class="p">(</span><span class="n">matplot_dict</span><span class="p">,</span> <span class="n">meme_dir</span><span class="p">,</span> <span class="n">logo_path</span><span class="p">,</span> <span class="n">motif_length</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create stem plot for phylop/scores scoresi</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    matplot_dict: dict like</span>
+<span class="sd">        A dict like object with the following fields:</span>
+<span class="sd">            {&#39;figure&#39;: plt.figure, &#39;gridspec&#39;: plt.gridspec, &#39;shareX&#39;: plt.axes}</span>
+<span class="sd">        where &#39;gridspec&#39; represents the grid specification</span>
+<span class="sd">        and shareX represents the axis to share X axis with.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">matplot_dict</span><span class="p">[</span><span class="s1">&#39;figure&#39;</span><span class="p">]</span>
+    <span class="n">gs</span> <span class="o">=</span> <span class="n">matplot_dict</span><span class="p">[</span><span class="s1">&#39;gridspec&#39;</span><span class="p">]</span>
+    <span class="n">logo_plot</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Subplot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">gs</span><span class="p">)</span>
+    <span class="n">logo</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">meme_dir</span><span class="p">),</span> <span class="n">logo_path</span><span class="p">))</span>
+    <span class="c1">##TODO Check this</span>
+    <span class="k">if</span> <span class="n">motif_length</span><span class="o">&gt;</span><span class="mi">45</span><span class="p">:</span>
+        <span class="n">XSCALE_FACTOR</span> <span class="o">=</span> <span class="n">motif_length</span><span class="o">/</span><span class="mf">1.9</span>
+        <span class="n">z</span><span class="o">=</span><span class="mi">2</span>
+    <span class="k">elif</span> <span class="n">motif_length</span><span class="o">&gt;</span><span class="mi">40</span><span class="p">:</span>
+        <span class="n">XSCALE_FACTOR</span> <span class="o">=</span> <span class="n">motif_length</span><span class="o">/</span><span class="mf">2.25</span>
+        <span class="n">z</span><span class="o">=</span><span class="mf">2.5</span>
+    <span class="k">elif</span> <span class="n">motif_length</span><span class="o">&gt;</span><span class="mi">36</span><span class="p">:</span>
+        <span class="n">XSCALE_FACTOR</span> <span class="o">=</span> <span class="n">motif_length</span><span class="o">/</span><span class="mf">1.95</span>
+        <span class="n">z</span><span class="o">=</span><span class="mi">2</span>
+    <span class="k">elif</span> <span class="n">motif_length</span><span class="o">&gt;</span><span class="mi">21</span><span class="p">:</span>
+        <span class="n">XSCALE_FACTOR</span> <span class="o">=</span> <span class="n">motif_length</span><span class="o">/</span><span class="mi">5</span>
+        <span class="n">z</span><span class="o">=</span><span class="mi">3</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">XSCALE_FACTOR</span> <span class="o">=</span> <span class="mf">4.5</span>
+        <span class="n">z</span><span class="o">=</span><span class="mi">3</span>
+
+    <span class="n">logo_plot</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">logo</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mi">40</span><span class="o">+</span><span class="mi">15</span><span class="o">+</span><span class="n">z</span><span class="o">*</span><span class="p">(</span><span class="n">OFFSET</span><span class="o">+</span><span class="mf">1.9</span><span class="p">),</span><span class="n">logo</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">15</span><span class="o">+</span><span class="n">XSCALE_FACTOR</span><span class="o">*</span><span class="p">(</span><span class="n">OFFSET</span><span class="o">+</span><span class="mf">1.9</span><span class="p">),</span><span class="mi">0</span><span class="p">,</span><span class="n">logo</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+    <span class="n">logo_plot</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">logo_plot</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">logo_plot</span></div>
+
+<div class="viewcode-block" id="create_bar_plot"><a class="viewcode-back" href="../../../moca.plotter.html#moca.plotter.plotter.create_bar_plot">[docs]</a><span class="k">def</span> <span class="nf">create_bar_plot</span><span class="p">(</span><span class="n">logo_plot</span><span class="p">,</span>  <span class="n">X_right</span><span class="p">,</span> <span class="n">height_px</span><span class="p">,</span>
+                    <span class="n">total_sequences</span><span class="p">,</span> <span class="n">all_meme_occurrences</span><span class="p">,</span>
+                    <span class="n">motif_number</span><span class="p">,</span> <span class="n">motif_evalue</span><span class="p">):</span>
+    <span class="n">start_point</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_meme_occurrences</span><span class="p">)</span>
+    <span class="n">height_scale</span> <span class="o">=</span> <span class="mf">2.25</span>
+    <span class="n">bottom_scale</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">heights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">height_px</span><span class="o">/</span><span class="n">height_scale</span><span class="o">*</span><span class="n">all_meme_occurrences</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="n">total_sequences</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">start_point</span><span class="p">)])</span>
+    <span class="n">bottoms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">height_px</span><span class="o">/</span><span class="n">bottom_scale</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">start_point</span><span class="p">)])</span>
+    <span class="n">barlist</span> <span class="o">=</span> <span class="n">logo_plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X_right</span><span class="p">[</span><span class="o">-</span><span class="n">start_point</span><span class="p">:]),</span>
+                            <span class="n">heights</span><span class="p">,</span>
+                            <span class="n">width</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span>
+                            <span class="n">bottom</span><span class="o">=</span><span class="n">bottoms</span><span class="p">,</span>
+                            <span class="n">fill</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+    <span class="n">occurrence</span> <span class="o">=</span> <span class="n">all_meme_occurrences</span><span class="p">[</span><span class="n">motif_number</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">total_sequences</span><span class="o">*</span><span class="mf">100.0</span>
+    <span class="n">textstr</span> <span class="o">=</span> <span class="s1">r&#39;\noindent$\mathrm{E-Value}=</span><span class="si">%s</span><span class="s1">$</span><span class="se">\\</span><span class="s1">~</span><span class="se">\\</span><span class="s1">$\mathrm</span><span class="si">{Enrichment}</span><span class="s1">=</span><span class="si">%s</span><span class="s1">$&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">format_pvalue</span><span class="p">(</span><span class="n">motif_evalue</span><span class="p">),</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">\%&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">occurrence</span><span class="p">))</span>
+    <span class="n">logo_plot</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">X_right</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bottoms</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">textstr</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+    <span class="n">barlist</span><span class="p">[</span><span class="n">motif_number</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+    <span class="n">barlist</span><span class="p">[</span><span class="n">motif_number</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_hatch</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span></div>
+
+<span class="k">def</span> <span class="nf">_get_logo_path</span><span class="p">(</span><span class="n">meme_dir</span><span class="p">,</span> <span class="n">motif</span><span class="p">,</span> <span class="n">rc</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">meme_dir</span><span class="p">,</span> <span class="s1">&#39;logo_rc</span><span class="si">{}</span><span class="s1">.png&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">motif</span><span class="p">)</span> <span class="k">if</span> <span class="n">rc</span> <span class="k">else</span> <span class="s1">&#39;logo</span><span class="si">{}</span><span class="s1">.png&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">motif</span><span class="p">))</span>
+
+<div class="viewcode-block" id="init_figure"><a class="viewcode-back" href="../../../moca.plotter.html#moca.plotter.plotter.init_figure">[docs]</a><span class="k">def</span> <span class="nf">init_figure</span><span class="p">(</span><span class="n">meme_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">X_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">motif</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">subplot_ncols</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">annotate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Initialize plot based on logo size&quot;&quot;&quot;</span>
+    <span class="n">logo</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">_get_logo_path</span><span class="p">(</span><span class="n">meme_dir</span><span class="p">,</span> <span class="n">motif</span><span class="p">))</span>
+    <span class="n">height_px</span> <span class="o">=</span> <span class="n">logo</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># Should be 212</span>
+    <span class="c1">#subplot_ncols+=1</span>
+    <span class="n">total_px</span> <span class="o">=</span> <span class="n">X_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">subplot_ncols</span><span class="o">*</span><span class="n">height_px</span><span class="o">+</span><span class="mi">140</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">subplot_ncols</span><span class="o">*</span><span class="n">height_px</span><span class="o">+</span><span class="mi">10</span><span class="o">+</span><span class="mi">140</span><span class="o">-</span><span class="mf">0.2</span><span class="o">*</span><span class="n">height_px</span><span class="p">)</span><span class="o">/</span><span class="n">total_px</span>
+
+    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="n">total_px</span><span class="o">/</span><span class="mi">100</span><span class="p">,(</span><span class="mi">2</span><span class="o">*</span><span class="n">height_px</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span><span class="o">+</span><span class="mf">0.6</span><span class="p">)</span>
+
+    <span class="n">gs</span> <span class="o">=</span>  <span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">gs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.14</span><span class="p">,</span>
+              <span class="n">left</span><span class="o">=</span><span class="mf">0.08</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">1</span><span class="o">-</span><span class="n">right</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">DPI</span><span class="p">,</span>
+                   <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;figure&#39;</span><span class="p">:</span> <span class="n">f</span><span class="p">,</span>
+            <span class="s1">&#39;gs&#39;</span><span class="p">:</span> <span class="n">gs</span><span class="p">,</span>
+            <span class="s1">&#39;figsize&#39;</span><span class="p">:</span> <span class="n">figsize</span><span class="p">,</span>
+            <span class="s1">&#39;right_margin&#39;</span><span class="p">:</span> <span class="n">right</span><span class="p">,</span>
+            <span class="s1">&#39;height_px&#39;</span><span class="p">:</span> <span class="n">height_px</span><span class="p">,</span>
+            <span class="s1">&#39;total_px&#39;</span><span class="p">:</span> <span class="n">total_px</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="create_enrichment_plot"><a class="viewcode-back" href="../../../moca.plotter.html#moca.plotter.plotter.create_enrichment_plot">[docs]</a><span class="k">def</span> <span class="nf">create_enrichment_plot</span><span class="p">(</span><span class="n">matplot_dict</span><span class="p">,</span> <span class="n">motif_number</span><span class="p">,</span> <span class="n">centrimo_txt</span><span class="p">,</span> <span class="n">centrimo_stats</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">matplot_dict</span><span class="p">[</span><span class="s1">&#39;figure&#39;</span><span class="p">]</span>
+    <span class="n">gs_h</span> <span class="o">=</span> <span class="n">matplot_dict</span><span class="p">[</span><span class="s1">&#39;gridspec_header&#39;</span><span class="p">]</span>
+    <span class="n">gs_b</span> <span class="o">=</span> <span class="n">matplot_dict</span><span class="p">[</span><span class="s1">&#39;gridspec_body&#39;</span><span class="p">]</span>
+
+    <span class="n">all_stats</span> <span class="o">=</span> <span class="n">read_centrimo_stats</span><span class="p">(</span><span class="n">centrimo_stats</span><span class="p">)</span>
+    <span class="n">motif_stats</span> <span class="o">=</span> <span class="n">all_stats</span><span class="p">[</span><span class="s1">&#39;MEME&#39;</span><span class="p">][</span><span class="s1">&#39;MOTIF_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">motif_number</span><span class="p">)]</span>
+    <span class="n">X_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">motif_stats</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">])</span>
+    <span class="n">Y_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">motif_stats</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">])</span>
+    <span class="n">normalized_Y</span> <span class="o">=</span> <span class="n">Y_values</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Y_values</span><span class="p">)</span>
+
+    <span class="n">density</span> <span class="o">=</span> <span class="n">gaussian_kde</span><span class="p">(</span><span class="n">Y_values</span><span class="p">)</span>
+    <span class="n">x_smooth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">X_values</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">X_values</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="c1">#y_smooth = spline(X_values, normalized_Y, x_smooth)</span>
+    <span class="n">smoother</span> <span class="o">=</span> <span class="n">UnivariateSpline</span><span class="p">(</span><span class="n">X_values</span><span class="p">,</span> <span class="n">normalized_Y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">0.0005</span><span class="p">)</span>
+    <span class="n">density</span><span class="o">.</span><span class="n">covariance_factor</span> <span class="o">=</span> <span class="k">lambda</span> <span class="p">:</span> <span class="o">.</span><span class="mi">0005</span>
+    <span class="n">density</span><span class="o">.</span><span class="n">_compute_covariance</span><span class="p">()</span>
+
+
+    <span class="n">y_smooth</span> <span class="o">=</span> <span class="n">smoother</span><span class="p">(</span><span class="n">x_smooth</span><span class="p">)</span>
+
+    <span class="n">centrimo_dict</span> <span class="o">=</span> <span class="n">read_centrimo_txt</span><span class="p">(</span><span class="n">centrimo_txt</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">centrimo_motif_dict</span> <span class="o">=</span> <span class="n">centrimo_dict</span><span class="p">[</span><span class="n">motif_number</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+        <span class="c1">#TODO This should be logged somewhere</span>
+        <span class="n">centrimo_motif_dict</span> <span class="o">=</span> <span class="n">centrimo_dict</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">enrichment_pval</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">centrimo_motif_dict</span><span class="p">[</span><span class="s1">&#39;adj_p-value&#39;</span><span class="p">])</span>
+    <span class="n">enrichment</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">centrimo_motif_dict</span><span class="p">[</span><span class="s1">&#39;sites_in_bin&#39;</span><span class="p">])</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">centrimo_motif_dict</span><span class="p">[</span><span class="s1">&#39;total_sites&#39;</span><span class="p">])</span>
+
+    <span class="n">enrichment_plot</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Subplot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">gs_h</span><span class="p">,</span> <span class="n">autoscale_on</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">enrichment_plot</span><span class="o">.</span><span class="n">set_frame_on</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">enrichment_plot</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+    <span class="n">enrichment_plot</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+    <span class="n">enrichment_pval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%.1g</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">enrichment_pval</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;e&#39;</span> <span class="ow">in</span> <span class="n">enrichment_pval</span><span class="p">:</span>
+        <span class="n">enrichment_pval</span><span class="o">+=</span> <span class="s1">&#39;}&#39;</span>
+        <span class="n">enrichment_pval</span><span class="o">=</span> <span class="n">enrichment_pval</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;*10^{&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-0&#39;</span><span class="p">,</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;$\mathrm{Center-enrichment}$&#39;</span>
+    <span class="n">textstr</span> <span class="o">=</span> <span class="s1">r&#39;\noindent </span><span class="si">{}</span><span class="s1">=$</span><span class="si">{:.2f}</span><span class="s1">$</span><span class="se">\\</span><span class="s1">~</span><span class="se">\\</span><span class="s1">$(p=</span><span class="si">{}</span><span class="s1">)$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">enrichment</span><span class="p">,</span> <span class="n">enrichment_pval</span><span class="p">)</span>
+    <span class="n">txtx</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.05</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">textstr</span><span class="p">)</span><span class="o">/</span><span class="mf">100.0</span>
+    <span class="n">enrichment_plot</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">txtx</span><span class="p">,</span> <span class="n">TXT_YPOS</span><span class="p">,</span> <span class="n">textstr</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">LEGEND_FONTSIZE</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">enrichment_plot</span><span class="p">)</span>
+    <span class="n">enrichment_plot</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Subplot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">gs_b</span><span class="p">,</span> <span class="n">autoscale_on</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1">#enrichment_plot.plot(X_values, normalized_Y, linewidth=LINEWIDTH)</span>
+    <span class="c1">#enrichment_plot.plot(x_smooth, density(x_smooth), linewidth=LINEWIDTH)</span>
+    <span class="n">enrichment_plot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_smooth</span><span class="p">,</span> <span class="n">y_smooth</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">LINEWIDTH</span><span class="p">)</span>
+    <span class="n">enrichment_plot</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="n">TICKLENGTH</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">)</span>
+    <span class="n">enrichment_plot</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;$\mathrm</span><span class="si">{Distance}</span><span class="s1">\ \mathrm</span><span class="si">{from}</span><span class="s1"> \ \mathrm</span><span class="si">{peak}</span><span class="s1">$&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">FONTSIZE</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+    <span class="n">enrichment_plot</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;$\mathrm</span><span class="si">{Density}</span><span class="s1">$&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">FONTSIZE</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+    <span class="n">enrichment_plot</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">X_values</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-.&#39;</span><span class="p">)</span>
+    <span class="n">enrichment_plot</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">X_values</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-.&#39;</span><span class="p">)</span>
+    <span class="n">enrichment_plot</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-.&#39;</span><span class="p">)</span>
+    <span class="n">seaborn</span><span class="o">.</span><span class="n">despine</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">enrichment_plot</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">trim</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">enrichment_plot</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">X_values</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-.&#39;</span><span class="p">)</span>
+    <span class="n">enrichment_plot</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">X_values</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-.&#39;</span><span class="p">)</span>
+    <span class="n">MAX_YTICKS</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">yloc</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">MaxNLocator</span><span class="p">(</span><span class="n">MAX_YTICKS</span><span class="p">)</span>
+    <span class="n">enrichment_plot</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">yloc</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">enrichment_plot</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="create_annnotation_plot"><a class="viewcode-back" href="../../../moca.plotter.html#moca.plotter.plotter.create_annnotation_plot">[docs]</a><span class="k">def</span> <span class="nf">create_annnotation_plot</span><span class="p">(</span><span class="n">matplot_dict</span><span class="p">,</span> <span class="n">json_annotation</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">matplot_dict</span><span class="p">[</span><span class="s1">&#39;figure&#39;</span><span class="p">]</span>
+    <span class="n">gs_h</span> <span class="o">=</span> <span class="n">matplot_dict</span><span class="p">[</span><span class="s1">&#39;gridspec_header&#39;</span><span class="p">]</span>
+    <span class="n">gs_b</span> <span class="o">=</span> <span class="n">matplot_dict</span><span class="p">[</span><span class="s1">&#39;gridspec_body&#39;</span><span class="p">]</span>
+
+    <span class="n">annotate_dict</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_annotation</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">annotate_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;gene_name&#39;</span><span class="p">,</span> <span class="s1">&#39;dataset&#39;</span><span class="p">,</span> <span class="s1">&#39;assembly&#39;</span><span class="p">,</span> <span class="s1">&#39;filename&#39;</span><span class="p">]</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">r&#39;$&#39;</span><span class="o">+</span><span class="n">key</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">+</span><span class="s1">&#39;$&#39;</span><span class="p">,</span> <span class="s1">r&#39;$&#39;</span><span class="o">+</span><span class="n">annotate_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;$&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">]</span>
+    <span class="n">ann_header</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Subplot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">gs_h</span><span class="p">,</span> <span class="n">autoscale_on</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ann_header</span><span class="o">.</span><span class="n">set_frame_on</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ann_header</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+    <span class="n">ann_header</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">ann_header</span><span class="p">)</span>
+    <span class="n">textstr</span> <span class="o">=</span> <span class="s1">r&#39;$Metadata$&#39;</span>
+    <span class="n">txtx</span> <span class="o">=</span> <span class="mf">1.7</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">textstr</span><span class="p">)</span><span class="o">/</span><span class="mf">100.0</span>
+    <span class="n">ann_header</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">txtx</span><span class="p">,</span> <span class="n">TXT_YPOS</span><span class="p">,</span> <span class="n">textstr</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">LEGEND_FONTSIZE</span><span class="p">)</span>
+    <span class="n">ann_plot</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Subplot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">gs_b</span><span class="p">,</span> <span class="n">autoscale_on</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ann_plot</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+    <span class="n">ann_plot</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+    <span class="n">ann_plot</span><span class="o">.</span><span class="n">set_frame_on</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="n">ann_plot</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="n">cellText</span><span class="o">=</span><span class="n">data</span><span class="p">,</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+    <span class="n">table</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">fontproperties</span><span class="o">=</span><span class="n">FontProperties</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">LEGEND_FONTSIZE</span><span class="o">*</span><span class="mi">8</span><span class="p">)</span><span class="c1">#, family=&#39;serif&#39; )</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">cell</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">get_celld</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+        <span class="n">row</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="k">if</span> <span class="n">row</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">cell</span><span class="o">.</span><span class="n">set_text_props</span><span class="p">(</span><span class="n">fontproperties</span><span class="o">=</span><span class="n">fontproperties</span><span class="p">)</span>
+
+    <span class="n">table</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">LEGEND_FONTSIZE</span><span class="o">*</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">ann_plot</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="create_ols_legend_plot"><a class="viewcode-back" href="../../../moca.plotter.html#moca.plotter.plotter.create_ols_legend_plot">[docs]</a><span class="k">def</span> <span class="nf">create_ols_legend_plot</span><span class="p">(</span><span class="n">matplot_dict</span><span class="p">,</span> <span class="n">motif_freq</span><span class="p">,</span>
+                           <span class="n">sample_scores</span><span class="p">,</span> <span class="n">control_scores</span><span class="p">,</span>
+                           <span class="n">flank_length</span><span class="p">,</span> <span class="n">legend_title</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">matplot_dict</span><span class="p">[</span><span class="s1">&#39;figure&#39;</span><span class="p">]</span>
+    <span class="n">gs</span> <span class="o">=</span> <span class="n">matplot_dict</span><span class="p">[</span><span class="s1">&#39;gridspec&#39;</span><span class="p">]</span>
+
+    <span class="n">phlyop_plots_legend</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Subplot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">gs</span><span class="p">,</span> <span class="n">autoscale_on</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">corr_result</span> <span class="o">=</span> <span class="n">get_pearson_corr</span><span class="p">(</span><span class="n">motif_freq</span><span class="p">,</span>
+                                   <span class="n">remove_flanking_scores</span><span class="p">(</span><span class="n">sample_scores</span><span class="p">,</span> <span class="n">flank_length</span><span class="p">))</span>
+    <span class="n">corr_pval</span> <span class="o">=</span> <span class="n">corr_result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">corr_r2</span> <span class="o">=</span> <span class="n">corr_result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">ttest_result_flanking</span> <span class="o">=</span> <span class="n">perform_t_test</span><span class="p">(</span><span class="n">remove_flanking_scores</span><span class="p">(</span><span class="n">sample_scores</span><span class="p">,</span> <span class="n">flank_length</span><span class="p">),</span>
+                                  <span class="n">get_flanking_scores</span><span class="p">(</span><span class="n">sample_scores</span><span class="p">,</span> <span class="n">flank_length</span><span class="p">))</span>
+    <span class="n">p_deltaphylop_flanking</span> <span class="o">=</span> <span class="n">ttest_result_flanking</span><span class="p">[</span><span class="s1">&#39;one_sided_pval&#39;</span><span class="p">]</span>
+    <span class="n">delta_phylop_flanking</span> <span class="o">=</span> <span class="n">ttest_result_flanking</span><span class="p">[</span><span class="s1">&#39;delta&#39;</span><span class="p">]</span>
+
+    <span class="n">pearsonr_pval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%.1g</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">corr_pval</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;e&#39;</span> <span class="ow">in</span> <span class="n">pearsonr_pval</span><span class="p">:</span>
+        <span class="n">pearsonr_pval</span> <span class="o">+=</span> <span class="s1">&#39;}&#39;</span>
+        <span class="n">pearsonr_pval</span> <span class="o">=</span> <span class="n">pearsonr_pval</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;*10^{&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-0&#39;</span><span class="p">,</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+    <span class="n">delta_phylop_flanking_pval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%.1g</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">p_deltaphylop_flanking</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;e&#39;</span> <span class="ow">in</span> <span class="n">delta_phylop_flanking_pval</span><span class="p">:</span>
+        <span class="n">delta_phylop_flanking_pval</span> <span class="o">+=</span> <span class="s1">&#39;}&#39;</span>
+        <span class="n">delta_phylop_flanking_pval</span> <span class="o">=</span> <span class="n">delta_phylop_flanking_pval</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;*10^{&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-0&#39;</span><span class="p">,</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+
+
+    <span class="n">ttest_result_control</span> <span class="o">=</span> <span class="n">perform_t_test</span><span class="p">(</span><span class="n">remove_flanking_scores</span><span class="p">(</span><span class="n">sample_scores</span><span class="p">,</span> <span class="n">flank_length</span><span class="p">),</span>
+                                          <span class="n">remove_flanking_scores</span><span class="p">(</span><span class="n">control_scores</span><span class="p">,</span> <span class="n">flank_length</span><span class="p">))</span>
+
+    <span class="n">p_deltaphylop_control</span> <span class="o">=</span> <span class="n">ttest_result_control</span><span class="p">[</span><span class="s1">&#39;one_sided_pval&#39;</span><span class="p">]</span>
+    <span class="n">delta_phylop_control</span> <span class="o">=</span> <span class="n">ttest_result_control</span><span class="p">[</span><span class="s1">&#39;delta&#39;</span><span class="p">]</span>
+
+    <span class="n">delta_phylop_control_pval</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%.1g</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">p_deltaphylop_control</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;e&#39;</span> <span class="ow">in</span> <span class="n">delta_phylop_control_pval</span><span class="p">:</span>
+        <span class="n">delta_phylop_control_pval</span> <span class="o">+=</span> <span class="s1">&#39;}&#39;</span>
+        <span class="n">delta_phylop_control_pval</span> <span class="o">=</span> <span class="n">delta_phylop_control_pval</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;*10^{&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-0&#39;</span><span class="p">,</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+
+    <span class="n">textstr</span> <span class="o">=</span> <span class="s1">r&#39;$r^2_</span><span class="si">{pearson}</span><span class="s1">=</span><span class="si">%.2f</span><span class="s1">(p=</span><span class="si">%s</span><span class="s1">)$&#39;</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="s1">r&#39;$\Delta_</span><span class="si">{flanking}</span><span class="s1">=</span><span class="si">%.2f</span><span class="s1">(p=</span><span class="si">%s</span><span class="s1">)$&#39;</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="s1">r&#39;$\Delta_</span><span class="si">{control}</span><span class="s1">=</span><span class="si">%.2f</span><span class="s1">(p=</span><span class="si">%s</span><span class="s1">)$&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">corr_r2</span><span class="p">,</span> <span class="n">pearsonr_pval</span><span class="p">,</span>
+                                                                                                                            <span class="n">delta_phylop_flanking</span><span class="p">,</span> <span class="n">delta_phylop_flanking_pval</span><span class="p">,</span>
+                                                                                                                            <span class="n">delta_phylop_control</span><span class="p">,</span> <span class="n">delta_phylop_control_pval</span><span class="p">)</span>
+    <span class="n">txtx</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">LEGEND_XMULTIPLIER</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">textstr</span><span class="p">)</span><span class="o">/</span><span class="mf">100.0</span>
+    <span class="n">phlyop_plots_legend</span><span class="o">.</span><span class="n">set_frame_on</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">phlyop_plots_legend</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+    <span class="n">phlyop_plots_legend</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+    <span class="n">phlyop_plots_legend</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">txtx</span><span class="p">,</span> <span class="n">TXT_YPOS</span><span class="p">,</span> <span class="n">textstr</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">LEGEND_FONTSIZE</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">phlyop_plots_legend</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="create_scatter_plot"><a class="viewcode-back" href="../../../moca.plotter.html#moca.plotter.plotter.create_scatter_plot">[docs]</a><span class="k">def</span> <span class="nf">create_scatter_plot</span><span class="p">(</span><span class="n">matplot_dict</span><span class="p">,</span> <span class="n">motif_freq</span><span class="p">,</span>
+                        <span class="n">sample_scores</span><span class="p">,</span> <span class="n">control_scores</span><span class="p">,</span>
+                        <span class="n">flank_length</span><span class="p">,</span> <span class="n">num_occurrences</span><span class="p">,</span> <span class="n">y_label</span><span class="p">):</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">matplot_dict</span><span class="p">[</span><span class="s1">&#39;figure&#39;</span><span class="p">]</span>
+    <span class="n">gs</span> <span class="o">=</span> <span class="n">matplot_dict</span><span class="p">[</span><span class="s1">&#39;gridspec&#39;</span><span class="p">]</span>
+    <span class="n">scatter_plot</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Subplot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">gs</span><span class="p">,</span> <span class="n">autoscale_on</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">control_scores</span> <span class="o">=</span> <span class="n">remove_flanking_scores</span><span class="p">(</span><span class="n">control_scores</span><span class="p">,</span> <span class="n">flank_length</span><span class="p">)</span>
+    <span class="n">sample_scores</span> <span class="o">=</span> <span class="n">remove_flanking_scores</span><span class="p">(</span><span class="n">sample_scores</span><span class="p">,</span> <span class="n">flank_length</span><span class="p">)</span>
+
+    <span class="n">fit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">motif_freq</span><span class="p">,</span> <span class="n">sample_scores</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">fit_fn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+
+    <span class="n">control_ols</span> <span class="o">=</span> <span class="n">perform_OLS</span><span class="p">(</span><span class="n">control_scores</span><span class="p">,</span> <span class="n">motif_freq</span><span class="p">)</span>
+    <span class="n">sample_ols</span> <span class="o">=</span> <span class="n">perform_OLS</span><span class="p">(</span><span class="n">sample_scores</span><span class="p">,</span> <span class="n">motif_freq</span><span class="p">)</span>
+
+    <span class="n">sample_regression_line</span> <span class="o">=</span> <span class="n">sample_ols</span><span class="p">[</span><span class="s1">&#39;regression_line&#39;</span><span class="p">]</span>
+    <span class="n">control_regression_line</span> <span class="o">=</span> <span class="n">control_ols</span><span class="p">[</span><span class="s1">&#39;regression_line&#39;</span><span class="p">]</span>
+
+    <span class="n">scatter_plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">motif_freq</span><span class="p">,</span> <span class="n">sample_scores</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span>
+                         <span class="n">s</span><span class="o">=</span><span class="p">[</span><span class="n">POINTSIZE</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">motif_freq</span><span class="p">],</span>
+                         <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">r&#39;$\mathrm</span><span class="si">{Sample}</span><span class="s1">$&#39;</span><span class="p">)</span>
+    <span class="n">scatter_plot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">motif_freq</span><span class="p">,</span> <span class="n">sample_regression_line</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">,</span>
+                      <span class="n">motif_freq</span><span class="p">,</span> <span class="n">fit_fn</span><span class="p">(</span><span class="n">motif_freq</span><span class="p">),</span>
+                      <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">LINEWIDTH</span><span class="p">)</span>
+    <span class="n">scatter_plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">motif_freq</span><span class="p">,</span> <span class="n">control_scores</span><span class="p">,</span>
+                         <span class="n">color</span><span class="o">=</span><span class="n">GREYNESS</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="p">[</span><span class="n">POINTSIZE</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">motif_freq</span><span class="p">],</span>
+                         <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">r&#39;$\mathrm</span><span class="si">{Control}</span><span class="s1">$&#39;</span><span class="p">)</span>
+    <span class="n">scatter_plot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">motif_freq</span><span class="p">,</span> <span class="n">control_regression_line</span><span class="p">,</span>
+                      <span class="n">color</span><span class="o">=</span><span class="n">GREYNESS</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">LINEWIDTH</span><span class="p">)</span>
+    <span class="n">leg</span> <span class="o">=</span> <span class="n">scatter_plot</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+    <span class="n">leg</span><span class="o">.</span><span class="n">draw_frame</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1">#leg.get_frame().set_edgecolor(&#39;b&#39;)</span>
+    <span class="n">leg</span><span class="o">.</span><span class="n">get_frame</span><span class="p">()</span><span class="o">.</span><span class="n">set_linewidth</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+
+    <span class="n">ticks_and_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1.02</span><span class="o">*</span><span class="nb">min</span><span class="p">(</span><span class="n">motif_freq</span><span class="p">),</span> <span class="mf">1.02</span><span class="o">*</span><span class="nb">max</span><span class="p">(</span><span class="n">motif_freq</span><span class="p">),</span>
+                                   <span class="n">num</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">scatter_plot</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">ticks_and_labels</span><span class="p">)</span>
+
+    <span class="n">ticks_and_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;$</span><span class="si">%.2f</span><span class="s2">$&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="p">(</span><span class="mf">1.02</span><span class="o">*</span><span class="n">num_occurrences</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ticks_and_labels</span><span class="p">]</span>
+    <span class="n">scatter_plot</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">ticks_and_labels</span><span class="p">)</span><span class="c1">#, rotation=45)</span>
+
+    <span class="n">yloc</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">MaxNLocator</span><span class="p">(</span><span class="n">MAX_YTICKS</span><span class="p">)</span>
+    <span class="n">scatter_plot</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">yloc</span><span class="p">)</span>
+    <span class="n">scatter_plot</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">r&#39;$\mathrm</span><span class="si">{Most}</span><span class="s1">\ \mathrm</span><span class="si">{frequent}</span><span class="s1"> \ \mathrm</span><span class="si">{base}</span><span class="s1">\ \mathrm</span><span class="si">{frequency}</span><span class="s1">$&#39;</span><span class="p">,</span>
+                            <span class="n">fontsize</span><span class="o">=</span><span class="n">FONTSIZE</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+    <span class="n">scatter_plot</span><span class="o">.</span><span class="n">get_xaxis</span><span class="p">()</span><span class="o">.</span><span class="n">tick_bottom</span><span class="p">()</span>
+    <span class="n">scatter_plot</span><span class="o">.</span><span class="n">get_yaxis</span><span class="p">()</span><span class="o">.</span><span class="n">tick_left</span><span class="p">()</span>
+    <span class="n">scatter_plot</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;$\mathrm{</span><span class="si">%s</span><span class="s1">}\ \mathrm</span><span class="si">{Score}</span><span class="s1">$&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">y_label</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">FONTSIZE</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+    <span class="n">scatter_plot</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="n">TICKPAD</span><span class="p">)</span>
+    <span class="n">scatter_plot</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="n">TICKPAD</span><span class="p">)</span>
+    <span class="n">scatter_plot</span><span class="o">.</span><span class="n">get_yaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_tick_params</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s1">&#39;out&#39;</span><span class="p">)</span>
+    <span class="n">scatter_plot</span><span class="o">.</span><span class="n">get_xaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_tick_params</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s1">&#39;out&#39;</span><span class="p">)</span>
+    <span class="n">scatter_plot</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="n">TICKLENGTH</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">)</span>
+
+    <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">scatter_plot</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="create_plot"><a class="viewcode-back" href="../../../moca.plotter.html#moca.plotter.plotter.create_plot">[docs]</a><span class="k">def</span> <span class="nf">create_plot</span><span class="p">(</span><span class="n">meme_file</span><span class="p">,</span>
+                <span class="n">plot_title</span><span class="p">,</span>
+                <span class="n">output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">centrimo_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">motif_number</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">flank_length</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                <span class="n">sample_score_files</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">control_score_files</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">reg_plot_titles</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">annotate</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create plot</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    meme_file: string</span>
+<span class="sd">        Path to meme.txt</span>
+<span class="sd">    peak_file: string</span>
+<span class="sd">        Path to summit file</span>
+<span class="sd">    centrimo_dir: string</span>
+<span class="sd">        Path to centrimo&#39;s output directory</span>
+<span class="sd">    motif_number: int</span>
+<span class="sd">        1-based number of motif in the motif file</span>
+<span class="sd">    sample_score_files: list</span>
+<span class="sd">        Path to conservation scores files for sample</span>
+<span class="sd">    control_score_files: list</span>
+<span class="sd">        Path to conservation score files for control</span>
+<span class="sd">    legend_titles: list</span>
+<span class="sd">        List of legend titles</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">meme_record</span> <span class="o">=</span> <span class="n">read_memefile</span><span class="p">(</span><span class="n">meme_file</span><span class="p">)</span>
+    <span class="n">total_sequences</span> <span class="o">=</span> <span class="n">get_total_sequences</span><span class="p">(</span><span class="n">meme_file</span><span class="p">)</span>
+    <span class="n">record</span> <span class="o">=</span> <span class="n">meme_record</span><span class="p">[</span><span class="s1">&#39;motif_records&#39;</span><span class="p">][</span><span class="n">motif_number</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">num_occurrences</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="s1">&#39;num_occurrences&#39;</span><span class="p">,</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">)</span>
+    <span class="n">all_meme_occurrences</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">motif_record</span> <span class="ow">in</span> <span class="n">meme_record</span><span class="p">[</span><span class="s1">&#39;motif_records&#39;</span><span class="p">]:</span>
+        <span class="n">all_meme_occurrences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">motif_record</span><span class="p">,</span> <span class="s1">&#39;num_occurrences&#39;</span><span class="p">,</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">))</span>
+
+    <span class="n">meme_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">meme_file</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">output_dir</span><span class="p">:</span>
+        <span class="n">output_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">meme_dir</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">),</span> <span class="s1">&#39;moca_plots&#39;</span><span class="p">)</span>
+    <span class="n">safe_makedir</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+
+    <span class="n">subplot_ncols</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sample_score_files</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">MocaException</span><span class="p">(</span><span class="s1">&#39;Found no sample score files&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">control_score_files</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">MocaException</span><span class="p">(</span><span class="s1">&#39;Found no control score filees&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">sample_score_files</span><span class="p">)</span><span class="o">!=</span><span class="nb">len</span><span class="p">(</span><span class="n">control_score_files</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">MocaException</span><span class="p">(</span><span class="s1">&#39;Found unequal size of sample and control score files&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">annotate</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="n">annotate</span> <span class="o">==</span> <span class="s1">&#39; &#39;</span><span class="p">:</span>
+        <span class="n">annotate</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">subplot_ncols</span> <span class="o">+=</span><span class="mi">1</span>
+
+    <span class="n">max_occur</span> <span class="o">=</span> <span class="n">get_max_occuring_bases</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">max_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">count_type</span><span class="o">=</span><span class="n">COUNT_TYPE</span><span class="p">)</span>
+    <span class="n">motif_freq</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">position</span> <span class="ow">in</span> <span class="n">max_occur</span><span class="p">:</span>
+        <span class="n">motif_freq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">motif_freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">motif_freq</span><span class="p">)</span>
+    <span class="n">sample_conservation_scores</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">control_conservation_scores</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">sample_score_files</span><span class="p">)):</span>
+        <span class="n">sample_conservation_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">sample_score_files</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">control_score_files</span><span class="p">)):</span>
+        <span class="n">control_conservation_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">control_score_files</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+    <span class="n">motif</span> <span class="o">=</span> <span class="n">record</span>
+    <span class="n">motif_length</span> <span class="o">=</span> <span class="n">motif</span><span class="o">.</span><span class="n">length</span>
+    <span class="n">motif_evalue</span> <span class="o">=</span> <span class="n">motif</span><span class="o">.</span><span class="n">evalue</span>
+    <span class="n">meme_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">meme_file</span><span class="p">))</span>
+    <span class="n">X_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">40</span><span class="o">+</span><span class="mi">15</span><span class="p">]</span> <span class="c1">## this is by trial and error, the position for the first base logo</span>
+    <span class="c1">## Generate all other X coordinates</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">motif</span><span class="p">)</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">flank_length</span><span class="p">):</span>
+        <span class="n">X_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">X_values</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">OFFSET</span><span class="o">+</span><span class="mf">1.9</span> <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">centrimo_dir</span><span class="p">:</span>
+        <span class="n">subplot_ncols</span> <span class="o">+=</span><span class="mi">1</span>
+        <span class="n">centrimo_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">centrimo_dir</span><span class="p">)</span>
+        <span class="n">centrimo_txt</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">centrimo_dir</span><span class="p">,</span> <span class="s1">&#39;centrimo.txt&#39;</span><span class="p">)</span>
+        <span class="n">centrimo_stats</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">centrimo_dir</span><span class="p">,</span> <span class="s1">&#39;site_counts.txt&#39;</span><span class="p">)</span>
+
+    <span class="n">plot_title</span> <span class="o">+=</span> <span class="s1">r&#39; \# </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">motif_number</span><span class="p">)</span>
+    <span class="c1">##FIXME This is a big dirty hacl to get thegenerate plots for the Reverse complement logo too</span>
+    <span class="n">logo_name</span> <span class="o">=</span><span class="p">[</span><span class="s1">&#39;logo</span><span class="si">{}</span><span class="s1">.png&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">motif_number</span><span class="p">),</span> <span class="s1">&#39;logo_rc</span><span class="si">{}</span><span class="s1">.png&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">motif_number</span><span class="p">)]</span>
+    <span class="n">figures</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">sample_score</span><span class="p">,</span> <span class="n">control_score</span><span class="p">,</span> <span class="n">subplot_legend_title</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">sample_conservation_scores</span><span class="p">,</span>
+                                                  <span class="n">control_conservation_scores</span><span class="p">,</span>
+                                                  <span class="n">reg_plot_titles</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">logo_filename</span> <span class="ow">in</span> <span class="n">logo_name</span><span class="p">:</span>
+            <span class="n">setup_matplotlib</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s1">&#39;rc&#39;</span><span class="ow">in</span> <span class="n">logo_filename</span><span class="p">:</span>
+                <span class="n">sample_score</span> <span class="o">=</span> <span class="n">sample_score</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">matplot_dict</span> <span class="o">=</span> <span class="n">init_figure</span><span class="p">(</span><span class="n">meme_dir</span><span class="o">=</span><span class="n">meme_dir</span><span class="p">,</span> <span class="n">X_values</span><span class="o">=</span><span class="n">X_values</span><span class="p">,</span>
+                                    <span class="n">motif</span><span class="o">=</span><span class="n">motif_number</span><span class="p">,</span>
+                                    <span class="n">subplot_ncols</span><span class="o">=</span><span class="n">subplot_ncols</span><span class="p">,</span> <span class="n">annotate</span><span class="o">=</span><span class="n">annotate</span><span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">matplot_dict</span><span class="p">[</span><span class="s1">&#39;figure&#39;</span><span class="p">]</span>
+            <span class="n">gs</span> <span class="o">=</span> <span class="n">matplot_dict</span><span class="p">[</span><span class="s1">&#39;gs&#39;</span><span class="p">]</span>
+            <span class="n">figsize</span> <span class="o">=</span> <span class="n">matplot_dict</span><span class="p">[</span><span class="s1">&#39;figsize&#39;</span><span class="p">]</span>
+            <span class="n">right_margin</span> <span class="o">=</span> <span class="n">matplot_dict</span><span class="p">[</span><span class="s1">&#39;right_margin&#39;</span><span class="p">]</span>
+            <span class="c1">#total_px= matplot_dict[&#39;total_px&#39;]</span>
+
+            <span class="n">title</span> <span class="o">=</span> <span class="s1">r&#39;\textbf{&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">underline{&#39;</span><span class="o">+</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">plot_title</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;}}&#39;</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">LEGEND_FONTSIZE</span><span class="p">)</span>
+            <span class="n">logo_plot</span> <span class="o">=</span> <span class="n">create_logo_plot</span><span class="p">({</span><span class="s1">&#39;figure&#39;</span><span class="p">:</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;gridspec&#39;</span><span class="p">:</span> <span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">]},</span> <span class="n">meme_dir</span><span class="p">,</span> <span class="n">logo_filename</span><span class="p">,</span> <span class="n">motif_length</span><span class="p">)</span>
+
+            <span class="n">subgrid</span> <span class="o">=</span> <span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">subplot_ncols</span><span class="p">,</span> <span class="n">height_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">subplot_ncols</span><span class="p">)</span>
+            <span class="n">subgrid</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="mf">0.14</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">1</span><span class="o">-</span><span class="n">right_margin</span><span class="o">*</span><span class="mf">0.85</span><span class="p">,</span> <span class="n">wspace</span><span class="o">=</span><span class="mf">0.58</span><span class="p">)</span>
+            <span class="n">X_left</span><span class="p">,</span> <span class="n">X_center</span><span class="p">,</span> <span class="n">X_right</span> <span class="o">=</span> <span class="n">create_stemplot</span><span class="p">({</span><span class="s1">&#39;figure&#39;</span><span class="p">:</span> <span class="n">f</span><span class="p">,</span>
+                                                        <span class="s1">&#39;gridspec&#39;</span><span class="p">:</span> <span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                                        <span class="s1">&#39;shareX&#39;</span><span class="p">:</span> <span class="n">logo_plot</span><span class="p">},</span>
+                                                        <span class="n">X_values</span><span class="p">,</span>
+                                                        <span class="n">sample_score</span><span class="p">,</span>
+                                                        <span class="n">motif_length</span><span class="p">,</span>
+                                                        <span class="n">flank_length</span><span class="o">=</span><span class="n">flank_length</span><span class="p">,</span>
+                                                        <span class="n">legend_title</span><span class="o">=</span><span class="n">subplot_legend_title</span><span class="p">)</span>
+
+            <span class="n">create_bar_plot</span><span class="p">(</span><span class="n">logo_plot</span><span class="p">,</span>  <span class="n">X_right</span><span class="p">,</span> <span class="n">matplot_dict</span><span class="p">[</span><span class="s1">&#39;height_px&#39;</span><span class="p">],</span>
+                            <span class="n">total_sequences</span><span class="p">,</span> <span class="n">all_meme_occurrences</span><span class="p">,</span> <span class="n">motif_number</span><span class="p">,</span> <span class="n">motif_evalue</span><span class="p">)</span>
+            <span class="n">create_ols_legend_plot</span><span class="p">({</span><span class="s1">&#39;figure&#39;</span><span class="p">:</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;gridspec&#39;</span><span class="p">:</span> <span class="n">subgrid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]},</span>  <span class="n">motif_freq</span><span class="p">,</span>
+                                <span class="n">sample_score</span><span class="p">,</span> <span class="n">control_score</span><span class="p">,</span>
+                                <span class="n">flank_length</span><span class="p">,</span> <span class="n">legend_title</span><span class="o">=</span><span class="n">subplot_legend_title</span><span class="p">)</span>
+            <span class="n">create_scatter_plot</span><span class="p">({</span><span class="s1">&#39;figure&#39;</span><span class="p">:</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;gridspec&#39;</span><span class="p">:</span> <span class="n">subgrid</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]},</span> <span class="n">motif_freq</span><span class="p">,</span>
+                                <span class="n">sample_score</span><span class="p">,</span> <span class="n">control_score</span><span class="p">,</span>
+                                <span class="n">flank_length</span><span class="p">,</span> <span class="n">num_occurrences</span><span class="p">,</span> <span class="n">y_label</span><span class="o">=</span><span class="n">subplot_legend_title</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">centrimo_dir</span><span class="p">:</span>
+                <span class="n">create_enrichment_plot</span><span class="p">({</span><span class="s1">&#39;figure&#39;</span><span class="p">:</span> <span class="n">f</span><span class="p">,</span>
+                                        <span class="s1">&#39;gridspec_header&#39;</span><span class="p">:</span> <span class="n">subgrid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                                        <span class="s1">&#39;gridspec_body&#39;</span><span class="p">:</span> <span class="n">subgrid</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]},</span>
+                                        <span class="n">motif_number</span><span class="p">,</span>
+                                        <span class="n">centrimo_txt</span><span class="p">,</span>
+                                        <span class="n">centrimo_stats</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="s1">&#39;rc&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">logo_filename</span><span class="p">:</span>
+                <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span><span class="s1">&#39;moca_</span><span class="si">{}</span><span class="s1">_</span><span class="si">{}</span><span class="s1">.png&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">subplot_legend_title</span><span class="p">,</span> <span class="n">motif_number</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span><span class="s1">&#39;moca_</span><span class="si">{}</span><span class="s1">_</span><span class="si">{}</span><span class="s1">_rc.png&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">subplot_legend_title</span><span class="p">,</span> <span class="n">motif_number</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">annotate</span><span class="p">:</span>
+                <span class="n">create_annnotation_plot</span><span class="p">({</span><span class="s1">&#39;figure&#39;</span><span class="p">:</span> <span class="n">f</span><span class="p">,</span>
+                                        <span class="s1">&#39;gridspec_header&#39;</span><span class="p">:</span> <span class="n">subgrid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                        <span class="s1">&#39;gridspec_body&#39;</span><span class="p">:</span> <span class="n">subgrid</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]},</span>
+                                        <span class="n">annotate</span><span class="p">)</span>
+
+            <span class="c1">#if save:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_file</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">DPI</span><span class="p">)</span>
+            <span class="n">figures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">figures</span></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">create_plot</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2016, Saket Choudhary.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
