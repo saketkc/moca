@@ -6,6 +6,7 @@
 Welcome to MoCA's documentation!
 ======================================
 .. include:: ../README.rst
+.. include:: ./modules.rst
 Contents:
 
 .. toctree::
