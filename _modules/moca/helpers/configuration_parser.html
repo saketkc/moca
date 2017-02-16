@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>moca.helpers.configuration_parser &mdash; MoCA 0.1.0 documentation</title>
+    <title>moca.helpers.configuration_parser &#8212; MoCA 0.1.0 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -18,7 +18,8 @@
         VERSION:     '0.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -28,8 +29,8 @@
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="MoCA 0.1.0 documentation" href="../../../index.html" />
-    <link rel="up" title="Module code" href="../../index.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -65,6 +66,9 @@
   <ul class="dropdown-menu globaltoc"
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../moca.html">moca package</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../readme.html">MoCA: Tool for MOtif Conservation Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../usage.html">Usage</a></li>
@@ -118,15 +122,18 @@
     <div class="col-md-12 content">
       
   <h1>Source code for moca.helpers.configuration_parser</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">future</span> <span class="kn">import</span> <span class="n">standard_library</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">future</span> <span class="k">import</span> <span class="n">standard_library</span>
 <span class="n">standard_library</span><span class="o">.</span><span class="n">install_aliases</span><span class="p">()</span>
-<span class="kn">from</span> <span class="nn">builtins</span> <span class="kn">import</span> <span class="nb">object</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span>
 <span class="kn">import</span> <span class="nn">csv</span>
-<span class="kn">from</span> <span class="nn">..helpers</span> <span class="kn">import</span> <span class="n">MocaException</span>
-<span class="kn">import</span> <span class="nn">configparser</span>
+<span class="kn">from</span> <span class="nn">..helpers</span> <span class="k">import</span> <span class="n">MocaException</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">configparser</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">ConfigParser</span> <span class="k">as</span> <span class="nn">configparser</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
 <div class="viewcode-block" id="is_executable"><a class="viewcode-back" href="../../../moca.helpers.html#moca.helpers.configuration_parser.is_executable">[docs]</a><span class="k">def</span> <span class="nf">is_executable</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>
@@ -151,7 +158,7 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_file</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config_file</span> <span class="o">=</span> <span class="n">config_file</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">config_file</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">MocaException</span><span class="p">(</span><span class="s1">&#39;Config file {} not found&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">config_file</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="n">MocaException</span><span class="p">(</span><span class="s1">&#39;Config file </span><span class="si">{}</span><span class="s1"> not found&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">config_file</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">allowed_categories</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;genomes&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;wig&#39;</span><span class="p">,</span> <span class="s1">&#39;genome&#39;</span><span class="p">,</span> <span class="s1">&#39;table&#39;</span><span class="p">]}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config_blob</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read</span><span class="p">()</span>
 
@@ -217,7 +224,7 @@
 <span class="sd">            Dictionary specifying the files associated with a genome</span>
 <span class="sd">            Format: {&#39;genome_name&#39;: {&#39;&lt;wig_prefix&gt;&#39;: wig_prefix_path, &#39;genome_table&#39;: genome_table_path}}</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">genome_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_blob</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;genome:{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">genome_name</span><span class="p">)))</span>
+        <span class="n">genome_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_blob</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;genome:</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">genome_name</span><span class="p">)))</span>
         <span class="k">return</span> <span class="n">genome_dict</span></div>
 
 <div class="viewcode-block" id="ConfigurationParser.get_binary_path"><a class="viewcode-back" href="../../../moca.helpers.html#moca.helpers.configuration_parser.ConfigurationParser.get_binary_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_binary_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">binary_name</span><span class="p">):</span>
@@ -238,7 +245,7 @@
             <span class="c1">#Since meme invovles a lot of subprograms,</span>
             <span class="c1">#we avoid checking executalble status</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">is_executable</span><span class="p">(</span><span class="n">binary_path</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="n">MocaException</span><span class="p">(</span><span class="s1">&#39;{} is not executable.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">binary_path</span><span class="p">))</span>
+                <span class="k">raise</span> <span class="n">MocaException</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not executable.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">binary_path</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">is_executable</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">binary_path</span><span class="p">,</span><span class="s1">&#39;meme&#39;</span><span class="p">)):</span>
                 <span class="k">pass</span>
@@ -260,7 +267,7 @@
     </p>
     <p>
         &copy; Copyright 2016, Saket Choudhary.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.<br/>
     </p>
   </div>
 </footer>

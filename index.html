@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to MoCA’s documentation! &mdash; MoCA 0.1.0 documentation</title>
+    <title>Welcome to MoCA’s documentation! &#8212; MoCA 0.1.0 documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -18,7 +18,8 @@
         VERSION:     '0.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -28,8 +29,9 @@
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="MoCA 0.1.0 documentation" href="#" />
-    <link rel="next" title="MoCA: Tool for MOtif Conservation Analysis" href="readme.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="moca package" href="moca.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -65,6 +67,9 @@
   <ul class="dropdown-menu globaltoc"
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="moca.html">moca package</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="readme.html">MoCA: Tool for MOtif Conservation Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
@@ -88,6 +93,7 @@
 <li><a class="reference internal" href="#moca-tool-for-motif-conservation-analysis">MoCA: Tool for MOtif Conservation Analysis</a><ul>
 <li><a class="reference internal" href="#license">LICENSE</a></li>
 <li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#current-version">Current Version</a></li>
 <li><a class="reference internal" href="#requirements">Requirements</a></li>
 <li><a class="reference internal" href="#using-conda">Using Conda</a></li>
 <li><a class="reference internal" href="#using-pip">Using pip</a></li>
@@ -95,14 +101,21 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#workflow">Workflow</a></li>
-<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#motif-analysis-using-meme">Motif analysis using MEME</a></li>
+<li><a class="reference internal" href="#moca-find-motifs">moca find_motifs</a></li>
+<li><a class="reference internal" href="#moca-plot">moca plot</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#example">Example</a></li>
 <li><a class="reference internal" href="#api-documentation">API Documentation</a></li>
 <li><a class="reference internal" href="#tests">Tests</a></li>
-<li><a class="reference internal" href="#todo">TODO</a></li>
 <li><a class="reference internal" href="#credits">Credits</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li><a class="reference internal" href="#moca">moca</a><ul>
 </ul>
 </li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
@@ -115,7 +128,7 @@
               
                 
   <li>
-    <a href="readme.html" title="Next Chapter: MoCA: Tool for MOtif Conservation Analysis"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">MoCA: Tool fo... &raquo;</span>
+    <a href="moca.html" title="Next Chapter: moca package"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">moca package &raquo;</span>
     </a>
   </li>
               
@@ -125,7 +138,7 @@
             
               <li class="hidden-sm">
 <div id="sourcelink">
-  <a href="_sources/index.txt"
+  <a href="_sources/index.rst.txt"
      rel="nofollow">Source</a>
 </div></li>
             
@@ -153,18 +166,22 @@
 <h1>Welcome to MoCA&#8217;s documentation!<a class="headerlink" href="#welcome-to-moca-s-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="moca-tool-for-motif-conservation-analysis">
 <h2>MoCA: Tool for MOtif Conservation Analysis<a class="headerlink" href="#moca-tool-for-motif-conservation-analysis" title="Permalink to this headline">¶</a></h2>
-<a class="reference external image-reference" href="https://pypi.python.org/pypi/moca/"><img src="https://img.shields.io/pypi/v/moca.svg" /></a>
-<a class="reference external image-reference" href="https://travis-ci.org/saketkc/moca"><img src="https://img.shields.io/travis/saketkc/moca.svg" /></a>
+<a class="reference external image-reference" href="https://pypi.python.org/pypi/moca/"><img alt="https://img.shields.io/pypi/v/moca.svg" src="https://img.shields.io/pypi/v/moca.svg" /></a>
+<a class="reference external image-reference" href="https://travis-ci.org/saketkc/moca"><img alt="https://img.shields.io/travis/saketkc/moca.svg" src="https://img.shields.io/travis/saketkc/moca.svg" /></a>
+<a class="reference external image-reference" href="https://bioconda.github.io/recipes/moca/README.html"><img alt="https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg" src="https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg" /></a>
 <a class="reference external image-reference" href="https://coveralls.io/github/saketkc/moca?branch=master"><img alt="https://coveralls.io/repos/github/saketkc/moca/badge.svg?branch=master" src="https://coveralls.io/repos/github/saketkc/moca/badge.svg?branch=master" /></a>
 <a class="reference external image-reference" href="https://landscape.io/github/saketkc/moca/master"><img alt="https://landscape.io/github/saketkc/moca/master/landscape.svg?style=flat" src="https://landscape.io/github/saketkc/moca/master/landscape.svg?style=flat" /></a>
 <a class="reference external image-reference" href="https://requires.io/github/saketkc/moca/requirements/?branch=master"><img alt="https://requires.io/github/saketkc/moca/requirements.svg?branch=master" src="https://requires.io/github/saketkc/moca/requirements.svg?branch=master" /></a>
-<p>Python rewrite of <a class="reference external" href="https://github.com/saketkc/moca_web">MoCA0.1.0</a></p>
 <div class="section" id="license">
 <h3>LICENSE<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h3>
 <p>ISC</p>
 </div>
 <div class="section" id="installation">
 <h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="current-version">
+<h4>Current Version<a class="headerlink" href="#current-version" title="Permalink to this headline">¶</a></h4>
+<p>0.3.3.dev0</p>
+</div>
 <div class="section" id="requirements">
 <h4>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h4>
 <ul class="simple">
@@ -186,9 +203,6 @@ hence if you are using <cite>4.10.2</cite> make sure the <cite>fasta-shuffle-let
 <p><code class="docutils literal"><span class="pre">moca</span></code> is most compatible with the <a class="reference external" href="http://conda.pydata.org/docs/using/using.html">conda</a> environment.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ conda config --add channels bioconda
 $ conda install moca
-$ conda env create -n mocaenv python=2.7
-$ source activate mocaenv
-$ conda install moca
 </pre></div>
 </div>
 </div>
@@ -203,7 +217,7 @@ $ conda install moca
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ git clone https://github.com:saketkc/moca.git
 $ cd moca
 $ conda env create -f environment.yml python=2.7
-$ source activate mocatest
+$ source activate mocadev
 $ python setup.py install
 </pre></div>
 </div>
@@ -218,31 +232,93 @@ to its surrounding(flanking sequences).</p>
 </div>
 <div class="section" id="usage">
 <h3>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ mocacli --help
-Usage: mocacli [OPTIONS]
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ moca
+Usage: moca [OPTIONS] COMMAND [ARGS]...
 
-Run moca
+  moca: Motif Conservation Analysis
+
+Options:
+  --version  Show the version and exit.
+  --help     Show this message and exit.
+
+Commands:
+  find_motifs  Run meme to locate motifs and create...
+  plot         Create stacked conservation plots
+</pre></div>
+</div>
+<div class="section" id="motif-analysis-using-meme">
+<h4>Motif analysis using MEME<a class="headerlink" href="#motif-analysis-using-meme" title="Permalink to this headline">¶</a></h4>
+<p>MoCA can perform motif analysis for you given a bedfile containing
+ChIP-Seq peaks.</p>
+<p>Genome builds and MEME binary locations are specified through a configuraton file.
+A sample configuration file is available: <cite>tests/data/application.cfg</cite> and should be
+self-explanatory.</p>
+</div>
+<div class="section" id="moca-find-motifs">
+<h4>moca find_motifs<a class="headerlink" href="#moca-find-motifs" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ moca find_motifs -h
+Usage: moca find_motifs [OPTIONS]
+
+  Run meme to locate motifs and create conservation stacked plots
 
 Options:
   -i, --bedfile TEXT            Bed file input  [required]
-  -o, --oc TEXT                 Output Directory
+  -o, --oc TEXT                 Output Directory  [required]
   -c, --configuration TEXT      Configuration file  [required]
-  --flank-seq INTEGER           Flanking sequence length  [required]
+  --slop-length INTEGER         Flanking sequence length  [required]
   --flank-motif INTEGER         Length of sequence flanking motif  [required]
+  --n-motif INTEGER             Number of motifs
+  -t, --cores INTEGER           Number of parallel MEME jobs  [required]
   -g, -gb, --genome-build TEXT  Key denoting genome build to use in
-                            configuration file  [required]
-  --help                        Show this message and exit.
+                                configuration file  [required]
+  --show-progress               Print progress
+  -h, --help                    Show this message and exit.
 </pre></div>
 </div>
-<p>A sample configuration file is available: <cite>tests/data/application.cfg</cite></p>
+</div>
+<div class="section" id="moca-plot">
+<h4>moca plot<a class="headerlink" href="#moca-plot" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ moca plot -h
+Usage: moca plot [OPTIONS]
+
+  Create stacked conservation plots
+
+Options:
+  --meme-dir, --meme_dir TEXT     MEME output directory  [required]
+  --centrimo-dir, --centrimo_dir TEXT
+                                  Centrimo output directory  [required]
+  --fimo-dir-sample, --fimo_dir_sample TEXT
+                                  Sample fimo.txt  [required]
+  --fimo-dir-control, --fimo_dir_control TEXT
+                                  Control fimo.txt  [required]
+  --name TEXT                     Plot title
+  --flank-motif INTEGER           Length of sequence flanking motif
+                                  [required]
+  --motif INTEGER                 Motif number
+  -o, --oc TEXT                   Output Directory  [required]
+  -c, --configuration TEXT        Configuration file  [required]
+  --show-progress                 Print progress
+  -g, -gb, --genome-build TEXT    Key denoting genome build to use in
+                                  configuration file  [required]
+  -h, --help                      Show this message and exit.
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="example">
 <h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
 <p>Most users will require using the command line version only:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ mocacli -i tests/data/ENCFF002CDP.ctcf.bed\
-    -g hg19
-    -c tests/data/application.cfg\
-    -o output_dir
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ moca find_motifs -i encode_test_data/ENCFF002DAR.bed\
+    -c tests/data/application.cfg -g hg19 --show-progress
+</pre></div>
+</div>
+<p>Creating plots if you already have run MEME and Centrimo:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ moca plot -c tests/data/application.cfg -g hg19\
+    --meme-dir moca_output/meme_out\
+    --centrimo-dir moca_output/centrimo_out\
+    --fimo-dir-sample moca_output/meme_out/fimo_out_1\
+    --fimo-dir-control moca_output/meme_out/fimo_random_1\
+    --name ENCODEID
 </pre></div>
 </div>
 <img alt="http://www.saket-choudhary.me/moca/_static/img/ENCFF002CEL.png" src="http://www.saket-choudhary.me/moca/_static/img/ENCFF002CEL.png" />
@@ -261,16 +337,63 @@ however it might be missing examples and documentation at places.</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="todo">
-<h3>TODO<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li>[ ] Allow skipping MEME step</li>
-<li>[ ] Implement logger (-v) instead of tqdm</li>
-</ul>
-</div>
 <div class="section" id="credits">
 <h3>Credits<a class="headerlink" href="#credits" title="Permalink to this headline">¶</a></h3>
 <p>This package was created with <a class="reference external" href="https://github.com/audreyr/cookiecutter">Cookiecutter</a> and the <a class="reference external" href="https://github.com/audreyr/cookiecutter-pypackage">audreyr/cookiecutter-pypackage</a> project template.</p>
+</div>
+</div>
+</div>
+<div class="section" id="moca">
+<h1>moca<a class="headerlink" href="#moca" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="moca.html">moca package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="moca.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="moca.bedoperations.html">moca.bedoperations package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moca.bedoperations.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moca.bedoperations.html#module-moca.bedoperations.model">moca.bedoperations.model module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moca.bedoperations.html#module-moca.bedoperations">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moca.helpers.html">moca.helpers package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moca.helpers.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moca.helpers.html#module-moca.helpers.configuration_parser">moca.helpers.configuration_parser module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moca.helpers.html#module-moca.helpers.exceptions">moca.helpers.exceptions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moca.helpers.html#module-moca.helpers.job_executor">moca.helpers.job_executor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moca.helpers.html#module-moca.helpers">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moca.pipeline.html">moca.pipeline package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moca.pipeline.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moca.pipeline.html#module-moca.pipeline.job_processor">moca.pipeline.job_processor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moca.pipeline.html#module-moca.pipeline">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moca.plotter.html">moca.plotter package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moca.plotter.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moca.plotter.html#module-moca.plotter.plotter">moca.plotter.plotter module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moca.plotter.html#module-moca.plotter">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moca.webservice.html">moca.webservice package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moca.webservice.html#module-moca.webservice">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="moca.wigoperations.html">moca.wigoperations package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="moca.wigoperations.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moca.wigoperations.html#module-moca.wigoperations.query">moca.wigoperations.query module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="moca.wigoperations.html#module-moca.wigoperations">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="moca.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="moca.html#module-moca.version">moca.version module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="moca.html#module-moca">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
 <ul>
@@ -282,7 +405,6 @@ however it might be missing examples and documentation at places.</p>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#example">Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#api-documentation">API Documentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#tests">Tests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="readme.html#todo">TODO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#credits">Credits</a></li>
 </ul>
 </li>
@@ -301,17 +423,16 @@ however it might be missing examples and documentation at places.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="history.html">History</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="history.html#id1">0.2.9 (2016-05-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="history.html#id2">0.2.8 (2016-05-30)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="history.html#id3">0.2.7 (2016-05-30)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="history.html#id4">0.2.4 (2016-05-29)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="history.html#id5">0.2.3 (2016-05-29)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="history.html#id6">0.2.0 (2016-05-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id1">0.3.3 (2016-10-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id2">0.2.9 (2016-05-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id3">0.2.8 (2016-05-30)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id4">0.2.7 (2016-05-30)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id5">0.2.4 (2016-05-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id6">0.2.3 (2016-05-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id7">0.2.0 (2016-05-29)</a></li>
 </ul>
 </li>
 </ul>
-</div>
-</div>
 </div>
 </div>
 <div class="section" id="indices-and-tables">
@@ -336,7 +457,7 @@ however it might be missing examples and documentation at places.</p>
     </p>
     <p>
         &copy; Copyright 2016, Saket Choudhary.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.<br/>
     </p>
   </div>
 </footer>

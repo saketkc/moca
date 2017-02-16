@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>History &mdash; MoCA 0.1.0 documentation</title>
+    <title>History &#8212; MoCA 0.1.0 documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -18,7 +18,8 @@
         VERSION:     '0.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -28,7 +29,8 @@
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="MoCA 0.1.0 documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Credits" href="authors.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -85,12 +87,13 @@
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">History</a><ul>
-<li><a class="reference internal" href="#id1">0.2.9 (2016-05-31)</a></li>
-<li><a class="reference internal" href="#id2">0.2.8 (2016-05-30)</a></li>
-<li><a class="reference internal" href="#id3">0.2.7 (2016-05-30)</a></li>
-<li><a class="reference internal" href="#id4">0.2.4 (2016-05-29)</a></li>
-<li><a class="reference internal" href="#id5">0.2.3 (2016-05-29)</a></li>
-<li><a class="reference internal" href="#id6">0.2.0 (2016-05-29)</a></li>
+<li><a class="reference internal" href="#id1">0.3.3 (2016-10-03)</a></li>
+<li><a class="reference internal" href="#id2">0.2.9 (2016-05-31)</a></li>
+<li><a class="reference internal" href="#id3">0.2.8 (2016-05-30)</a></li>
+<li><a class="reference internal" href="#id4">0.2.7 (2016-05-30)</a></li>
+<li><a class="reference internal" href="#id5">0.2.4 (2016-05-29)</a></li>
+<li><a class="reference internal" href="#id6">0.2.3 (2016-05-29)</a></li>
+<li><a class="reference internal" href="#id7">0.2.0 (2016-05-29)</a></li>
 </ul>
 </li>
 </ul>
@@ -112,7 +115,7 @@
             
               <li class="hidden-sm">
 <div id="sourcelink">
-  <a href="_sources/history.txt"
+  <a href="_sources/history.rst.txt"
      rel="nofollow">Source</a>
 </div></li>
             
@@ -139,40 +142,46 @@
   <div class="section" id="history">
 <h1>History<a class="headerlink" href="#history" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="id1">
-<h2>0.2.9 (2016-05-31)<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2>0.3.3 (2016-10-03)<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Removed pycairo dependency</li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h2>0.2.9 (2016-05-31)<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Do not fail silently on MEME failing</li>
 <li>Support &#8211;cores to support parallel threads</li>
 </ul>
 </div>
-<div class="section" id="id2">
-<h2>0.2.8 (2016-05-30)<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id3">
+<h2>0.2.8 (2016-05-30)<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Fixed MEME pipeline missing from mocacli</li>
 </ul>
 </div>
-<div class="section" id="id3">
-<h2>0.2.7 (2016-05-30)<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id4">
+<h2>0.2.7 (2016-05-30)<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Fixed bug where missing wig keys were not handled in mocacli</li>
 </ul>
 </div>
-<div class="section" id="id4">
-<h2>0.2.4 (2016-05-29)<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id5">
+<h2>0.2.4 (2016-05-29)<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Cleaned up unused scripts under scripts directory</li>
 <li>Add configuration file example</li>
 </ul>
 </div>
-<div class="section" id="id5">
-<h2>0.2.3 (2016-05-29)<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id6">
+<h2>0.2.3 (2016-05-29)<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Include package_dir in setup.py</li>
 <li>Include requirements.txt in MANIFEST</li>
 </ul>
 </div>
-<div class="section" id="id6">
-<h2>0.2.0 (2016-05-29)<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id7">
+<h2>0.2.0 (2016-05-29)<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>First release on PyPI.</li>
 </ul>
@@ -192,7 +201,7 @@
     </p>
     <p>
         &copy; Copyright 2016, Saket Choudhary.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.<br/>
     </p>
   </div>
 </footer>
