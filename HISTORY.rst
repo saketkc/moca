@@ -1,6 +1,12 @@
 =======
 History
 =======
+0.4.1 (2017-02-16)
+------------------
+* Added $\delta$ options for sample vs control ttest
+* Removed unused requirements: ipaddress
+* Fixed meme runner to plot
+
 0.3.3 (2016-10-03)
 ------------------
 * Removed pycairo dependency
