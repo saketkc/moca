@@ -137,17 +137,19 @@ def find_motifs(bedfile, oc, configuration, slop_length,
     memechip_out_dir = meme_out_dir
     meme_params = moca_pipeline.get_meme_default_params
     if cores==1:
-        re.sub(r' -p*', '', meme_params)
+        pass
     else:
-        re.sub(r'-p*', '-p {}'.format(cores), meme_params)
+        meme_params += ' -p {}'.format(cores)
     if show_progress:
         progress_bar.show_progress('Running MEME')
 
     #meme_run_out = moca_pipeline.run_memechip(fasta_in=query_fasta, out_dir=memechip_out_dir)
     #
+    print('********* {}'.format(meme_params))
     meme_run_out = moca_pipeline.run_meme(fasta_in=query_train_fasta,
                                           out_dir=meme_out_dir,
                                           strargs=meme_params)
+    print(meme_run_out)
     if meme_run_out['stderr']!='':
         sys.stdout.write('Error running MEME: {}'.format(meme_run_out['stderr']))
         sys.exit(1)

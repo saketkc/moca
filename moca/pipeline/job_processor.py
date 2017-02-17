@@ -5,6 +5,7 @@ from __future__ import division
 from __future__ import absolute_import
 import os
 import warnings
+import re
 from ..helpers import ConfigurationParser
 from ..helpers import run_job
 from ..helpers import xstr
@@ -86,7 +87,9 @@ class Pipeline(ConfigurationParser):
         if not out_dir:
             out_dir = os.path.join(os.path.dirname(fasta_in), 'meme_out')
         out_dir = os.path.abspath(out_dir)
-        if self.can_run_meme_parallel('{} -p 2'.format(meme_binary)):
+        regex = re.compile(r'-p.*')
+        print('#################'+self.meme_strargs)
+        if self.can_run_meme_parallel('{} -p 2'.format(meme_binary)) and not regex.findall(self.meme_strargs):
             self.meme_strargs += ' -p {}'.format(self.cpu_cores)
         cmd = '{} {} -oc {} {}'.format(self.meme_location, self.meme_strargs,
                                        out_dir, os.path.abspath(fasta_in))
