@@ -39,6 +39,7 @@ VERSION    = '%s.%s.%s' % (MAJOR, MINOR, MICRO)
 setup(
     name='moca',
     version=VERSION,
+    use_2to3=True,
     description="Tool for motif conservation analysis",
     long_description=readme + '\n\n' + history,
     author="Saket Choudhary",

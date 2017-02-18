@@ -26,10 +26,12 @@ def get_motif_bg_freq(meme_file):
         A dict with bases as keys and corresponding frequency  as values
     """
     frequencies_line = None
-    with open(meme_file) as f:
-        for line in f:
-            if 'Background letter frequencies (from' in line.strip():
-                frequencies_line = f.next().strip()
+    with open(meme_file, 'r') as f:
+        content = [line.rstrip('\n') for line in f]
+    for index, line in enumerate(content):
+        if line.find('Background letter frequencies (from')!=-1:
+            frequencies_line = content[index+1].strip()
+            break
 
     assert frequencies_line is not None
     frequencies = frequencies_line.split(' ')
@@ -52,9 +54,10 @@ def get_total_sequences(meme_file):
     """
     seq_line = None
     count = 0
-    with open(meme_file) as f:
+    """
+    with open(meme_file, 'rb') as f:
         for line in f:
-            if line.strip().startswith('TRAINING SET'):
+            if line.strip().startswith(b'TRAINING SET'):
                 star_line = f.next().strip()
                 datafile_line = f.next().strip()
                 alphabet_line = f.next().strip()
@@ -63,6 +66,23 @@ def get_total_sequences(meme_file):
                 count = 0
                 while not f.next().strip().startswith('*********'):
                     count+=1
+    """
+    with open(meme_file, 'r') as f:
+        content = [line.rstrip('\n') for line in f]
+
+    for index, line in enumerate(content):
+        if line.find('TRAINING SET')==0:
+            start_index = index
+            break
+
+    lines = content[start_index+6:]
+    count = 0
+    for line in lines:
+        if line.find('*********')==0:
+            break
+        else:
+            count+=1
+
     return count*2
 
 #TODO Rename this!

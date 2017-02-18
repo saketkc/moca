@@ -48,7 +48,7 @@ class Pipeline(ConfigurationParser):
 
     def can_run_meme_parallel(self, cmd):
         stdout, stderr, exitcode = run_job(cmd=cmd, cwd='/tmp')
-        if '-p <np> given but Parallel MEME not configured.' in stderr:
+        if '-p <np> given but Parallel MEME not configured.' in stderr.decode('utf-8'):
             return False
         return True
 
@@ -88,7 +88,6 @@ class Pipeline(ConfigurationParser):
             out_dir = os.path.join(os.path.dirname(fasta_in), 'meme_out')
         out_dir = os.path.abspath(out_dir)
         regex = re.compile(r'-p.*')
-        print('#################'+self.meme_strargs)
         if self.can_run_meme_parallel('{} -p 2'.format(meme_binary)) and not regex.findall(self.meme_strargs):
             self.meme_strargs += ' -p {}'.format(self.cpu_cores)
         cmd = '{} {} -oc {} {}'.format(self.meme_location, self.meme_strargs,
@@ -157,7 +156,7 @@ class Pipeline(ConfigurationParser):
         stdout, stderr, exitcode = run_job(cmd=cmd,
                                            cwd=os.path.dirname(fasta_out))
         with open(os.path.abspath(fasta_out), 'w') as f:
-            f.write(stdout)
+            f.write(stdout.decode('utf-8'))
         output = {'stdout': stdout,
                   'stderr': stderr,
                   'exitcode': exitcode,

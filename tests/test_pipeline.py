@@ -35,7 +35,6 @@ class TestPipeline(unittest.TestCase):
         #TODO Check if meme.txt is same and created
         #TODO This check is too stringent, specially if logos are being produced.
         #MEME installation leads to hard coded paths
-        print(output)
         assert output['exitcode'] == 0
         meme_record = read_memefile('tests/data/generated_out/meme_analysis/meme.txt')
         assert meme_record['total_motifs'] == 5
@@ -96,6 +95,5 @@ class TestPipeline(unittest.TestCase):
         fasta_in = 'tests/data/expected_out/macsPeak.fasta'
         fasta_out = 'tests/data/generated_out/macsPeak.shuffled.fastsa'
         output = self.pipeline.run_fasta_shuffler(fasta_in=fasta_in, fasta_out=fasta_out)
-        print output
         with open(fasta_out) as f:
             assert 'chr1' in f.readline()
