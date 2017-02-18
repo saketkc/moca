@@ -111,7 +111,7 @@ def find_motifs(bedfile, oc, configuration, slop_length,
         msg_list = ['Extracting Fasta',
                     'Running MEME',
                     'Running CENTRIMO']
-        msg_list_e = ['Generating random Fasta', 'Running fimo random', 'Running fimo main'] + ['Extracting Scores']*len(wigfiles.keys()) + ['Creating PLot']
+        msg_list_e = ['Generating random Fasta', 'Running fimo random', 'Running fimo main'] + ['Extracting Scores']*len(list(wigfiles.keys())) + ['Creating PLot']
         msg_list = msg_list + msg_list_e*n_motif
         progress_bar = ProgressBar(msg_list)
 
@@ -145,11 +145,9 @@ def find_motifs(bedfile, oc, configuration, slop_length,
 
     #meme_run_out = moca_pipeline.run_memechip(fasta_in=query_fasta, out_dir=memechip_out_dir)
     #
-    print('********* {}'.format(meme_params))
     meme_run_out = moca_pipeline.run_meme(fasta_in=query_train_fasta,
                                           out_dir=meme_out_dir,
                                           strargs=meme_params)
-    print(meme_run_out)
     if meme_run_out['stderr']!='':
         sys.stdout.write('Error running MEME: {}'.format(meme_run_out['stderr']))
         sys.exit(1)
@@ -211,7 +209,7 @@ def find_motifs(bedfile, oc, configuration, slop_length,
             control_score_files.append(control_score_file)
         if show_progress:
             progress_bar.show_progress('Creating Plot')
-        create_plot(meme_file,
+        create_plot(mlocalieme_file,
                     bedfile_fn,
                     centrimo_dir=centrimo_main_dir,
                     motif_number=motif,
