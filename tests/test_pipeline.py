@@ -35,7 +35,14 @@ class TestPipeline(unittest.TestCase):
         #TODO Check if meme.txt is same and created
         #TODO This check is too stringent, specially if logos are being produced.
         #MEME installation leads to hard coded paths
-        assert output['exitcode'] == 0
+        if output['exitcode'] != 0:
+            ## HTML is not required so allow failing here
+            if output['stdout'].find(b'Warning: meme_xml_to_html'):
+                pass
+            else:
+                print(output)
+                raise RuntimeError('Error running meme')
+
         meme_record = read_memefile('tests/data/generated_out/meme_analysis/meme.txt')
         assert meme_record['total_motifs'] == 5
 

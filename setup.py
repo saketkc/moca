@@ -2,6 +2,12 @@
 # -*- coding: utf-8 -*-
 import os
 import re
+import sys
+
+if sys.version_info[0] == 2:
+    requirements_file = 'requirements.txt'
+elif sys.version_info[0] ==3 :
+    requirements_file = 'requirements_py3.txt'
 
 try:
     from setuptools import setup
@@ -15,7 +21,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-with open('requirements.txt') as f:
+with open(requirements_file) as f:
     requirements = f.read().splitlines()
 
 version_file = os.path.join('moca', 'version.py')
