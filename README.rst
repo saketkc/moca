@@ -31,22 +31,17 @@ Installation
 ------------
 
 
-Current Version
-~~~~~~~~~~~~~~~
-0.3.3.dev0
-
-
 Requirements
 ~~~~~~~~~~~~
 
-* bedtools>=2.25.0
-* biopython>=1.66
-* pandas>=0.18
-* scipy>=0.17
-* statsmodels>=0.6
-* pybigwig>=0.2.8
-* seaborn>=0.7.0
-* MEME>=4.10.2
+* pybedtools
+* biopython
+* pandas
+* scipy
+* statsmodels
+* pybigwig
+* seaborn
+* MEME==4.10.2
 
 NOTE: MoCA also relies on `fasta-shuffle-letters` that was introduced in MEME `4.11.0`
 hence if you are using `4.10.2` make sure the `fasta-shuffle-letters` is the updated one.
