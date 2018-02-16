@@ -1,3 +1,5 @@
 *.rst linguist-documentation
 *.html linguist-documentation
 *.ipynb linguist-language=python
+docs/* linguist-documentation
+tests/data/* linguist-detectable=false
