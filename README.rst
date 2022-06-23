@@ -13,12 +13,6 @@ MoCA: Tool for MOtif Conservation Analysis
 
 .. image:: https://coveralls.io/repos/github/saketkc/moca/badge.svg?branch=master
         :target: https://coveralls.io/github/saketkc/moca?branch=master
-
-.. image:: https://landscape.io/github/saketkc/moca/master/landscape.svg?style=flat
-        :target: https://landscape.io/github/saketkc/moca/master
-
-.. image:: https://requires.io/github/saketkc/moca/requirements.svg?branch=master
-        :target: https://requires.io/github/saketkc/moca/requirements/?branch=master
         
 .. image:: https://zenodo.org/badge/50889586.svg
         :target: https://zenodo.org/badge/latestdoi/50889586
